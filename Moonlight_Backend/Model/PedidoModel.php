@@ -15,7 +15,8 @@ class PedidoModel{
         $this->preco = $preco;
         $this->itens = $itens;
     }
-
+    
+    //GETTERS
     public function getIdOrder(): int 
     {
         return $this->idOrder;
@@ -40,6 +41,7 @@ class PedidoModel{
     {
         return $this->itens;
     }
+    //SETTERS
 
     public function setIdOrder(int $idOrder): void 
     {

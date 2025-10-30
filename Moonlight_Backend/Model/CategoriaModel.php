@@ -3,7 +3,7 @@
 class CategoriaModel {
     //declaração de variáveis 
     private $pdo;
-    private static $id_categoriajogos;
+    private int $id_categoriajogos;
     private int $id_biblio_user;
     private string $cat_descricao = "";
     private int $id_games;
@@ -25,6 +25,50 @@ class CategoriaModel {
 
             return $consulta->fetchAll(PDO::FETCH_OBJ);//return com fecth para resultados 
         }
+        
+        //GETTERS
+    public function getPdo() 
+    {
+        return $this->pdo;
+    }
+
+	public function getIdCategoriajogos(): int 
+    {
+        return $this->id_categoriajogos;
+    }
+
+	public function getIdBiblioUser(): int 
+    {
+        return $this->id_biblio_user;
+    }
+
+	public function getIdGames(): int 
+    {
+        return $this->id_games;
+    }
+
+    //SETTERS
+
+	public function setPdo( $pdo): void 
+    {
+        $this->pdo = $pdo;
+    }
+
+	public function setIdCategoriajogos(int $id_categoriajogos): void 
+    {
+        $this->id_categoriajogos = $id_categoriajogos;
+    }
+
+	public function setIdBiblioUser(int $id_biblio_user): void 
+    {
+        $this->id_biblio_user = $id_biblio_user;
+    }
+
+	public function setIdGames(int $id_games): void 
+    {
+        $this->id_games = $id_games;
+    }
+
 }
 
 
