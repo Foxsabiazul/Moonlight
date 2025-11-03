@@ -1,0 +1,566 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --mainColor: #151414;
+    --textMainColor: #FFFFFF;
+
+    --elementColor: #272727;
+    --elementHardColor: #121212;
+    --elementHardColorAlpha: rgba(18, 18, 18, 0.769);
+
+    --secondColor: #F5F5F5;
+    --textSecondColor: #000000;
+
+    --tableLine: #dddddddd;
+    --tableDelete: #730000;
+    --tableBackground1: #FFFFFF;
+    --tableBackground2: #f3f3f3;
+
+    --CTAColor: #26bbff;
+    --CTAHoverColor: #72d3ff;
+    
+    --btnBackgroundColor: rgb(198, 198, 198);
+    --btnBackgroundColorhover: rgb(255, 255, 255);
+    --btnTextColor: #000000;
+
+    --inputBackground: #121212;
+    --inputBorder: rgb(198, 198, 198);
+    --inputBackgroundhover: #272727;
+    --inputBorderhover:rgb(255, 255, 255);
+    --btnBackgroundCtaColor: #26bbff;
+    --btnBackgroundCtaHoverColor: #72d3ff;
+    --font-default: "Poppins", arial, sans-serif;
+}
+
+@keyframes glowCTA {
+  0% { box-shadow: 0 0 5px rgba(38, 186, 255, 0.2) }
+  50% { box-shadow: 0 0 15px rgba(38, 186, 255, 0.664); }
+  100% { box-shadow: 0 0 5px rgba(38, 186, 255, 0.2); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+  50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.664); }
+  100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--mainColor);
+    color: var(--textMainColor);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+p{
+    color: var(--textMainColor);
+    font-family: var(--font-default);
+}
+
+.container {
+    width: 100%; /* ocupa o maximo de espaço disponivel */
+    margin: 0 auto; /* equilibra e centraliza horizontalmente */
+    padding: 0 15px; /* distancia itens e logo horizontalmente da borda da tela */
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1000px) {
+    .container {
+        width: 1000px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+
+/* HEADER */
+.header {
+    width: 100%; /** ocupa a tela toda **/
+    z-index: 4; /** fica acima do conteúdo. **/
+    top: 0; /** gruda no topo da tela **/
+    left: 0; /** gruda na parte esquerda **/
+    background-color: var(--elementColor); /** cor de fundo **/
+    position: fixed;  /* fixa no topo ao rolar a tela */
+}
+
+.header .container .flex {
+    display: flex; /* coloca os filhos lado a lado (logo + menu) */
+    justify-content: space-between; /* mantêm espaço entre logo e menu */
+    align-items: center; /* centraliza verticalmente o conteúdo. */
+    height: 100px; /* tamanho do header. Disclaimer importante, se você mexe nesse cara ele passa por cima do conteúdo principal o que não é nem um pouco bacana */
+    /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
+}
+
+.header .container .flex .flex-col1 {
+    flex-basis: 30%;
+    align-items: center;
+}
+
+.header .container .flex .flex-col1 .headerLogo {
+    display: block;
+    width: min-content;
+}
+
+.header .container .flex .flex-col1 .headerLogo img {
+    width: 250px;
+    height: 100px;
+}
+
+.header .container .flex .flex-col2 {
+    flex-basis: 70%;
+    /* text-align: right; */
+}
+
+.header .container .flex .flex-col2 .header-menu {
+    display: none;
+}
+
+.header .container .flex .flex-col2 .header-nav {
+    display: block;
+    position: relative;
+    text-align: center;
+    justify-items: end;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li{
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
+    display: block;
+    background-color: var(--btnBackgroundColor);
+    color: var(--btnTextColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.3s;
+}
+
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
+    background-color: var(--btnBackgroundColorhover);
+    transform: translateY(-2px);
+}
+
+/* O container principal do dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* O link que ativa o dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+    font-family: var(--font-default);
+    font-size: 14px;
+    background-color: var(--btnBackgroundCtaColor);
+    color: var(--btnTextColor);
+    padding: 8px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: ease-in-out 0.3s;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.user-menu:hover {
+    background-color: var(--btnBackgroundCtaHoverColor) !important;
+}
+
+/* O ícone de seta para baixo */
+.dropdown-arrow {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+/* O menu que será exibido */
+.dropdown-menu {
+    display: none; /* Esconde o menu por padrão */
+    position: absolute;
+    right: 0; /* Alinha o menu com o lado direito do link */
+    background-color: var(--btnBackgroundCtaColor);
+    border: unset;
+    width: 100%;
+    z-index: 10;
+    list-style-type: none;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Links dentro do menu */
+.dropdown-menu li a {
+    color: var(--btnAndInputCTATextColor);
+    background-color: var(--btnAndInputBackground);
+    padding: 8px;
+    text-decoration: none;
+    font-family: var(--font-default);
+    font-size: 14px;
+    display: block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--btnBackgroundCtaHoverColor);
+}
+
+.dropdown-menu li #lastBtn {
+    border-radius: 0 0 5px 5px;
+}
+
+/* Easter egg gigatonico do GTA SA: Mostra o menu quando o mouse clica no contêiner */
+.dropdown-container.active .dropdown-menu {
+    display: block;
+}
+
+/* Rotação da seta quando o menu está visível */
+.dropdown-container.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-container.active .user-menu{
+    border-radius: 5px 5px 0 0 !important;
+}
+
+main{
+    padding-top: 100px; /* padding top para deixar o conteudo principal a mostra sem ficar embaixo do header. Disclaimer importante, se você mexe nesse cara ele fica por baixo do header o que não é nem um pouco bacana */
+    /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
+    width: 100%;
+    position: relative;
+}
+
+.card {
+    background-color: #272727;
+    box-shadow: 0 0 10px #CCC;
+    border-radius: 5px;
+    margin: 30px 0;
+}
+
+/* footer */
+
+.footer{
+    position: relative;
+    background-color: var(--elementColor); /** cor de fundo **/
+    /* background: linear-gradient(180deg, var(--secondColor), var(--mainColor)); */
+    height: fit-content;
+    padding: 20px 0;
+    text-align: center;
+    z-index: 3;
+}
+
+.footer img{
+    width: 15%;
+}
+
+.footer .description{
+    line-height: 30px;
+    color: var(--textColor);
+    font-family: var(--font-default);
+}
+
+.footer .footerClass{
+    text-align: center;
+    margin: auto;
+}
+
+/* Personalização do Modal */
+.modal-container{
+    position: relative;
+}
+
+.modal-container .modal{
+    background-color: var(--mainColor);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25vw;
+    height: auto;
+    border-radius: 10px;
+}
+  
+.modal-container .modal .modalContainerTitle{
+    width: 100%;
+    padding: 25px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: var(--secondColor);
+}
+
+.modal-container .modal .modalContainerTitle .modalTitle{
+    font: 24px var(--font-default);
+    color: var(--textSecondColor) !important;
+}
+
+.modal-container .modal .modalContainerMessage{
+    width: 100%;
+    padding: 25px;
+}
+
+.modal-container .modal .modalContainerMessage .modalMessage{
+    font: 24px var(--font-default);
+    color: var(--textMainColor) !important;
+}
+        
+.modal-container .modal .modalButton{
+    width: 100%;
+    padding: 25px;
+    border-radius: 0px 0px 10px 10px;
+    background-color: var(--mainColor);
+}
+
+.modal-container .modal .modalButton button{
+    padding: 10px;
+    background-color: var(--btnBackgroundColor);
+    color: var(--btnTextColor);
+    font: 18px var(--font-default);
+    transition: ease-in-out 0.3s;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+            
+.modal-container .modal .modalButton button:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.modal-container .modal .modalDualButton{
+    display: flex;
+    width: 100%;
+    padding: 25px;
+    border-radius: 0px 0px 10px 10px;
+    background-color: var(--mainColor);
+    justify-content: space-evenly;
+}
+
+.modal-container .modal .modalDualButton button{
+    padding: 10px;
+    background-color: var(--btnBackgroundColor);
+    color: var(--btnTextColor);
+    font: 18px var(--font-default);
+    transition: ease-in-out 0.3s;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+            
+.modal-container .modal .modalDualButton button:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+
+@media(max-width:1000px){
+
+    /* Responsivo */
+
+    .header .container{
+        width: 90%;
+        margin: auto;
+    }
+
+    .header .container .flex .flex-col1{
+        flex-basis: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .header .container .flex .flex-col1 .headerLogo img {
+        width: 250px;
+        /* TAMANHO DO LOGO NO CELULAR, ELE DEVE SER DO MESMO TAMANHO QUE O RESTO da turma dele. */
+    }
+
+    .header .container .flex .flex-col2 {
+        align-content: center;
+        flex-basis: 50%;
+    }
+
+    .header .container .flex .flex-col2 .header-menu {
+        display: block;
+        text-align: right;
+        position: relative;
+        top: 2.25px;
+        font-size: 20px;
+        color: var(--textColor);
+    }
+
+    .header .container .flex .flex-col2 .header-menu:hover {
+        color: var(--accentHoverColor);
+    }
+
+    #fa-bars{
+        transition: transform ease 0.3s;
+    }
+
+    #fa-bars.active{
+        transform: rotate(90deg);
+    }
+
+    .header .container .flex .flex-col2 .header-nav {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 100px; /* top para deixar o menu do mobile a mostra sem ficar em cima do header. Disclaimer importante, se você mexe nesse cara ele fica em cima do header o que não é nem um pouco bacana */
+        /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
+        width: 100%;
+        text-align: center;
+        justify-content: none;
+    }
+
+    .header .container .flex .flex-col2 .header-nav.active {
+        display: block;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul{
+        width: 100%;
+        background-color: var(--mainColor);
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li {
+        display: block;
+        margin: 0;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
+        display: block;
+        border-radius: 0px;
+        padding: 0px;
+    }
+
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
+        transform: translateY(0px);
+    }
+
+    /* O container principal do dropdown */
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
+        width: 100%;
+        border-radius: 0px;
+        padding: 0px;
+        display: block;
+    }
+
+    /* O link que ativa o dropdown */
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+        width: 100%;
+        border-radius: 0px;
+        padding: 0px;
+        justify-content: center;
+    }
+
+    /* O menu que será exibido */
+    .dropdown-menu {
+        display: none; /* Esconde o menu por padrão */
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+        z-index: 10;
+        list-style-type: none;
+        border-radius: 0;
+    }
+
+    .dropdown-menu li #lastBtn {
+        border-radius: 0;
+    }
+
+    .footer img{
+        width: 35%;
+    }
+
+    .modal-container .modal {
+        width: fit-content; /* só isso muda */
+    }
+}
+
+@media(max-width:350px){
+    .header .container .flex .flex-col1 .headerLogo img {
+        width: 200px;
+        /* TAMANHO DO LOGO NO CELULAR, ELE DEVE SER DO MESMO TAMANHO QUE O RESTO da turma dele. */
+        
+    }
+
+}
+
+@media(max-width:300px){
+    .header .container .flex .flex-col1 .headerLogo img {
+        width: 125px;
+        /* TAMANHO DO LOGO NO CELULAR, ELE DEVE SER DO MESMO TAMANHO QUE O RESTO da turma dele. */
+        height: 75px;
+    }
+
+}

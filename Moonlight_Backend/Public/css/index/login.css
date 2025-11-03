@@ -1,0 +1,124 @@
+button{
+    cursor: pointer;
+}
+
+
+.login {
+    width: 380px;
+    padding: 100px 10px;
+    margin: auto;
+}
+
+.logo-image{
+    width: 170px;
+}
+
+.card {
+    background-color: #272727;
+    box-shadow: 0 0 10px #CCC;
+    border-radius: 5px;
+    margin: 30px 0;
+}
+
+.card-header {
+    display: flex;
+    border-bottom: 1px solid #CCC;
+    justify-content: center;
+}
+
+.formUser{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    padding: 25px;
+}
+
+.formLabel{
+    font-family: var(--font-default);
+    color: var(--textMainColor);
+}
+
+.inputStyle{
+    background-color: var(--inputBackground);
+    border: 5px solid var(--inputBorder);
+    border-radius: 5px !important;
+    transition: ease-in-out 0.3s;
+    color: var(--textMainColor);
+}
+
+.inputStyle:hover, .selectStyle:hover{
+    border: 5px solid var(--inputBorderhover);
+}
+
+.inputStyle::placeholder{
+    font-family: var(--font-default);
+}
+
+.form-control, .btn {
+    border-radius: 5px;
+}
+
+.form-control[readonly] {
+    background-color: #f1f1f1;
+}
+
+.input-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputStyleGroup{
+    background-color: var(--inputBackground);
+    border: 5px solid var(--inputBorder);
+    border-radius: 5px 0px 0px 5px !important;
+    transition: ease-in-out 0.3s;
+    color: var(--textMainColor);
+}
+
+.inputStyleGroup:hover, .selectStyleGroup:hover{
+    border: 5px solid var(--inputBorderhover);
+}
+
+.inputStyleGroup::placeholder{
+    font-family: var(--font-default);
+}
+
+.btnStyleGroup{
+    background-color: var(--btnBackgroundColor);
+    border: 0;
+    border-radius: 0px 5px 5px 0px;
+    transition: ease-in-out 0.3s;
+    height: 36px;
+}
+
+.btnStyleGroup:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.formBtn{
+    font-family: var(--font-default);
+    background-color: var(--btnBackgroundColor);
+    border: 0;
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+}
+
+.formBtn:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.parsley-errors-list {
+    color: #F00;
+    list-style: none;
+    margin-left: -30px;
+}
+
+.alert {
+    margin: 0;
+    padding: 0 10px;
+}
+
+#erro {
+    margin-top: -15px;
+}
