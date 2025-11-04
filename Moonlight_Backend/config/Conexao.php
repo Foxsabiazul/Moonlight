@@ -3,6 +3,8 @@ namespace Moonlight_Backend\config;
 use PDO;
 use PDOException;
 
+use App\Model;
+
 class Conexao {
     private static $host = "localhost:3306";
     private static $usuario = "root";
@@ -23,4 +25,5 @@ class Conexao {
             die("Erro ao conectar: {$e->getMessage()}");
         }
     }
+
 }

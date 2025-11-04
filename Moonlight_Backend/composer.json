@@ -1,8 +1,10 @@
 {
     "autoload": {
         "psr-4": {
-            "Moonlight_Backend\\": "./"
+            "Moonlight_Backend\\": "./App"
         }
     },
-    "require": {}
+    "require": {
+        
+    }
 }
