@@ -1,5 +1,6 @@
 <?php
 
+require "./Moonlight_Backend/Model/CategoriaModel.php";
 
 class CategoriaController{
     private int $id = 0;

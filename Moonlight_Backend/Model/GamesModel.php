@@ -56,7 +56,7 @@ class GamesModel {
     }
 
     //SETTERS
-    
+
     public function setId(int $id): void
     {
         $this->id = $id;

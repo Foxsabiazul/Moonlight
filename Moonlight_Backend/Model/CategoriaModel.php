@@ -9,7 +9,8 @@ class CategoriaModel {
     private int $id_games;
     private string $nome_categoria = "";
 
-    public function __construct(int $id_categoriajogos, int $id_games, int $id_biblio_user, string $cat_descricao, string $nome_categoria) {//parametros
+    public function __construct(int $id_categoriajogos, int $id_games, int $id_biblio_user, string $cat_descricao, string $nome_categoria) 
+    {//parametros
         //validação dos parametros na construção
         $this->id_categoriajogos = $id_categoriajogos;
         $this->id_biblio_user = $id_biblio_user;
