@@ -5,6 +5,8 @@
     --mainColor: #151414;
     --textMainColor: #FFFFFF;
 
+    --textMainColorhover:#c7c7c7;
+
     --elementColor: #272727;
     --elementHardColor: #121212;
     --elementHardColorAlpha: rgba(18, 18, 18, 0.769);
@@ -22,7 +24,6 @@
     
     --btnBackgroundColor: rgb(198, 198, 198);
     --btnBackgroundColorhover: rgb(255, 255, 255);
-    --btnTextColor: #000000;
 
     --inputBackground: #121212;
     --inputBorder: rgb(198, 198, 198);
@@ -77,9 +78,50 @@ html, body {
     box-sizing: border-box;
 }
 
-p{
-    color: var(--textMainColor);
+.white-text{
     font-family: var(--font-default);
+    color: var(--textMainColor);
+}
+
+.black-text{
+    font-family: var(--font-default);
+    color: var(--textSecondColor);
+}
+
+.text-center{
+    text-align: center;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.ml-x1{
+    margin-left: 10px;
+}
+
+.mr-x1{
+    margin-right: 10px;
+}
+
+.jc-between{
+    justify-content: space-between !important;
+}
+
+.textdec-Debloat{
+    text-decoration: none;
+}
+
+.p-x1{
+    padding: 8px;
+}
+
+.as-center{
+    align-self: center;
 }
 
 .container {
@@ -187,18 +229,17 @@ p{
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn {
     display: block;
-    background-color: var(--btnBackgroundColor);
-    color: var(--btnTextColor);
+    color: var(--textMainColor);
     font-family: var(--font-default);
     font-size: 14px;
     text-decoration: none;
     border-radius: 5px;
     padding: 8px;
-    transition: ease-in-out 0.3s;
+    transition: ease-in-out 0.2s;
 }
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
-    background-color: var(--btnBackgroundColorhover);
+    color: var(--textMainColorhover);
     transform: translateY(-2px);
 }
 
@@ -212,8 +253,8 @@ p{
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
     font-family: var(--font-default);
     font-size: 14px;
-    background-color: var(--btnBackgroundCtaColor);
-    color: var(--btnTextColor);
+    background-color: var(--btnBackgroundColor);
+    color: var(--textSecondColor);
     padding: 8px;
     border-radius: 5px;
     display: flex;
@@ -226,7 +267,7 @@ p{
 }
 
 .user-menu:hover {
-    background-color: var(--btnBackgroundCtaHoverColor) !important;
+    background-color: var(--btnBackgroundColorhover) !important;
 }
 
 /* O ícone de seta para baixo */
@@ -240,7 +281,7 @@ p{
     display: none; /* Esconde o menu por padrão */
     position: absolute;
     right: 0; /* Alinha o menu com o lado direito do link */
-    background-color: var(--btnBackgroundCtaColor);
+    background-color: var(--btnBackgroundColor);
     border: unset;
     width: 100%;
     z-index: 10;
@@ -250,8 +291,8 @@ p{
 
 /* Links dentro do menu */
 .dropdown-menu li a {
-    color: var(--btnAndInputCTATextColor);
-    background-color: var(--btnAndInputBackground);
+    color: var(--textSecondColor);
+    background-color: var(--btnBackgroundColor);
     padding: 8px;
     text-decoration: none;
     font-family: var(--font-default);
@@ -261,7 +302,7 @@ p{
 }
 
 .dropdown-menu li a:hover {
-    background-color: var(--btnBackgroundCtaHoverColor);
+    background-color: var(--btnBackgroundColorhover);
 }
 
 .dropdown-menu li #lastBtn {
@@ -377,7 +418,7 @@ main{
 .modal-container .modal .modalButton button{
     padding: 10px;
     background-color: var(--btnBackgroundColor);
-    color: var(--btnTextColor);
+    color: var(--textMainColor);
     font: 18px var(--font-default);
     transition: ease-in-out 0.3s;
     border: 0;
@@ -401,7 +442,7 @@ main{
 .modal-container .modal .modalDualButton button{
     padding: 10px;
     background-color: var(--btnBackgroundColor);
-    color: var(--btnTextColor);
+    color: var(--textMainColor);
     font: 18px var(--font-default);
     transition: ease-in-out 0.3s;
     border: 0;

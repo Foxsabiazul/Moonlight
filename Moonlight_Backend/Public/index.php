@@ -27,7 +27,7 @@ use Moonlight_Backend\Controller\CategoriaController;
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/all.min.css">
     <link rel="stylesheet" href="css/index/style.css">
-    <link rel="stylesheet" href="css/index/login.css">
+    <link rel="stylesheet" href="css/index/forms.css">
     <link rel="stylesheet" href="css/index/erro.css">
 <?php
     $cssMap = [
@@ -179,13 +179,16 @@ use Moonlight_Backend\Controller\CategoriaController;
                         <nav class="header-nav" id="header-nav">
                             <ul class="nav-ul">
                                 <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Categorias" href="Categoria">Categorias</a>
+                                    <a class="nav-btn" title="Listagem de Categorias" href="categoria">Categorias</a>
                                 </li>
                                 <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Games" href="Games">Games</a>
+                                    <a class="nav-btn" title="Listagem de Games" href="games">Games</a>
                                 </li>
                                 <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Favoritos" href="Favoritos">Favoritos</a>
+                                    <a class="nav-btn" title="Listagem de Favoritos" href="favoritos">Favoritos</a>
+                                </li>
+                                <li class="nav-li">
+                                    <a class="nav-btn" title="Listagem de Usuarios" href="usuario">Usuarios</a>
                                 </li>
                                 <li class="nav-li">
                                     <div class="dropdown-container">
@@ -230,6 +233,7 @@ use Moonlight_Backend\Controller\CategoriaController;
 
         <main>
                 <?php
+
 
                 $param = explode("/", $controller);
 

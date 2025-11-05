@@ -1,7 +1,7 @@
 <div class="login">
     <div class="card">
         <div class="card-header">
-            <img src="img/Moonlight.png" class="img-fluid logo-image" alt="Moonlight">
+            <img src="img/index/Moonlight.png" class="img-fluid logo-image" alt="Moonlight">
         </div>
         <div class="card-body">
             <form class="formUser" name="form1" method="post" data-parsley-validate="">
