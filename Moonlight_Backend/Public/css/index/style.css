@@ -101,11 +101,19 @@ html, body {
 }
 
 .ml-x1{
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .mr-x1{
-    margin-right: 10px;
+    margin-right: 5px;
+}
+
+.mt-x1{
+    margin-top: 5px;
+}
+
+.mb-x1{
+    margin-bottom: 5px;
 }
 
 .jc-between{
