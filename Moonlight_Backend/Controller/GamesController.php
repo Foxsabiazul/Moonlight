@@ -1,6 +1,7 @@
 <?php
 
-require "./Moonlight_Backend/Model/GamesModel.php";
+// require "./Moonlight_Backend/Model/GamesModel.php";
+use Moonlight_Backend\Model\GamesModel;
 
 class GamesController {
     private $pdo;
