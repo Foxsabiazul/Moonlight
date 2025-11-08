@@ -15,9 +15,10 @@
     --textSecondColor: #000000;
 
     --tableLine: #dddddddd;
-    --tableDelete: #730000;
+    /* --tableDelete: #730000; */
     --tableBackground1: #FFFFFF;
     --tableBackground2: #f3f3f3;
+    --tableCTA: #bebebe;
 
     --CTAColor: #26bbff;
     --CTAHoverColor: #72d3ff;
@@ -118,6 +119,10 @@ html, body {
 
 .jc-between{
     justify-content: space-between !important;
+}
+
+.jc-evenly{
+    justify-content: space-evenly;
 }
 
 .textdec-Debloat{
@@ -426,7 +431,7 @@ main{
 .modal-container .modal .modalButton button{
     padding: 10px;
     background-color: var(--btnBackgroundColor);
-    color: var(--textMainColor);
+    color: var(--textSecondColor);
     font: 18px var(--font-default);
     transition: ease-in-out 0.3s;
     border: 0;
@@ -450,7 +455,7 @@ main{
 .modal-container .modal .modalDualButton button{
     padding: 10px;
     background-color: var(--btnBackgroundColor);
-    color: var(--textMainColor);
+    color: var(--textSecondColor);
     font: 18px var(--font-default);
     transition: ease-in-out 0.3s;
     border: 0;

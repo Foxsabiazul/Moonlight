@@ -53,7 +53,8 @@
                 $consulta->bindParam(":nm_user", $_POST["nome"]);
                 $consulta->bindParam(":email", $_POST["email"]);
                 $consulta->bindParam(":senha", $_POST["senha"]);
-                $consulta->bindParam(":data_criacao", $_POST["data"]);
+                $dataHoraSQL = (new \DateTime())->format('Y-m-d H:i:s');
+                $consulta->bindParam(":data_criacao", $dataHoraSQL);
 
             } else if (empty($_POST["senha"])) {
                 $sql = "update usuários set nm_user = :nm_user, email = :email, where id_user = :id_user limit 1";
@@ -75,7 +76,7 @@
         }
 
         public function excluir($id) {
-            $sql = "DELETE FROM usuario WHERE id_user = :id_user limit 1";
+            $sql = "DELETE FROM usuários WHERE id_user = :id_user limit 1";
             $consulta = $this->pdo->prepare($sql);
             $consulta->bindParam(":id_user", $id);
 

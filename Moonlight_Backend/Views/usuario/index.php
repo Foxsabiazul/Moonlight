@@ -11,9 +11,10 @@ if (!empty($id)) {
         exit;
     }
 
-    $id = $dados->id;
-    $nome = $dados->nome;
+    $id = $dados->id_user;
+    $nome = $dados->nm_user;
     $email = $dados->email;
+    $dataCriacao = $dados->data_criacao;
 }
 
 ?>
@@ -22,17 +23,17 @@ if (!empty($id)) {
         <div class="card-header jc-between">
             <h2 class="float-start as-center white-text">Cadastro de Usuários</h2>
             <div class="float-end">
-                <a href="usuario" title="Novo Registro" class="simpleBtn p-x1 textdec-Debloat  white-text">
+                <a href="<?= BASE_URL ?>/usuario" title="Novo Registro" class="simpleBtn p-x1 textdec-Debloat white-text">
                     <i class="fas fa-file"></i> Novo Registro
                 </a>
 
-                <a href="usuario/listar" title="Listar" class="simpleBtn p-x1 textdec-Debloat  white-text">
+                <a href="<?= BASE_URL ?>/usuario/listar" title="Listar" class="simpleBtn p-x1 textdec-Debloat white-text">
                     <i class="fas fa-file"></i> Listar
                 </a>
             </div>
         </div>
         <div class="card-body">
-            <form name="formCadastro" method="post" action="usuario/salvar" data-parsley-validate="">
+            <form name="formCadastro" method="post" action="<?= BASE_URL ?>/usuario/salvar" data-parsley-validate="">
                 <div class="row">
                     <div class="col-12 col-md-1">
                         <label class="formLabel" for="id">ID:</label>
