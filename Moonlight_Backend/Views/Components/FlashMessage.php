@@ -1,25 +1,24 @@
-<!-- só pra modal aparecer na tela -->
 <?php if(isset($_SESSION['modalMessage'])): ?>
-        <div id="modal-container" class="modal-container">
+        <div id="modal-container" class="modal-container" style="display: flex; opacity: 1;">
             <div class="modal">
                 <div class="modalContainerTitle">
-                    <h3 class="modalTitle">
+                    <h3 class="modalTitle" id="modalTitle">
                         <?= htmlspecialchars($_SESSION['modalTitle']) ?>
                     </h3>
                 </div>
                 <div class="modalContainerMessage">
-                    <p class="modalMessage">
+                    <p class="modalMessage" id="modalMessage">
                         <?= htmlspecialchars($_SESSION['modalMessage']) ?>
                     </p>
                 </div>
-                <div class="modalButton">
+                 <div class="modalButton">
                     <button onclick="fecharModal()">
                         Fechar
                     </button>
                 </div>
             </div>
         </div>
-        <div id="modal-overlay" class="modal-overlay"></div>
+        <div id="modal-overlay" class="modal-overlay" style="display: flex; opacity: 1;"></div>
         <?php unset($_SESSION['modalTitle']); ?>
         <?php unset($_SESSION['modalMessage']); ?>
 <?php endif; ?>

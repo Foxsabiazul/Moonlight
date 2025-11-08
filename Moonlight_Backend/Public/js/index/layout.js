@@ -5,7 +5,15 @@ function fecharModal(){
     modalContainer.style.opacity = "0";
     modalOverlay.style.display = "none";
     modalOverlay.style.opacity = "0";
+}
 
+function fecharModalExclusao(){
+    const modalContainer = document.getElementById('modalContainer');
+    const modalOverlay = document.getElementById('modalOverlay');
+    modalContainer.style.display = "none";
+    modalContainer.style.opacity = "0";
+    modalOverlay.style.display = "none";
+    modalOverlay.style.opacity = "0";
 }
 
 window.onload = () =>{

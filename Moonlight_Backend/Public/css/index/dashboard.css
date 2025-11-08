@@ -1,0 +1,37 @@
+.table{
+    --bs-table-bg: none !important;
+}
+
+.dashboard-table thead tr {
+    font-family: var(--font-default);
+    background-color: var(--secondColor);
+    color: var(--textSecondColor);
+    text-align: left;
+    font-weight: bold;
+}
+
+.dashboard-table td{
+    font-family: var(--font-default);
+}
+
+.dashboard-table td a{
+    text-decoration: none;
+}
+
+.dashboard-table tbody tr {
+    border-bottom: 1px solid var(--tableLine);
+    cursor: pointer;
+    background-color: var(--secondColor);
+}
+
+.dashboard-table tbody tr:nth-of-type(even) {
+    background-color: var(--tableBackground2);
+}
+
+.dashboard-table tbody tr:hover{
+    background-color: var(--tableCTA);
+}
+
+.dashboard-table tbody tr:nth-of-type(even):hover {
+    background-color: var(--tableCTA);
+}
