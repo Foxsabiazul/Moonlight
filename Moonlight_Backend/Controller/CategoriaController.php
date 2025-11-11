@@ -14,16 +14,7 @@ class CategoriaController{
             $this->descricao = $descricao;
             $this->nome = $nome;
        }
-
-       public function listar(string $nome, string $descricao, int $id){//função de listagem/filtragem por descrição __ talvez mude para nome  
-           $this->nome = $nome;
-
-        if($id >= $descricao){
-            echo("descrição salva!");
-        }else{
-            return "problema com a descrição";
-        }
-    }
+       
         public function excluir($id) {
             $sql = "delete from categoria where id = :id limit 1";
             $consulta = $this->pdo->prepare($sql);
@@ -48,5 +39,12 @@ class CategoriaController{
 
             return $consulta->execute();
         }
+            public function editar($id) {
+            $sql = "select * from usuários where id_user = :id_user limit 1";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->bindParam(":id_user", $id);
+            $consulta->execute();
 
+            return $consulta->fetch(PDO::FETCH_OBJ);
+        }
     }

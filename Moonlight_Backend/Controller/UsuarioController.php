@@ -26,17 +26,16 @@ class UsuarioController{
             $_SESSION['modalMessage'] = "O registro fornecido é inválido.";
         } else{
             $mensagem = $this->usuario->excluir($id);
-            if($mensagem == 1){
-                $_SESSION['modalTitle'] = "Registro excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido foi excluido.";
-            } else{
-                $_SESSION['modalTitle'] = "O Registro não foi excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido não foi excluido por alguma falha interna.";
+        if($mensagem == 1){
+            $_SESSION['modalTitle'] = "Registro excluído";
+            $_SESSION['modalMessage'] = "O registro fornecido foi excluido.";
+        } else{
+            $_SESSION['modalTitle'] = "O Registro não foi excluído";
+            $_SESSION['modalMessage'] = "O registro fornecido não foi excluido por alguma falha interna.";
             }
         }
 
         header("Location: " . BASE_URL . "/usuario/listar");
-        
     }
 
     public function salvar() {
@@ -159,5 +158,4 @@ class UsuarioController{
             exit;
         }
     }
-	
 }

@@ -212,77 +212,76 @@ ob_start();
 
     } else {
         ?>
-        <header class="header">
-            <div class="container">
-                <div class="flex">
-                    <div class="flex-col1">
-                        <a href="index" class="headerLogo" title="Pagina Inicial">
-                            <img src="<?= BASE_URL ?>/img/index/MoonlightMenor.png" alt="logo Moonlight">
-                        </a>
-                    </div>
-                    <div class="flex-col2">
-                        <a href="javascript:showMenu()" class="header-menu" id="header-menu">
-                            <i class="fas fa-bars" id="fa-bars"></i>
-                        </a>
-                        <nav class="header-nav" id="header-nav">
-                            <ul class="nav-ul">
-                                <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Categorias" href="<?= BASE_URL ?>/categoria">Categorias</a>
-                                </li>
-                                <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Games" href="<?= BASE_URL ?>/games">Games</a>
-                                </li>
-                                <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Favoritos" href="<?= BASE_URL ?>/favoritos">Favoritos</a>
-                                </li>
-                                <li class="nav-li">
-                                    <a class="nav-btn" title="Listagem de Usuarios" href="<?= BASE_URL ?>/usuario">Usuarios</a>
-                                </li>
-                                <li class="nav-li">
-                                    <div class="dropdown-container">
-                                        <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
-                                            <?php
-                                                // Obtém a hora atual para definir a saudação
-                                                date_default_timezone_set("America/Sao_Paulo");
-                                                $hour = date('H');
-                                                $greeting = "Olá";
+<header class="header">
+        <div class="container">
+        <div class="flex">
+        <div class="flex-col1">
+    <a href="index" class="headerLogo" title="Pagina Inicial">
+        <img src="<?= BASE_URL ?>/img/index/MoonlightMenor.png" alt="logo Moonlight">
+    </a>
+</div>
+    <div class="flex-col2">
+    <a href="javascript:showMenu()" class="header-menu" id="header-menu">
+    <i class="fas fa-bars" id="fa-bars"></i>
+</a>
+<nav class="header-nav" id="header-nav">
+    <ul class="nav-ul">
+        <li class="nav-li">
+        <a class="nav-btn" title="Listagem de Categorias" href="<?= BASE_URL ?>/categoria">Categorias</a>
+</li>
+    <li class="nav-li">
+        <a class="nav-btn" title="Listagem de Games" href="<?= BASE_URL ?>/games">Games</a>
+</li>
+    <li class="nav-li">
+        <a class="nav-btn" title="Listagem de Favoritos" href="<?= BASE_URL ?>/favoritos">Favoritos</a>
+</li>
+    <li class="nav-li">
+        <a class="nav-btn" title="Listagem de Usuarios" href="<?= BASE_URL ?>/usuario">Usuarios</a>
+</li>
+    <li class="nav-li">
+        <div class="dropdown-container">
+            <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
+                <?php
+                    // Obtém a hora atual para definir a saudação
+                    date_default_timezone_set("America/Sao_Paulo");
+                    $hour = date('H');
+                    $greeting = "Olá";
 
-                                                // Define a saudação com base na hora do dia
-                                                if ($hour >= 5 && $hour < 12) {
-                                                    $greeting = "Bom dia";
-                                                } else if ($hour >= 12 && $hour < 18) {
-                                                    $greeting = "Boa tarde";
-                                                } else {
-                                                    $greeting = "Boa noite";
-                                                }
-                                                
-                                                $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
+                    // Define a saudação com base na hora do dia
+                    if ($hour >= 5 && $hour < 12) {
+                        $greeting = "Bom dia";
+                    } else if ($hour >= 12 && $hour < 18) {
+                        $greeting = "Boa tarde";
+                    } else {
+                        $greeting = "Boa noite";
+                    }
+                    
+                    $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
 
-                                                // Exibe a saudação e o nome do usuário
-                                                echo $greeting . ", " . $userName . "!";
-                                            ?>
-                                            <span class="dropdown-arrow">&#9660</span> 
-                                            <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
+                    // Exibe a saudação e o nome do usuário
+                    echo $greeting . ", " . $userName . "!";
+                ?>
+                <span class="dropdown-arrow">&#9660</span> 
+                <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar 
+                    de uma imagem para representar essa seta. -->
 
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </header>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
+                </li>
+                    </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</header>
 
         <main>
                 <?php
-
-
                 $param = explode("/", $controller);
 
                 $controller = $param[0] ?? "index";
@@ -316,7 +315,7 @@ ob_start();
                 </p>
                 
                 <p class="description">
-                    © Moonlight - 2025
+                    ©Moonlight - 2025
                 </p>
             </div>
         </footer>

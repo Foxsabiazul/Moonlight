@@ -4,10 +4,10 @@ use PDO;
 use PDOException;
 
 class Conexao {
-    private static $host = "localhost:3306";
+    private static $host = "3306";
     private static $usuario = "root";
     private static $senha = "";
-    private static $db = "moonlight_e_commerce";
+    private static $db = "moonlight_e-commerce";
 
     public static function connect(): PDO {
         try {
