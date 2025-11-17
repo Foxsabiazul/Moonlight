@@ -17,16 +17,71 @@
             $this->pdo = $pdo;
         }
 
-        public function getUsuario($email){
-            $sql = "select * from usuários where email = :email limit 1";
+        /**
+         * @param array $dados Os dados do usuário, com a senha já com hash.
+         * @return bool
+         */
+        public function inserirUsuario(array $dados): bool {
+            $sql = "INSERT INTO usuários (nm_user, email, senha, data_criacao, tipo) 
+                    VALUES (:nm_user, :email, :senha, :data_criacao, :tipo)";
+            
             $consulta = $this->pdo->prepare($sql);
-            $consulta->bindParam(":email", $email);
-            $consulta->execute();
+            
+            $consulta->bindParam(":nm_user", $dados['nm_user']);
+            $consulta->bindParam(":email", $dados['email']);
+            $consulta->bindParam(":senha", $dados['senha']);
+            $consulta->bindParam(":data_criacao", $dados['data_criacao']);
+            $consulta->bindParam(":tipo", $dados['tipo']);
 
-            return $consulta->fetch(PDO::FETCH_OBJ);
+            return $consulta->execute();
         }
 
-        public function editar($id) {
+        /**
+         * @param array $dados Os dados do usuário. Pode conter a chave 'senha' ou não.
+         * @return bool
+         * 
+         * Faz update na tabela Usuários, com base nos dados fornecidos d
+         */
+        public function atualizarUsuario(array $dados): bool {
+            
+            $setClauses = "nm_user = :nm_user, email = :email, tipo = :tipo";
+            $parameters = [
+                ":nm_user" => $dados['nm_user'],
+                ":email"   => $dados['email'],
+                ":tipo" => $dados['tipo'],
+                ":id_user" => $dados['id_user']
+            ];
+            
+            // Se a senha foi fornecida no Controller, adiciona a string do comando SQL para a senha dentro do $setClauses.
+            if (isset($dados['senha'])) {
+                $setClauses .= ", senha = :senha";
+                $parameters[":senha"] = $dados['senha'];
+            }
+            
+            $sql = "UPDATE usuários SET {$setClauses} WHERE id_user = :id_user LIMIT 1";
+            $consulta = $this->pdo->prepare($sql);
+            
+            // Faz o bind de todos os parâmetros dinamicamente
+            foreach ($parameters as $key => $value) {
+                // $key: armazena a chave do array (ex: ":nm_user", ":email", ou ":senha")
+                // $value: armazena o valor do array (ex: "João", "joao@x.com", ou o hash da senha)
+                // $parameters[$key]: armazena a referencia do valor dessa chave no array, ou seja, é a mesma coisa que puxar o valor dele.
+                $consulta->bindParam($key, $parameters[$key]);
+            }
+
+            return $consulta->execute();
+        }
+
+        public function listarUsuario() {
+            $sql = "select * from usuários order by nm_user";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_OBJ);
+        }
+
+        // editar não é update, ele serve para resgatar os valores do banco para trazer à interface do formulario de Usuario
+        public function editarUsuario($id) {
             $sql = "select * from usuários where id_user = :id_user limit 1";
             $consulta = $this->pdo->prepare($sql);
             $consulta->bindParam(":id_user", $id);
@@ -35,47 +90,7 @@
             return $consulta->fetch(PDO::FETCH_OBJ);
         }
 
-        public function listar() {
-            $sql = "select * from usuários order by nm_user";
-            $consulta = $this->pdo->prepare($sql);
-            $consulta->execute();
-
-            return $consulta->fetchAll(PDO::FETCH_OBJ);
-        }
-
-        public function salvar() {
-            if (!empty($_POST["senha"])) $_POST["senha"] = password_hash($_POST["senha"], PASSWORD_DEFAULT);
-
-            if (empty($_POST["id"])) {
-                $sql = "insert into usuários (nm_user, email, senha, data_criacao) 
-                values (:nm_user, :email, :senha, :data_criacao)";
-                $consulta = $this->pdo->prepare($sql);
-                $consulta->bindParam(":nm_user", $_POST["nome"]);
-                $consulta->bindParam(":email", $_POST["email"]);
-                $consulta->bindParam(":senha", $_POST["senha"]);
-                $dataHoraSQL = (new \DateTime())->format('Y-m-d H:i:s');
-                $consulta->bindParam(":data_criacao", $dataHoraSQL);
-
-            } else if (empty($_POST["senha"])) {
-                $sql = "update usuários set nm_user = :nm_user, email = :email, where id_user = :id_user limit 1";
-                $consulta = $this->pdo->prepare($sql);
-                $consulta->bindParam(":nm_user", $_POST["nome"]);
-                $consulta->bindParam(":email", $_POST["email"]);
-                $consulta->bindParam(":id_user", $_POST["id"]);
-
-            } else {
-                $sql = "update usuários set senha = :senha, nm_user = :nm_user, email = :email where id_user = :id_user limit 1";
-                $consulta = $this->pdo->prepare($sql);
-                $consulta->bindParam(":senha", $_POST["senha"]);
-                $consulta->bindParam(":nm_user", $_POST["nome"]);
-                $consulta->bindParam(":email", $_POST["email"]);
-                $consulta->bindParam(":id_user", $_POST["id"]);
-            }
-
-            return $consulta->execute();
-        }
-
-        public function excluir($id) {
+        public function excluirUsuario($id) {
             $sql = "DELETE FROM usuários WHERE id_user = :id_user limit 1";
             $consulta = $this->pdo->prepare($sql);
             $consulta->bindParam(":id_user", $id);
@@ -83,9 +98,8 @@
             return $consulta->execute();
         }
 
-        public function getLogin($email) {
-
-            $sql = "select id_user, nm_user, email, senha, data_criacao from usuários where email = :email limit 1";
+        public function buscarPorEmail(string $email){
+            $sql = "select * from usuários where email = :email limit 1";
             $consulta = $this->pdo->prepare($sql);
             $consulta->bindParam(":email", $email);
             $consulta->execute();

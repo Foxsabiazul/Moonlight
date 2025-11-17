@@ -1,27 +1,11 @@
-<?php
-
-$nome = $email = NULL;
-
-if (!empty($id)) {
-    $dados = $this->usuario->editar($id);
-
-    if (empty($dados)) {
-        $_SESSION['modalTitle'] = "Dados inválidos";
-        $_SESSION['modalMessage'] = "Os dados não foram encontrados.";
-        exit;
-    }
-
-    $id = $dados->id_user;
-    $nome = $dados->nm_user;
-    $email = $dados->email;
-    $dataCriacao = $dados->data_criacao;
-}
-
-?>
 <div class="container">
     <div class="card">
         <div class="card-header jc-between">
-            <h2 class="float-start as-center white-text">Cadastro de Usuários</h2>
+            <?php if(!empty($dados->id_user)): ?>
+            <h2 class="float-start as-center white-text">Atualização de Usuário</h2>
+            <?php else: ?>
+            <h2 class="float-start as-center white-text">Cadastro de Usuário</h2>
+            <?php endif; ?>
             <div class="float-end">
                 <a href="<?= BASE_URL ?>/usuario" title="Novo Registro" class="simpleBtn p-x1 textdec-Debloat white-text">
                     <i class="fas fa-file"></i> Novo Registro
@@ -63,6 +47,14 @@ if (!empty($id)) {
                             data-parsley-equalto="#senha"
                             data-parsley-equalto-message="As senhas são diferentes"
                             placeholder="Redigite a senha do Usuario">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="tipo" class="formLabel">Tipo do Usuario</label>
+                        <select name="tipo" id="tipo" class="selectForm-control" data-parsley-required-message="Selecione um tipo" required>
+                            <option value="">Selecione um Tipo</option>
+                            <option value="cliente" <?= $tipo === "cliente" ? "selected" : "" ?>>Cliente</option>
+                            <option value="admin" <?= $tipo === "admin" ? "selected" : "" ?>>Administrador</option>
+                        </select>
                     </div>
                 </div>
                 <br>

@@ -2,118 +2,153 @@ CREATE DATABASE moonlight_e_commerce;
 
 USE moonlight_e_commerce;
 
--- Tabela Usuários
+
 CREATE TABLE `Usuários`(
-    `id_user` BIGINT NOT NULL PRIMARY KEY, -- PK adicionada
+    `id_user` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `nm_user` VARCHAR(255) NOT NULL COMMENT 'Nome do usuário',
-    `email` VARCHAR(150) NOT NULL UNIQUE COMMENT 'Único (login)', -- Adicionado UNIQUE
+    `email` VARCHAR(150) NOT NULL UNIQUE COMMENT 'Único (login)',
     `senha` VARCHAR(255) NOT NULL COMMENT 'Hash da senha',
-    `data_criacao` DATETIME NOT NULL COMMENT 'Quando foi criado',
-    `type_user` ENUM('user','admin') NOT NULL DEFAULT 'user'
+    `data_criacao` DATETIME NOT NULL COMMENT 'Quando foi criado'
+    `tipo` ENUM('cliente','admin') NOT NULL DEFAULT 'cliente'
 );
 
--- Tabela Jogos
+
+CREATE TABLE `Categorias`(
+    `id_categoria` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `nm_cat` VARCHAR(255) NOT NULL,
+    `desc_cat` VARCHAR(255) NOT NULL
+);
+
+---
+
+
 CREATE TABLE `Jogos`(
-    `id_games` BIGINT NOT NULL PRIMARY KEY, -- PK adicionada
+    `id_games` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id_categoria` BIGINT NOT NULL COMMENT 'Id de categoria',
     `titulo` VARCHAR(255) NOT NULL COMMENT 'Nome do jogo',
-    `descricao` VARCHAR(255) COMMENT 'Texto descritivo', -- Corrigido o nome da coluna e o NOT NULL é opcional aqui
+    `descricao` VARCHAR(255) COMMENT 'Texto descritivo',
     `preco` DECIMAL(10, 2) NOT NULL COMMENT 'Preço do jogo',
     `imagem` VARCHAR(255) COMMENT 'Caminho/URL da capa',
     `link` VARCHAR(255) COMMENT 'Caminho/URL do arquivo (ou null)',
-    `data_lancamento` DATE NOT NULL COMMENT 'Data de lançamento'
+    `data_lancamento` DATE NOT NULL COMMENT 'Data de lançamento',
+    `ativo` ENUM('S', 'N') NOT NULL
+    
+    -- Chave Estrangeira (FK)
+    CONSTRAINT `fk_jogos_categoria` FOREIGN KEY (`id_categoria`) 
+        REFERENCES `Categorias`(`id_categoria`)
 );
 
--- Tabela Pedido (renomeada de 'Pedido' para 'Pedidos' e 'id_orders' para 'id_pedido' para consistência)
+-- índice na tabela jogos para otimizar buscas por titulos e preços de jogo
+CREATE INDEX `idx_jogos_titulo` ON `Jogos` (`titulo`);
+CREATE INDEX `idx_jogos_preco` ON `Jogos` (`preco`);
+
+---
+
+
 CREATE TABLE `Pedidos`(
-    `id_pedido` BIGINT NOT NULL PRIMARY KEY, -- PK adicionada
-    `user_id` BIGINT NOT NULL COMMENT 'Quem comprou',
+    -- Corrigido para AUTO_INCREMENT, que é comum para tabelas principais
+    `id_pedido` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+    `id_user` BIGINT NOT NULL COMMENT 'Quem comprou',
     `data_pedido` TIMESTAMP NOT NULL COMMENT 'Data da compra',
-    `total` DECIMAL(10, 2) NOT NULL COMMENT 'Valor total para o usuário com descrição se possivel'
+    `total` DECIMAL(10, 2) NOT NULL COMMENT 'Valor total para o usuário',
+    
+    -- Chave Estrangeira (FK)
+    CONSTRAINT `fk_pedidos_user` FOREIGN KEY (`id_user`) 
+        REFERENCES `Usuários`(`id_user`)
 );
 
--- Tabela ItensCompra
+---
+
+-- Tabela de relacionamento N:M (Pedido tem M Jogos)
 CREATE TABLE `ItensCompra`(
-    `id_itens` BIGINT NOT NULL PRIMARY KEY, -- PK adicionada
-    `order_id` BIGINT NOT NULL COMMENT 'Qual compra',
-    `game_id` BIGINT NOT NULL COMMENT 'Qual jogo foi comprado',
-    `preco` DECIMAL(10, 2) NOT NULL COMMENT 'Preço do jogo na data da compra'
+    `id_pedido` BIGINT NOT NULL COMMENT 'Qual compra',
+    `id_games` BIGINT NOT NULL COMMENT 'Qual jogo foi comprado',
+    `preco` DECIMAL(10, 2) NOT NULL COMMENT 'Preço do jogo na data da compra',
+    
+    -- Chave Primária Composta (Corrigida a sintaxe)
+    PRIMARY KEY (id_pedido, id_games), 
+    
+    -- Chaves Estrangeiras (FKs)
+    CONSTRAINT `fk_itenscompra_pedido` FOREIGN KEY (`id_pedido`) 
+        REFERENCES `Pedidos`(`id_pedido`),
+    CONSTRAINT `fk_itenscompra_jogo` FOREIGN KEY (`id_games`) 
+        REFERENCES `Jogos`(`id_games`)
 );
 
--- Tabela Biblioteca
+-- índice na tabela ItemCompra para otimizar buscas por pedido e jogo
+CREATE INDEX `idx_itemcompra_pedido` ON `ItensCompra` (`id_pedido`);
+CREATE INDEX `idx_itemcompra_games` ON `ItensCompra` (`id_games`);
+
+-- Tabela de relacionamento N:M (Usuário tem M Jogos)
 CREATE TABLE `Biblioteca`(
-    `id_library` BIGINT NOT NULL PRIMARY KEY,
-    `user_id` BIGINT NOT NULL COMMENT 'Dono do jogo',
-    `games_id` BIGINT NOT NULL COMMENT 'Jogo adquirido',
-    `data_adicao` TIMESTAMP NOT NULL COMMENT 'Quando foi liberado na conta ou data de acesso'
-    -- A PRIMARY KEY já estava definida. Considere uma chave composta (user_id, games_id) em vez de id_library, dependendo da necessidade.
+    `id_user` BIGINT NOT NULL COMMENT 'Dono do jogo',
+    `id_games` BIGINT NOT NULL COMMENT 'Jogo adquirido',
+    `data_adicao` TIMESTAMP NOT NULL COMMENT 'Quando foi liberado na conta ou data de acesso',
+    
+    -- Chave Primária Composta 
+    PRIMARY KEY (id_user, id_games),
+    
+    -- Chaves Estrangeiras (FKs)
+    CONSTRAINT `fk_biblioteca_user` FOREIGN KEY (`id_user`) 
+        REFERENCES `Usuários`(`id_user`),
+    CONSTRAINT `fk_biblioteca_jogo` FOREIGN KEY (`id_games`) 
+        REFERENCES `Jogos`(`id_games`)
 );
 
--- Tabela Categorias (Corrigido o tipo de `id_games` para BIGINT)
-CREATE TABLE `Categorias`(
-    `id_catg` BIGINT NOT NULL PRIMARY KEY,
-    -- O campo `biblioteca_id` parece inadequado aqui. Uma categoria deve ser aplicada a um Jogo.
-    -- O campo `id_games` deve ser parte de uma tabela de relacionamento (Categorias_Jogos) ou removido daqui.
-    `nm_cat` VARCHAR(255) NOT NULL,
-    `desc_cat` VARCHAR(255) NOT NULL
-    -- O campo `id_games` foi removido daqui e será tratado na tabela de relacionamento.
-);
 
--- Tabela de Relacionamento N:M entre Jogos e Categorias
-CREATE TABLE `Jogos_Categorias`(
-    `game_id` BIGINT NOT NULL,
-    `cat_id` BIGINT NOT NULL,
-    PRIMARY KEY (`game_id`, `cat_id`)
-);
-
--- Tabela Favoritos
+-- Tabela de relacionamento N:M (Usuário tem M Jogos Favoritos)
 CREATE TABLE `Favoritos`(
-    `fav_id` BIGINT NOT NULL PRIMARY KEY, -- PK já estava definida
     `id_user` BIGINT NOT NULL,
     `id_games` BIGINT NOT NULL,
-    `fav_star` ENUM('1','2','3','4','5', 'indefinido') NOT NULL DEFAULT 'indefinido'
+    `fav_star` ENUM('1','2','3','4','5', 'indefinido') NOT NULL DEFAULT 'indefinido',
+    
+    -- Chave Primária Composta
+    PRIMARY KEY (id_user, id_games),
+    
+    -- Chaves Estrangeiras (FKs)
+    CONSTRAINT `fk_favoritos_user` FOREIGN KEY (`id_user`) 
+        REFERENCES `Usuários`(`id_user`),
+    CONSTRAINT `fk_favoritos_jogo` FOREIGN KEY (`id_games`) 
+        REFERENCES `Jogos`(`id_games`)
 );
 
--- 1. Tabela Pedidos: FK para Usuários (user_id -> Usuários.id_user)
-ALTER TABLE `Pedidos`
-ADD CONSTRAINT `fk_pedidos_user` FOREIGN KEY (`user_id`)
-REFERENCES `Usuários`(`id_user`);
+CREATE TABLE `AuditoriaPreco`(
+    `id_audipreco` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `id_games` BIGINT NOT NULL,
+    `preco_antigo` DECIMAL(10, 2) NOT NULL,
+    `preco_novo` DECIMAL(10, 2) NOT NULL,
+    `data_alteracao` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `usuario_alteracao` varchar(255) comment 'Usuario que alterou',
+    FOREIGN KEY (`id_games`) REFERENCES `Jogos`(`id_games`)
+);
 
--- 2. Tabela ItensCompra: FK para Pedidos (order_id -> Pedidos.id_pedido)
-ALTER TABLE `ItensCompra`
-ADD CONSTRAINT `fk_itenscompra_pedido` FOREIGN KEY (`order_id`)
-REFERENCES `Pedidos`(`id_pedido`);
+-- TRIGGER para jogos: Verifica se a coluna 'preco' foi alterada e avisa quem foi que mudou.
 
--- 3. Tabela ItensCompra: FK para Jogos (game_id -> Jogos.id_games)
-ALTER TABLE `ItensCompra`
-ADD CONSTRAINT `fk_itenscompra_jogo` FOREIGN KEY (`game_id`)
-REFERENCES `Jogos`(`id_games`);
+DELIMITER //
 
--- 4. Tabela Biblioteca: FK para Usuários (user_id -> Usuários.id_user)
-ALTER TABLE `Biblioteca`
-ADD CONSTRAINT `fk_biblioteca_user` FOREIGN KEY (`user_id`)
-REFERENCES `Usuários`(`id_user`);
+CREATE TRIGGER `trg_auditar_preco_jogo`
+AFTER UPDATE ON `Jogos` 
+FOR EACH ROW
+BEGIN
+    -- Verifica se a coluna 'preco' foi alterada
+    IF OLD.preco <> NEW.preco THEN
+        INSERT INTO `AuditoriaPreco` (
+            `id_games`,         
+            `preco_antigo`,
+            `preco_novo`,
+            `usuario_alteracao`
+        )
+        VALUES (
+            NEW.id_games,       
+            OLD.preco,
+            NEW.preco,
+            COALESCE(@usuario_logado, USER())
+        );
+    END IF;
+END //
 
--- 5. Tabela Biblioteca: FK para Jogos (games_id -> Jogos.id_games)
-ALTER TABLE `Biblioteca`
-ADD CONSTRAINT `fk_biblioteca_jogo` FOREIGN KEY (`games_id`)
-REFERENCES `Jogos`(`id_games`);
+DELIMITER ;
 
--- 6. Tabela Favoritos: FK para Usuários (id_user -> Usuários.id_user)
-ALTER TABLE `Favoritos`
-ADD CONSTRAINT `fk_favoritos_user` FOREIGN KEY (`id_user`)
-REFERENCES `Usuários`(`id_user`);
+insert into usuários (nm_user, email, senha, data_criacao, tipo) values ('Carlinhos', 'carlos@gmail.com', '1234', '2025-10-30 17:54:59', 'admin');
 
--- 7. Tabela Favoritos: FK para Jogos (id_games -> Jogos.id_games)
-ALTER TABLE `Favoritos`
-ADD CONSTRAINT `fk_favoritos_jogo` FOREIGN KEY (`id_games`)
-REFERENCES `Jogos`(`id_games`);
-
--- 8. Tabela Jogos_Categorias: FK para Jogos (game_id -> Jogos.id_games)
-ALTER TABLE `Jogos_Categorias`
-ADD CONSTRAINT `fk_jogoscateg_jogo` FOREIGN KEY (`game_id`)
-REFERENCES `Jogos`(`id_games`);
-
--- 9. Tabela Jogos_Categorias: FK para Categorias (cat_id -> Categorias.id_catg)
-ALTER TABLE `Jogos_Categorias`
-ADD CONSTRAINT `fk_jogoscateg_cat` FOREIGN KEY (`cat_id`)
-REFERENCES `Categorias`(`id_catg`);
+-- RESTO DAS FUNÇÕES ESTÃO EM UM TXT NA AREA DE TRABALHO.

@@ -1,10 +1,10 @@
 function fecharModal(){
-    const modalContainer = document.getElementById('modal-container');
-    const modalOverlay = document.getElementById('modal-overlay');
-    modalContainer.style.display = "none";
-    modalContainer.style.opacity = "0";
-    modalOverlay.style.display = "none";
-    modalOverlay.style.opacity = "0";
+    const modalcontainer = document.getElementById('modal-container');
+    const modaloverlay = document.getElementById('modal-overlay');
+    modalcontainer.style.display = "none";
+    modalcontainer.style.opacity = "0";
+    modaloverlay.style.display = "none";
+    modaloverlay.style.opacity = "0";
 }
 
 function fecharModalExclusao(){
@@ -17,12 +17,12 @@ function fecharModalExclusao(){
 }
 
 window.onload = () =>{
-    const modalContainer = document.getElementById('modal-container');
-    const modalOverlay = document.getElementById('modal-overlay');
-    if(modalContainer){
-        modalContainer.style.display = "flex";
-        modalOverlay.style.display = "flex";
-        modalContainer.style.opacity = "1";
-        modalOverlay.style.opacity = "1";
+    const modalcontainer = document.getElementById('modal-container');
+    const modaloverlay = document.getElementById('modal-overlay');
+    if(modalcontainer){
+        modalcontainer.style.display = "flex";
+        modaloverlay.style.display = "flex";
+        modalcontainer.style.opacity = "1";
+        modaloverlay.style.opacity = "1";
     }
 }

@@ -2,12 +2,12 @@
         <div id="modal-container" class="modal-container" style="display: flex; opacity: 1;">
             <div class="modal">
                 <div class="modalContainerTitle">
-                    <h3 class="modalTitle" id="modalTitle">
+                    <h3 class="modalTitle">
                         <?= htmlspecialchars($_SESSION['modalTitle']) ?>
                     </h3>
                 </div>
                 <div class="modalContainerMessage">
-                    <p class="modalMessage" id="modalMessage">
+                    <p class="modalMessage">
                         <?= htmlspecialchars($_SESSION['modalMessage']) ?>
                     </p>
                 </div>

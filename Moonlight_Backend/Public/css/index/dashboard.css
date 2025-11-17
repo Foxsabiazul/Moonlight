@@ -2,6 +2,12 @@
     --bs-table-bg: none !important;
 }
 
+.dashboard-table{
+    overflow-y: auto;
+    overflow-x: auto;
+    height: auto;
+}
+
 .dashboard-table thead tr {
     font-family: var(--font-default);
     background-color: var(--secondColor);
@@ -34,4 +40,14 @@
 
 .dashboard-table tbody tr:nth-of-type(even):hover {
     background-color: var(--tableCTA);
+}
+
+#opcoes{
+    align-content: center;
+}
+
+@media(max-width: 768px){
+    .dashboard-table{
+        display: block;
+    }
 }

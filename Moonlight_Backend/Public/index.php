@@ -30,7 +30,7 @@ ob_start();
     // Exemplo: /Moonlight/Moonlight_Backend/Public
     $base_path = rtrim($root_dir, '/'); 
 
-    // 5. Constrói a URL completa e define a constante sem a barra final
+    // Constrói a URL completa e define a constante sem a barra final
     define('BASE_URL', "{$protocol}://{$host}{$base_path}");
 
     require __DIR__ .  "/../vendor/autoload.php";
@@ -41,9 +41,7 @@ ob_start();
         $controller = "index";
     }
 
-    use Moonlight_Backend\Controller\IndexController;
     use Moonlight_Backend\Controller\UsuarioController;
-    use Moonlight_Backend\Controller\CategoriaController;
     
 ?>
 <!DOCTYPE html>
@@ -61,6 +59,7 @@ ob_start();
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/index/forms.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/index/erro.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/index/dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 <?php
     $cssMap = [
         "store" => [
@@ -112,14 +111,44 @@ ob_start();
         }
     }
     ?>
-    <script src="<?= BASE_URL ?>/js/index/login.js"></script>
-    <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="/js/index/login.js"></script> -->
+    <!-- <script src="/js/index/layout.js"></script> -->
     <script src="<?= BASE_URL ?>/js/jquery-3.5.1.min.js"></script>
+    <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
     <script src="<?= BASE_URL ?>/js/jquery.inputmask.min.js"></script>
-    <script src="<?= BASE_URL ?>/js/bindings/inputmask.binding.js"></script>
+    <script src="<?= BASE_URL ?>/js/jquery.maskedinput-1.2.1.js"></script>
     <script src="<?= BASE_URL ?>/js/parsley.min.js"></script>
-    <script src="<?= BASE_URL ?>/js/index/layout.js"></script>
     <script>
+
+        function fecharModal(){
+            const modalcontainer = document.getElementById('modal-container');
+            const modaloverlay = document.getElementById('modal-overlay');
+            modalcontainer.style.display = "none";
+            modalcontainer.style.opacity = "0";
+            modaloverlay.style.display = "none";
+            modaloverlay.style.opacity = "0";
+        }
+
+        function fecharModalExclusao(){
+            const modalContainer = document.getElementById('modalContainer');
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalContainer.style.display = "none";
+            modalContainer.style.opacity = "0";
+            modalOverlay.style.display = "none";
+            modalOverlay.style.opacity = "0";
+        }
+
+        window.onload = () =>{
+            const modalcontainer = document.getElementById('modal-container');
+            const modaloverlay = document.getElementById('modal-overlay');
+            if(modalcontainer){
+                modalcontainer.style.display = "flex";
+                modaloverlay.style.display = "flex";
+                modalcontainer.style.opacity = "1";
+                modaloverlay.style.opacity = "1";
+            }
+        }
+
 
         function showMenu() {
             let bars = document.getElementById('fa-bars');
@@ -139,18 +168,15 @@ ob_start();
             const modalOverlay = document.getElementById('modalOverlay');
             const modalTitle = document.getElementById('modalTitle');
             const modalMessage = document.getElementById('modalMessage');
-
-            if(modalContainer){
-                modalContainer.style.display = "flex";
-                modalOverlay.style.display = "flex";
-                modalContainer.style.opacity = "1";
-                modalOverlay.style.opacity = "1";
-            }
-
-            modalTitle.textContent = "Excluir Registro";
-            modalMessage.textContent = "Deseja excluir este registro da tabela de " + tabela + "?";
-
             let idParaExcluir = id;
+
+            modalTitle.innerText = "Excluir Registro";
+            modalMessage.innerText = "Deseja excluir este registro da tabela de " + tabela + "?";
+            modalContainer.style.display = "flex";
+            modalOverlay.style.display = "flex";
+            modalContainer.style.opacity = "1";
+            modalOverlay.style.opacity = "1";
+            
             
             // Limpa listeners anteriores para evitar múltiplos eventos
             document.getElementById('btnConfirmar').removeEventListener("click", executeExclusao);
@@ -166,8 +192,6 @@ ob_start();
             function cancelarExclusao() {
                 idParaExcluir = null;
                 fecharModalExclusao();
-                modalTitle.textContent = "";
-                modalMessage.textContent = "";
             }
             
             // Adiciona os listeners
@@ -206,79 +230,76 @@ ob_start();
     } else if(!isset($_SESSION['Logado_Na_Sessão']) && ($_POST)){
 
         $acao = new UsuarioController();
-
-        $cleanData = $acao->sanitizacaoValidacaoInicial();
-        $acao->verificar($cleanData['email'], $cleanData['senha']);
+        $acao->login();
 
     } else {
         ?>
-<header class="header">
-        <div class="container">
-        <div class="flex">
-        <div class="flex-col1">
-    <a href="index" class="headerLogo" title="Pagina Inicial">
-        <img src="<?= BASE_URL ?>/img/index/MoonlightMenor.png" alt="logo Moonlight">
-    </a>
-</div>
-    <div class="flex-col2">
-    <a href="javascript:showMenu()" class="header-menu" id="header-menu">
-    <i class="fas fa-bars" id="fa-bars"></i>
-</a>
-<nav class="header-nav" id="header-nav">
-    <ul class="nav-ul">
-        <li class="nav-li">
-        <a class="nav-btn" title="Listagem de Categorias" href="<?= BASE_URL ?>/categoria">Categorias</a>
-</li>
-    <li class="nav-li">
-        <a class="nav-btn" title="Listagem de Games" href="<?= BASE_URL ?>/games">Games</a>
-</li>
-    <li class="nav-li">
-        <a class="nav-btn" title="Listagem de Favoritos" href="<?= BASE_URL ?>/favoritos">Favoritos</a>
-</li>
-    <li class="nav-li">
-        <a class="nav-btn" title="Listagem de Usuarios" href="<?= BASE_URL ?>/usuario">Usuarios</a>
-</li>
-    <li class="nav-li">
-        <div class="dropdown-container">
-            <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
-                <?php
-                    // Obtém a hora atual para definir a saudação
-                    date_default_timezone_set("America/Sao_Paulo");
-                    $hour = date('H');
-                    $greeting = "Olá";
+        <header class="header">
+            <div class="container">
+                <div class="flex">
+                    <div class="flex-col1">
+                        <a href="<?= BASE_URL ?>/index" class="headerLogo" title="Pagina Inicial">
+                            <img src="<?= BASE_URL ?>/img/index/MoonlightMenor.png" alt="logo Moonlight">
+                        </a>
+                    </div>
+                    <div class="flex-col2">
+                        <a href="javascript:showMenu()" class="header-menu" id="header-menu">
+                            <i class="fas fa-bars" id="fa-bars"></i>
+                        </a>
+                        <nav class="header-nav" id="header-nav">
+                            <ul class="nav-ul">
+                                <li class="nav-li">
+                                    <a class="nav-btn" title="Listagem de Categorias" href="<?= BASE_URL ?>/categoria">Categorias</a>
+                                </li>
+                                <li class="nav-li">
+                                    <a class="nav-btn" title="Listagem de Jogos" href="<?= BASE_URL ?>/games">Jogos</a>
+                                </li>
+                                <li class="nav-li">
+                                    <a class="nav-btn" title="Listagem de Usuarios" href="<?= BASE_URL ?>/usuario">Usuarios</a>
+                                </li>
+                                <li class="nav-li">
+                                    <div class="dropdown-container">
+                                        <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
+                                            <?php
+                                                // Obtém a hora atual para definir a saudação
+                                                date_default_timezone_set("America/Sao_Paulo");
+                                                $hour = date('H');
+                                                $greeting = "Olá";
 
-                    // Define a saudação com base na hora do dia
-                    if ($hour >= 5 && $hour < 12) {
-                        $greeting = "Bom dia";
-                    } else if ($hour >= 12 && $hour < 18) {
-                        $greeting = "Boa tarde";
-                    } else {
-                        $greeting = "Boa noite";
-                    }
-                    
-                    $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
+                                                // Define a saudação com base na hora do dia
+                                                if ($hour >= 5 && $hour < 12) {
+                                                    $greeting = "Bom dia";
+                                                } else if ($hour >= 12 && $hour < 18) {
+                                                    $greeting = "Boa tarde";
+                                                } else {
+                                                    $greeting = "Boa noite";
+                                                }
+                                                
+                                                $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
 
-                    // Exibe a saudação e o nome do usuário
-                    echo $greeting . ", " . $userName . "!";
-                ?>
-                <span class="dropdown-arrow">&#9660</span> 
-                <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar 
-                    de uma imagem para representar essa seta. -->
+                                                // Exibe a saudação e o nome do usuário
+                                                echo $greeting . ", " . $userName . "!";
+                                            ?>
+                                            <span class="dropdown-arrow">&#9660</span> 
+                                            <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
 
-            </a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
-                </li>
-                    </ul>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-</header>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="http://localhost/Moonlight/Moonlight/Public/index">Entrar na loja</a>
+                                            </li>
+                                            <li>
+                                                <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
 
         <main>
                 <?php
@@ -309,7 +330,7 @@ ob_start();
         <footer class="footer">
             <div class="footerClass">
                 <p>
-                    <a href="index" title="Pagina Inicial">
+                    <a href="<?= BASE_URL ?>/index" title="Pagina Inicial">
                         <img src="<?= BASE_URL ?>/img/index/Moonlight.png" alt="logo Moonlight">
                     </a>
                 </p>
