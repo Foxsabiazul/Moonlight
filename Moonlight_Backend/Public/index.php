@@ -303,8 +303,6 @@ ob_start();
 
         <main>
                 <?php
-
-
                 $param = explode("/", $controller);
 
                 $controller = $param[0] ?? "index";
@@ -338,7 +336,7 @@ ob_start();
                 </p>
                 
                 <p class="description">
-                    © Moonlight - 2025
+                    ©Moonlight - 2025
                 </p>
             </div>
         </footer>

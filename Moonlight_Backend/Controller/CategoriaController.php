@@ -134,6 +134,11 @@ class CategoriaController{
                 $_SESSION['modalMessage'] = "O registro fornecido não foi excluido por alguma falha interna.";
             }
         }
+            public function editar($id) {
+            $sql = "select * from usuários where id_user = :id_user limit 1";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->bindParam(":id_user", $id);
+            $consulta->execute();
 
         header("Location: " . BASE_URL . "/categoria/listar");
         exit;

@@ -6,9 +6,11 @@ class PedidoModel{
     private float $total;
     private float $preco;
     private string $itens;
+    private $pdo;
 
-    public function __construct(int $idOrder, float $dataPED, float $total, float $preco, string $itens)
+    public function __construct($pdo, int $idOrder, float $dataPED, float $total, float $preco, string $itens)
     {
+        $this->pdo = $pdo;
         $this->idOrder = $idOrder;
         $this->dataPED = $dataPED;
         $this->total = $total;
@@ -17,6 +19,10 @@ class PedidoModel{
     }
     
     //GETTERS
+    public function getPdo(){
+        return $this->pdo;
+    }
+
     public function getIdOrder(): int 
     {
         return $this->idOrder;
@@ -41,7 +47,11 @@ class PedidoModel{
     {
         return $this->itens;
     }
+
     //SETTERS
+    public function setPdo($pdo){
+        $this->pdo = $pdo;
+    }
 
     public function setIdOrder(int $idOrder): void 
     {
@@ -67,8 +77,7 @@ class PedidoModel{
     {
         $this->itens = $itens;
     }
-
+    
 }
-
 
 ?>

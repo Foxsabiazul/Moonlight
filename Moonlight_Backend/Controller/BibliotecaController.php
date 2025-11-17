@@ -4,11 +4,21 @@ require "./Moonlight_Backend/Model/BibliotecaModel.php";
 
 class BibliotecaController {
   private int $id_games;
-  private  $categoria;
-  private int $senha;
+  private string $categoria;
   private $pdo;
 
-  public function GetUsuario($email, $senha){
-    
+  public function _construct(int $id_games, string $categoria, $pdo){
+    $this->id_games = $id_games;
+    $this->categoria = $categoria;
+    $this->pdo = $pdo;
   }
+
+
+  public function listar() {
+            $sql = "select * from usuários order by nm_user";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_OBJ);
+        }
 }
