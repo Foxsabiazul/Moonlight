@@ -8,11 +8,12 @@ class CategoriaController{
     private string $nome; //nome da categoria
     private $pdo;
     
-       public function  __construct(int $id, float $pdo, string $descricao, string $nome)//parametros 
+       public function  __construct(int $id, $pdo, string $descricao, string $nome)//parametros 
        {
             $this->id = $id;
             $this->descricao = $descricao;
             $this->nome = $nome;
+            $this->pdo = $pdo;
        }
        
         public function excluir($id) {

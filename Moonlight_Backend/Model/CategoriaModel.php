@@ -19,12 +19,12 @@ class CategoriaModel {
         $this->nome_categoria = $nome_categoria;
 
     }
-          public function Listar() {//listagem por descrição
-            $sql = "select * from categoria order by descricao";
-            $consulta = $this->pdo->prepare($sql);
-            $consulta->execute();
+        public function Listar() {//listagem por descrição
+        $sql = "select * from categoria order by descricao";
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->execute();
 
-            return $consulta->fetchAll(PDO::FETCH_OBJ);//return com fecth para resultados 
+        return $consulta->fetchAll(PDO::FETCH_OBJ);//return com fecth para resultados 
         }
         
         //GETTERS

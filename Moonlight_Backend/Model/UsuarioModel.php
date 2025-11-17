@@ -8,8 +8,9 @@
 
     class UsuarioModel {
         private PDO $pdo;
-
+        
         public function __construct(
+            
             PDO $pdo,
         )
         {
@@ -43,7 +44,6 @@
         }
 
         public function salvar() {
-            
             if (!empty($_POST["senha"])) $_POST["senha"] = password_hash($_POST["senha"], PASSWORD_DEFAULT);
 
             if (empty($_POST["id"])) {

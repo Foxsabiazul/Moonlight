@@ -5,9 +5,10 @@
     use Moonlight_Backend\config\Sanitizador;
     use Moonlight_Backend\config\Conexao;
     use Moonlight_Backend\Model\UsuarioModel;
+    use PDO;
 
 class UsuarioController{
-
+    private PDO $pdo;
     private $usuario;
 
     public function __construct(){
