@@ -1,98 +1,175 @@
 <?php
 
+namespace Moonlight_Backend\Model;
+use PDO;
+
 class GamesModel {
-    private int $id;
-    private string $titulo;
-    private string $descricao;
-    private string $link;
-    private float $preco;
-    private float $imagem;
-    private float $dataLanc;
+    //declaração de variáveis 
+    private PDO $pdo;
 
-    public function __construct(int $id, string $titulo, string $descricao, string $link,
-    float $preco, float $imagem, float $dataLanc) {
-        $this->id = $id;
-        $this->titulo = $titulo;
-        $this->link = $link;
-        $this->preco = $preco;
-        $this->imagem = $imagem;
-        $this->dataLanc = $dataLanc;
-        $this->descricao = $descricao;
-    }
-    //GETTERS
-    public function getId(): int 
+    public function __construct(
+        PDO $pdo,
+    )
     {
-        return $this->id;
+        $this->pdo = $pdo;
     }
 
-	public function getTitulo(): string 
-    {
-        return $this->titulo;
+    /**
+     * @param array $dados Os dados do Jogo.
+     * @return bool resposta ao usuario.
+     */
+    public function inserirGames(array $dados): bool {
+        // Colunas: id_categoria, titulo, preco, data_lancamento, ativo (os que são obrigatorios entrarem). Os que não são, estão no isset abaixo:
+
+        // insert exige que as colunas sejam preenchidas desta forma, ao invés de fazer tudo em seguida igual ao update que faz assim por ex: 'id_categoria = :id_categoria'
+        $columns = [
+            'id_categoria', 
+            'titulo', 
+            'preco',
+            'data_lancamento', 
+            'ativo'
+        ];
+
+        $parameters = [
+            ":id_categoria" => $dados['id_categoria'],
+            ":titulo"       => $dados['titulo'],
+            ":preco"        => $dados['preco'],
+            ":data_lancamento" => $dados['data_lancamento'],
+            ":ativo"        => $dados['ativo']
+        ];
+
+        // colunas opcionais
+        if (isset($dados['descricao'])) { 
+            $columns[] = 'descricao'; // Adiciona o nome da coluna dentro do array como uma key. ex: $columns['descricao'] (mas nao define valor)
+            $parameters[":descricao"] = $dados['descricao']; // Adiciona placeholder (:descricao) como uma key do array e seu devido valor para realizar o bindParam em foreach no final.
+        }
+
+        if (isset($dados['imagem'])){
+            $columns[] = 'imagem';
+            $parameters[":imagem"] = $dados['imagem'];
+        }
+
+        if(isset($dados['link'])){
+            $columns[] = 'link';
+            $parameters[":link"] = $dados['link'];
+        }
+
+        // pegamos as keys dos arrays (o apelido da "variavel" dentro do array) e transformamos em uma string normal.
+        $columnsList = implode(', ', $columns); // "id_categoria, titulo, preco, ..."
+        $parametersList = implode(', ', array_keys($parameters)); // ":id_categoria, :titulo, :preco, ..."
+
+        $sql = "INSERT INTO jogos (
+                    {$columnsList}
+                ) 
+                VALUES (
+                    {$parametersList}
+                )";
+        
+        $consulta = $this->pdo->prepare($sql);
+        
+        foreach ($parameters as $key => $value) {
+            $consulta->bindParam($key, $parameters[$key]);
+        }
+
+        return $consulta->execute();
     }
 
-	public function getDescricao(): string 
-    {
-        return $this->descricao;
+    /**
+     * @param array $dados Os dados do Jogo.
+     * @return bool resposta ao usuario
+     * * Faz update na tabela Jogos, com base nos dados fornecidos da controller
+     */
+    public function atualizarGames(array $dados): bool {
+
+        // Todas as colunas que podem ser alteradas (exceto a chave primária id_games)
+
+        // o update exige que as colunas sejam chamadas assim no comando. 
+        $setClauses = "
+            id_categoria = :id_categoria, 
+            titulo = :titulo, 
+            preco = :preco,
+            data_lancamento = :data_lancamento, 
+            ativo = :ativo
+        ";
+
+        $parameters = [
+            ":id_categoria" => $dados['id_categoria'],
+            ":titulo"       => $dados['titulo'],
+            ":preco"        => $dados['preco'],
+            ":data_lancamento" => $dados['data_lancamento'],
+            ":ativo"        => $dados['ativo'],
+            ":id_games" => $dados['id_games']
+        ];
+
+        if (isset($dados['descricao'])) { 
+            $setClauses .= ", descricao = :descricao"; //mesma logica do de cima (queremos fazer uma string), a diferença é que ja adicionamos na string antes: ex: $setClauses = $setClauses + ", descricao = :descricao";
+            $parameters[":descricao"] = $dados['descricao'];
+        }
+
+        if (isset($dados['imagem'])){
+            $setClauses .= ", imagem = :imagem";
+            $parameters[":imagem"] = $dados['imagem'];
+        }
+
+        if(isset($dados['link'])){
+            $setClauses .= ", link = :link";
+            $parameters[":link"] = $dados['link'];
+        }
+        
+        // Coluna `data_lancamento` é do tipo DATE (Y-m-d)
+        // Coluna `preco` é DECIMAL(10, 2)
+        // Coluna `ativo` é ENUM('S', 'N')
+
+        //auditoria
+
+        // Obtenha o nome de usuário da sua sessão PHP
+        $usuarioLogado = $_SESSION['Logado_Na_Sessão']['nm_user'] ?? 'Sistema Desconhecido';
+
+        // Prepare e execute o comando SET @usuario_logado
+
+        $sqlSetUser = "SET @usuario_logado = :usuario_logado";
+        $stmtSetUser = $this->pdo->prepare($sqlSetUser);
+        $stmtSetUser->bindParam(":usuario_logado", $usuarioLogado);
+        $stmtSetUser->execute();
+
+        $sql = "UPDATE jogos SET {$setClauses} WHERE id_games = :id_games LIMIT 1";
+        $consulta = $this->pdo->prepare($sql);
+        
+        // Faz o bind de todos os parâmetros dinamicamente
+        foreach ($parameters as $key => $value) {
+            $consulta->bindParam($key, $parameters[$key]);
+        }
+
+        return $consulta->execute();
     }
 
-	public function getLink(): string 
-    {
-        return $this->link;
+    public function listarGames() {
+        // Ajustado para ordenar por título e traz o nome da categoria da propria tabela dela direto.
+        $sql = "SELECT j.*, c.nm_cat 
+                FROM jogos j
+                INNER JOIN categorias c ON j.id_categoria = c.id_categoria
+                ORDER BY j.titulo"; 
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_OBJ);
     }
 
-	public function getPreco(): float 
-    {
-        return $this->preco;
+    // editar não é update, ele serve para resgatar os valores do banco para trazer à interface do formulario de Jogo
+    public function editarGames($id) {
+        $sql = "SELECT * FROM jogos WHERE id_games = :id_games LIMIT 1";
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->bindParam(":id_games", $id);
+        $consulta->execute();
+
+        return $consulta->fetch(PDO::FETCH_OBJ);
     }
 
-	public function getImagem(): float 
-    {
-        return $this->imagem;
+    public function excluirGames($id) {
+        $sql = "DELETE FROM jogos WHERE id_games = :id_games LIMIT 1";
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->bindParam(":id_games", $id);
+
+        return $consulta->execute();
     }
-
-	public function getDataLanc(): float 
-    {
-        return $this->dataLanc;
-    }
-
-    //SETTERS
-    
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-	public function setTitulo(string $titulo): void 
-    {
-        $this->titulo = $titulo;
-    }
-
-	public function setDescricao(string $descricao): void 
-    {
-        $this->descricao = $descricao;
-    }
-
-	public function setLink(string $link): void 
-    {
-        $this->link = $link;
-    } 
-
-	public function setPreco(float $preco): void 
-    {
-        $this->preco = $preco;
-    }
-
-	public function setImagem(float $imagem): void 
-    {
-        $this->imagem = $imagem;
-    }
-
-	public function setDataLanc(float $dataLanc): void 
-    {
-        $this->dataLanc = $dataLanc;
-    }
-
 }
-
-
-?>

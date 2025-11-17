@@ -8,8 +8,7 @@
         private $usuario;
 
         public function __construct() {
-            $db = new Conexao();
-            $pdo = $db->connect();
+            $pdo = Conexao::connect();
             $this->usuario = new UsuarioModel($pdo);
         }
 

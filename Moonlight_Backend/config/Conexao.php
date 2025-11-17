@@ -9,19 +9,27 @@ class Conexao {
     private static $senha = "";
     private static $db = "moonlight_e_commerce";
 
+    // propriedade estatica para armazenar a instancia PDO
+    private static ?PDO $instancia = null;
+
     public static function connect(): PDO {
-        try {
-            return new PDO(
-                "mysql:host=".self::$host.
-                ";dbname=".self::$db.
-                ";charset=utf8",
-                self::$usuario,
-                self::$senha
-            );
-        } catch (PDOException $e) {
-            // Em caso de erro na conexão, paramos a aplicação.
-            die("Erro ao conectar: {$e->getMessage()}");
+        // Verifica se a instância PDO já existe
+        if (self::$instancia === null) {
+            try {
+                self::$instancia = new PDO(
+                    "mysql:host=".self::$host.
+                    ";dbname=".self::$db.
+                    ";charset=utf8",
+                    self::$usuario,
+                    self::$senha
+                );
+            } catch (PDOException $e) {
+                // Em caso de erro na conexão, paramos a aplicação.
+                die("Erro ao conectar: {$e->getMessage()}");
+            }
         }
+
+        return self::$instancia;
     }
 
 }
