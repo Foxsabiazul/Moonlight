@@ -179,6 +179,40 @@ html, body {
     }
 }
 
+.cardImg{
+    border-radius: 5px 5px 0px 0px;
+}
+
+.styledBtn {
+    font-family: var(--font-default);
+    background-color: var(--btnBackgroundColor);
+    color: var(--textSecondColor);
+    border: 0;
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.styledBtn:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.simpleBtn{
+    display: block;
+    color: var(--textMainColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 8px;
+    transition: ease-in-out 0.2s;
+}
+
+.simpleBtn:hover{
+    color: var(--textMainColorhover) !important;
+    transform: translateY(-2px);
+}
+
 
 /* HEADER */
 .header {
@@ -272,6 +306,8 @@ html, body {
     border-radius: 5px;
     display: flex;
     align-items: center;
+    width: max-content;
+    min-width: 150px;
     transition: ease-in-out 0.3s;
     text-decoration: none;
     -webkit-font-smoothing: antialiased;
@@ -294,12 +330,13 @@ html, body {
     display: none; /* Esconde o menu por padrão */
     position: absolute;
     right: 0; /* Alinha o menu com o lado direito do link */
-    left: 0;
     background-color: var(--btnBackgroundColor);
     border: unset;
-    width: 100%;
+    width: max-content;
+    min-width: 150px;
     z-index: 10;
     list-style-type: none;
+    white-space: nowrap;
     border-radius: 0 0 5px 5px;
 }
 

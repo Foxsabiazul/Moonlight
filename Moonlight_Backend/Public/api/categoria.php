@@ -14,11 +14,11 @@ use Moonlight_Backend\config\Conexao;
 
         $sql = "select * from categorias
         where id_categoria = :id_categoria
-        order by nm_cat";
+        limit 1";
         $consulta = $pdo->prepare($sql);
         $consulta->bindParam(":id_categoria", $id);
         $consulta->execute();
 
-        $dados = $consulta->fetchAll(PDO::FETCH_OBJ);
+        $dados = $consulta->fetch(PDO::FETCH_OBJ);
     }
     echo json_encode($dados);

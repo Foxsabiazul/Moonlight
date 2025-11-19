@@ -17,7 +17,7 @@
                 }
 
                 $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
-                echo "<h3 class='white-text'>Seja bem vindo" . $userName . ", como vai nessa " . $greeting . "?</h3>";
+                echo "<h3 class='white-text text-center'>Seja bem vindo " . $userName . ", como vai nessa " . $greeting . "?</h3>";
             ?>
              </div>
          </div>

@@ -219,10 +219,11 @@ ob_start();
      ?>
     <?php
     /**
-     * 3 cenários possíveis:
+     * 4 cenários possíveis:
      * 1) se marmanjo não estiver logado e n tiver enviado o form, mostra a tela de login
      * 2) se marmanjo não estiver logado e tiver enviado o form, processa o login
-     * 3) se marmanjo estiver logado, mostra o painel de controle
+     * 3) se marmanjo for cliente e tentando ser espertinho, será lançado pra loja comum.
+     * 4) se marmanjo estiver logado e é admin, mostra o painel de controle
      */
     if(!isset($_SESSION['Logado_Na_Sessão']) && (!$_POST)) {
         include "../Views/index/Login.php";
@@ -232,7 +233,10 @@ ob_start();
         $acao = new UsuarioController();
         $acao->login();
 
-    } else {
+    } else if($_SESSION['Logado_Na_Sessão']['tipo'] != 'admin'){
+        header('Location: http://localhost/Moonlight/Moonlight/Public/index'); // <-- Redirecionamento
+        exit;
+    } else{
         ?>
         <header class="header">
             <div class="container">

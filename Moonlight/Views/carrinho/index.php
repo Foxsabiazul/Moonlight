@@ -1,30 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moonlight-Front</title>
-    <!--------LINK------------>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!--------LINK------------>
-</head>
-<body>
-   <header>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Moonlight</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-            data-bs-target="#navMenu" 
-        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation"> 
-        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-        </button>
-            
-        <div class="collapse navbar-collapse" id="navMenu"> 
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-         <?php
+<?php
 
-session_start();
 // Exemplo de dados fictícios adicionados ao carrinho (normalmente vindo de formulário)
 
 if(!isset($_SESSION["cart_item"])) {
@@ -37,10 +12,8 @@ if(!isset($_SESSION["cart_item"])) {
 $total_quantity = 0;
 $total_price = 0;
 ?>
-    <title class="Cart">Carrinho de Compras</title>
-<body>
-    <?php if(!empty($_SESSION["cart_item"])): ?>
-    <div class="container mt-5">
+<?php if(!empty($_SESSION["cart_item"])): ?>
+<div class="container mt-5">
     <h2 class="Cart2">Carrinho de Compras</h2>
     <table class="table table-bordered">
         <thead>
@@ -74,15 +47,7 @@ $total_price = 0;
             </tr>
         </tbody>
     </table>
-    <?php else: ?>
+<?php else: ?>
     <p class="Pcat">Seu carrinho está vazio.</p>
-    <?php endif; ?>
+<?php endif; ?>
 </div>
-</body>
-       
-        </div>
-        </div>
-    </nav>
-   </header>
-</body>
-</html>

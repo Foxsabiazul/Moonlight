@@ -1,10 +1,10 @@
 <?php
 
-    namespace Moonlight_Backend\Controller;
+    namespace Moonlight\Controller;
 
-    use Moonlight_Backend\config\Sanitizador;
-    use Moonlight_Backend\config\Conexao;
-    use Moonlight_Backend\Model\UsuarioModel;
+    use Moonlight\config\Sanitizador;
+    use Moonlight\config\Conexao;
+    use Moonlight\Model\UsuarioModel;
     use PDO;
 
 class UsuarioController{
@@ -20,20 +20,16 @@ class UsuarioController{
     // metódo de sanitização para limpar os espaços vazios que vem de formulario.
     public function sanitizacao(array $inputData): array
     {
-        $id = Sanitizador::sanitizar($inputData["id"] ?? '');
         $nome = Sanitizador::sanitizar($inputData["nome"] ?? '');
         $email = Sanitizador::sanitizar($inputData['email'] ?? '');
         $senha = Sanitizador::sanitizar($inputData['senha'] ?? '');
         $senhaRedigitada = Sanitizador::sanitizar($inputData["senha2"] ?? '');
-        $tipo = Sanitizador::sanitizar($inputData["tipo"] ?? '');
 
         return[
-            "id_user" => $id,
             "nm_user" => $nome,
             "email" => $email,
             "senha" => $senha,
-            "senhaRedigitada" => $senhaRedigitada,
-            "tipo" => $tipo
+            "senhaRedigitada" => $senhaRedigitada
         ];
 
     }
@@ -46,32 +42,19 @@ class UsuarioController{
      * Se $id está vazio/nulo: A URL é do tipo /usuario ou /usuario/index. O fluxo é de Inserção (Novo Cadastro). O bloco no topo inicializa as variáveis $nome, $email, etc., como NULL ou vazias, e o formulário é carregado em branco.
      * Se $id tem um valor (ex: 5): A URL é do tipo /usuario/index/5. O fluxo é de Atualização (Edição).
      */
-    public function index($id) {
-        $nome = $email = $tipo = NULL;
-
-        if (!empty($id)) {
-            $dados = $this->usuario->editarUsuario($id);
-
-            if (empty($dados)) {
-                $_SESSION['modalTitle'] = "Dados inválidos";
-                $_SESSION['modalMessage'] = "Os dados não foram encontrados.";
-                exit;
-            }
-
-            $id = $dados->id_user;
-            $nome = $dados->nm_user;
-            $email = $dados->email;
-            $tipo = $dados->tipo;
-        }
-
+    public function index() {
         require "../Views/usuario/index.php";
     }
 
-    public function listar() {
-        require "../Views/usuario/listar.php";
+    public function access() {
+        require "../Views/usuario/login.php";
     }
 
-    // salvar é ativado sozinho como rota de formulario enviado nessa url aqui do formulario de Usuario.: /usuario/salvar
+    public function signup(){
+        require "../Views/usuario/cadastro.php";
+    }
+
+    // salvar é ativado sozinho como rota de formulario enviado nessa url aqui: /usuario/salvar
     public function salvar() {
         
         // pegamos tudo o que vem do formulario
@@ -93,11 +76,15 @@ class UsuarioController{
             $_SESSION['modalTitle'] = "Nome de usuario Inválido";
             $_SESSION['modalMessage'] = "Por favor, preencha o nome do usuário.";
             $validacaoFalhou = true;
+        } else if(empty($cleanData['email'])){
+            $_SESSION['modalTitle'] = "E-mail Inválido.";
+            $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
+            $validacaoFalhou = true;
         } else if (!filter_var($cleanData['email'], FILTER_VALIDATE_EMAIL)) { // email precisa ser valido
             $_SESSION['modalTitle'] = "Email inválido";
             $_SESSION['modalMessage'] = "Por favor, preencha com um e-mail válido.";
             $validacaoFalhou = true;
-        } else if ((empty($cleanData['id_user'])) && (empty($cleanData['senha']))) { // se for um registro novo de usuario, a senha precisa estar preenchida (se for atualização aí tanto faz, vai continuar a mesma senha do banco).
+        } else if (empty($cleanData['senha'])) { // se for um registro novo de usuario, a senha precisa estar preenchida (se for atualização aí tanto faz, vai continuar a mesma senha do banco).
             $_SESSION['modalTitle'] = "Senha inválida";
             $_SESSION['modalMessage'] = "Por favor, preencha a senha.";
             $validacaoFalhou = true;
@@ -105,44 +92,46 @@ class UsuarioController{
             $_SESSION['modalTitle'] = "Senha inválida";
             $_SESSION['modalMessage'] = "As senhas não estão iguais.";
             $validacaoFalhou = true;
-        } else if(empty($cleanData['tipo'])){
-            $_SESSION['modalTitle'] = "Defina um tipo para o usuario";
-            $_SESSION['modalMessage'] = "O usuario foi informado sem tipo.";
-            $validacaoFalhou = true;
         }
 
         if($validacaoFalhou){ // se validacao falhou é true ou existe, então só redirecione o usuario para /usuario
-            header("Location: " . BASE_URL . "/usuario");
+            header("Location: " . BASE_URL . "/usuario/signup");
             exit;
         } else{
-            
-            // se id não existir ou estiver vazio fará insert
-            if (empty($cleanData['id_user'])) {
-                // OPERAÇÃO: INSERT
-                // Senha é obrigatória no insert (validado acima)
-                $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
-                $cleanData['data_criacao'] = (new \DateTime())->format('Y-m-d H:i:s');
-                $mensagem = $this->usuario->inserirUsuario($cleanData);
 
-            } else {
-                // OPERAÇÃO: UPDATE
-                if (!empty($cleanData['senha'])) {
-                    // Se o usuário digitar uma nova senha no update, faz o hash e inclui nos dados
-                    $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
-                }
-                //se não for digitada uma nova senha no update, então a antiga permanecerá no banco;
+            // OPERAÇÃO: INSERT
+            // Senha é obrigatória no insert (validado acima)
+            $cleanData['tipo'] = "cliente";
+            $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
+            $cleanData['data_criacao'] = (new \DateTime())->format('Y-m-d H:i:s');
+            $mensagem = $this->usuario->inserirUsuario($cleanData);
+
+            // CAPTURA O ID (ou false se falhar)
+            $id = $this->usuario->inserirUsuario($cleanData); 
+
+            if($id > 0){ // operação de sucesso
                 
-                $mensagem = $this->usuario->atualizarUsuario($cleanData);
-            }
-
-            if($mensagem == 1){ // operação de sucesso
-                $_SESSION['modalTitle'] = "Operação realizada com sucesso.";
-                $_SESSION['modalMessage'] = "Usuario salvo ou atualizado.";
+                $cleanData['id_user'] = $id; 
+                
+                $_SESSION['Logado_Na_Sessão'] = array(
+                    "id_user" => $cleanData['id_user'], 
+                    "nm_user" => $cleanData['nm_user'],
+                    "data_criacao" => $cleanData['data_criacao'],
+                    "tipo"=> $cleanData['tipo']
+                );
+                $_SESSION['modalTitle'] = "Cadastro realizado com sucesso.";
+                $_SESSION['modalMessage'] = "Usuário salvo";
+            } else if ($id == -1) { // e-mail duplicado (retorno -1 do Model)
+                
+                $_SESSION['modalTitle'] = "E-mail já cadastrado.";
+                $_SESSION['modalMessage'] = "O e-mail " . htmlspecialchars($cleanData['email']) . " já está sendo usado. Tente fazer login.";
+            
             } else{ // operação de erro
                 $_SESSION['modalTitle'] = "Falha na Operação.";
-                $_SESSION['modalMessage'] = "O usuario não foi salvo ou atualizado por alguma falha interna.";
+                $_SESSION['modalMessage'] = "O usuario não foi salvo por alguma falha interna.";
             }
-            header("Location: " . BASE_URL . "/usuario/listar"); // redirecione o usuario para a pagina de listagem.
+
+            header("Location: " . BASE_URL . "/usuario/signup"); // redirecione o usuario para a pagina de listagem.
             exit;
         }
     }
@@ -160,15 +149,20 @@ class UsuarioController{
         /**
          * fazemos validação aqui
          */
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if(empty($email)){
             $_SESSION['modalTitle'] = "E-mail Inválido.";
             $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
-            header("Location: " . BASE_URL . "/index");
+            header("Location: " . BASE_URL . "/usuario/access");
+            exit;
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['modalTitle'] = "E-mail Inválido.";
+            $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
+            header("Location: " . BASE_URL . "/usuario/access");
             exit;
         } else if (empty($senha)) {
             $_SESSION['modalTitle'] = "Digite a senha.";
             $_SESSION['modalMessage'] = "A senha não está preenchida no formulário. Digite a senha.";
-            header("Location: " . BASE_URL . "/index");
+            header("Location: " . BASE_URL . "/usuario/access");
             exit;
         }
 
@@ -177,25 +171,6 @@ class UsuarioController{
          */
 
         $this->verificar($email, $senha);
-    }
-
-    public function excluir($id) {
-        if(empty($id)){
-            $_SESSION['modalTitle'] = "Registro Inválido";
-            $_SESSION['modalMessage'] = "O registro fornecido é inválido.";
-        } else{
-            $mensagem = $this->usuario->excluirUsuario($id);
-            if($mensagem == 1){
-                $_SESSION['modalTitle'] = "Registro excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido foi excluido.";
-            } else{
-                $_SESSION['modalTitle'] = "O Registro não foi excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido não foi excluido por alguma falha interna.";
-            }
-        }
-
-        header("Location: " . BASE_URL . "/usuario/listar");
-        exit;
     }
 
     // Método usado pro metodo login verificar as credenciais do usuário no banco por meio do email e comparando as senhas.
@@ -207,11 +182,6 @@ class UsuarioController{
         if(empty($dadosUsuario->id_user)) {
             $_SESSION['modalTitle'] = "Usuario Inválido";
             $_SESSION['modalMessage'] = "Usuario não foi encontrado.";
-            $loginFalhou = true;
-
-        } else if($dadosUsuario->tipo != 'admin'){
-            $_SESSION['modalTitle'] = "Usuario Inválido";
-            $_SESSION['modalMessage'] = "Você não tem permissão para acessar.";
             $loginFalhou = true;
 
         } else if(!password_verify($senha, $dadosUsuario->senha)){
@@ -229,7 +199,7 @@ class UsuarioController{
         }
 
         if($loginFalhou){
-            header("Location: " . BASE_URL . "/index");
+            header("Location: " . BASE_URL . "/usuario/access");
             exit;
         } else{
             $_SESSION['Logado_Na_Sessão'] = array(
