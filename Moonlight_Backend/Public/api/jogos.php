@@ -10,8 +10,9 @@ use Moonlight_Backend\config\Conexao;
     $pdo = Conexao::connect();
 
     if(!empty($categoria)){
+
         //JOGOS DE UMA CATEGORIA ESPECIFICA
-        $sql = "select * from jogos where ativo = 'S' and id_categoria = :id_categoria order by titulo";
+        $sql = "select j.*, c.nm_cat from jogos j INNER JOIN categorias c ON j.id_categoria = c.id_categoria where j.ativo = 'S' and j.id_categoria = :id_categoria order by j.titulo";
         $consulta = $pdo->prepare($sql);
         $consulta->bindParam(":id_categoria", $categoria);
         $consulta->execute();

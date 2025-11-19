@@ -1,5 +1,5 @@
 <?php
-namespace Moonlight_Backend\config;
+namespace Moonlight\config;
 use PDO;
 use PDOException;
 
