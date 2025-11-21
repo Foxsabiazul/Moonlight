@@ -281,6 +281,9 @@ class UsuarioController extends Controller{
         }
 
         try{
+            
+            $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
+
             $sucesso = $this->usuario->atualizarUsuario($cleanData);
 
             if($sucesso){
