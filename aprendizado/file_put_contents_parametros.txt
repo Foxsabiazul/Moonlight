@@ -1,0 +1,16 @@
+// Escreve no arquivo de log (ou em STDERR para simular o terminal/console)
+        // A função file_put_contents() é usada para escrever dados em um arquivo. Ela aceita tipicamente três argumentos:
+
+        //1 O caminho do arquivo (self::$logFile).
+
+        //2 Os dados/conteúdo a serem escritos ($logMessage).
+
+        //3 Flags (opcional), que modificam o comportamento.
+
+        // O comportamento padrão de file_put_contents() é sobrescrever (apagar) o conteúdo existente do arquivo e, em seguida, escrever os novos dados.
+
+        // Quando você usa a flag FILE_APPEND, você instrui a função a:
+        // Não apagar o conteúdo existente do arquivo.
+        // Anexar (colocar) o novo conteúdo ($logMessage) no final do arquivo
+
+        file_put_contents(self::$logFile, $logMessage, FILE_APPEND);

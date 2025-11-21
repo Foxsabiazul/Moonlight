@@ -86,7 +86,7 @@ html, body {
 
 .black-text{
     font-family: var(--font-default);
-    color: var(--textSecondColor);
+    color: var(--textSecondColor) !important;
 }
 
 .text-center{
@@ -137,13 +137,13 @@ html, body {
     align-self: center;
 }
 
-.container {
-    width: 100%; /* ocupa o maximo de espaço disponivel */
-    margin: 0 auto; /* equilibra e centraliza horizontalmente */
-    padding: 0 15px; /* distancia itens e logo horizontalmente da borda da tela */
-}
+/* .container { */
+    /* width: 100%; ocupa o maximo de espaço disponivel */
+    /* margin: 0 auto; equilibra e centraliza horizontalmente */
+    /* padding: 0 15px; distancia itens e logo horizontalmente da borda da tela */
+/* } */
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     .container {
         max-width: 540px;
     }
@@ -177,42 +177,7 @@ html, body {
     .container {
         max-width: 1320px;
     }
-}
-
-.cardImg{
-    border-radius: 5px 5px 0px 0px;
-}
-
-.styledBtn {
-    font-family: var(--font-default);
-    background-color: var(--btnBackgroundColor);
-    color: var(--textSecondColor);
-    border: 0;
-    border-radius: 5px;
-    transition: ease-in-out 0.3s;
-    padding: 8px;
-    text-decoration: none;
-}
-
-.styledBtn:hover{
-    background-color: var(--btnBackgroundColorhover);
-}
-
-.simpleBtn{
-    display: block;
-    color: var(--textMainColor);
-    font-family: var(--font-default);
-    font-size: 14px;
-    border-radius: 5px;
-    padding: 8px;
-    transition: ease-in-out 0.2s;
-}
-
-.simpleBtn:hover{
-    color: var(--textMainColorhover) !important;
-    transform: translateY(-2px);
-}
-
+} */
 
 /* HEADER */
 .header {
@@ -282,7 +247,7 @@ html, body {
     text-decoration: none;
     border-radius: 5px;
     padding: 8px;
-    transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.3s;
 }
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
@@ -290,21 +255,48 @@ html, body {
     transform: translateY(-2px);
 }
 
-/* O container principal do dropdown */
-.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
-    position: relative;
-    display: inline-block;
+/*
+DROPDOWNS SECUNDARIOS:
+*/
+
+.dropdown-menu{
+    color: var(--textSecondColor) !important;
+    background-color: var(--btnBackgroundColor) !important;
+    text-decoration: none;
+    font-family: var(--font-default);
+    font-size: 14px;
 }
 
-/* O link que ativa o dropdown */
-.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+.dropdown-item{
+    color: var(--textSecondColor) !important;
+    background-color: var(--btnBackgroundColor) !important;
+    text-decoration: none;
     font-family: var(--font-default);
-    /* font-size: 14px; */
+    font-size: 14px;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.dropdown-item:active{
+    background-color: var(--btnBackgroundColorhover) !important;
+}
+
+.dropdown-item:hover{
+    background-color: var(--btnBackgroundColorhover) !important;
+}
+
+/*
+DROPDOWN DO USUARIO
+*/
+
+/* O link que ativa o dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn-user-menu {
+    font-family: var(--font-default);
+    font-size: 14px;
     background-color: var(--btnBackgroundColor);
     color: var(--textSecondColor);
     padding: 8px;
     border-radius: 5px;
-    display: flex;
+    display: block;
     align-items: center;
     width: max-content;
     min-width: 150px;
@@ -315,69 +307,27 @@ html, body {
     text-rendering: optimizeLegibility;
 }
 
-.user-menu:hover {
+.nav-btn-user-menu:hover {
     background-color: var(--btnBackgroundColorhover) !important;
 }
 
 /* O ícone de seta para baixo */
-.dropdown-arrow {
+.dropdown-toggle {
+    display: inline-block;
     margin-left: 8px;
     transition: transform 0.3s ease;
 }
 
-/* O menu que será exibido */
-.dropdown-menu {
-    display: none; /* Esconde o menu por padrão */
-    position: absolute;
-    right: 0; /* Alinha o menu com o lado direito do link */
-    background-color: var(--btnBackgroundColor);
-    border: unset;
-    width: max-content;
-    min-width: 150px;
-    z-index: 10;
-    list-style-type: none;
-    white-space: nowrap;
-    border-radius: 0 0 5px 5px;
-}
-
-/* Links dentro do menu */
-.dropdown-menu li a {
-    color: var(--textSecondColor);
-    background-color: var(--btnBackgroundColor);
-    padding: 8px;
-    text-decoration: none;
-    font-family: var(--font-default);
-    font-size: 14px;
-    display: block;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.dropdown-menu li a:hover {
-    background-color: var(--btnBackgroundColorhover);
-}
-
-.dropdown-menu li #lastBtn {
-    border-radius: 0 0 5px 5px;
-}
-
-/* Easter egg gigatonico do GTA SA: Mostra o menu quando o mouse clica no contêiner */
-.dropdown-container.active .dropdown-menu {
-    display: block;
-}
-
-/* Rotação da seta quando o menu está visível */
-.dropdown-container.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-.dropdown-container.active .user-menu{
-    border-radius: 5px 5px 0 0 !important;
+.nav-li .nav-btn[aria-expanded="true"] .dropdown-toggle,
+.nav-li .nav-btn-user-menu[aria-expanded="true"] .dropdown-toggle{
+    transform: rotate(180deg) !important;
 }
 
 main{
     padding-top: 100px; /* padding top para deixar o conteudo principal a mostra sem ficar embaixo do header. Disclaimer importante, se você mexe nesse cara ele fica por baixo do header o que não é nem um pouco bacana */
     /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
     width: 100%;
+    padding-bottom: 0.1px;
     position: relative;
 }
 
@@ -386,6 +336,81 @@ main{
     box-shadow: 0 0 10px #CCC;
     border-radius: 5px;
     margin: 30px 0;
+}
+
+.card-deck { /* usar em div pai de todos os jogos (onde ficam os col-XX alguma coisa). */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch; /* Garante que todos os cards na linha se estiquem até a altura do mais alto */
+}
+
+.card-item{
+    /* garantir que o card ocupe 100% da coluna do grid */
+    height: 100%; 
+    display: flex;
+    flex-direction: column; /* Organiza os elementos verticalmente: Imagem, Conteúdo, Botão */
+}
+
+.cardImg{
+    width: 100%;
+    /* Defina uma altura para a imagem para padronizar. Ajuste este valor! */
+    height: 250px; 
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer (cortará a sobra) */
+    border-radius: 5px 5px 0px 0px;
+}
+
+.card-content{
+    padding: 8px;
+    text-align: center;
+    /* faz altura mínima para o conteúdo de texto */
+    min-height: 100px; /* valor que pode ser ajustado para titulos e preços mais longos */
+    display: flex; /* permite que os filhos fiquem com vantagens de flexbox */
+    flex-direction: column; /* derruba o conteudo pra baixo */
+    justify-content: space-between; /* Distribui Titulo/Preço e Botão */
+    flex-grow: 1; /* Permite que o conteúdo restante ocupe o espaço extra */
+}
+
+/* <p> garantidor de que o botão fique na parte inferior */
+.card-button-wrapper {
+    margin-top: auto; /* Pressiona o botão para o fundo do card, se necessário */
+    padding: 8px;
+}
+
+/* estilização pro botão quando estiver no card de jogo. (somente quando estiver no card de jogo) */
+.card-button-wrapper .styledBtn {
+    width: 100%;
+}
+
+.styledBtn {
+    font-family: var(--font-default);
+    background-color: var(--btnBackgroundColor);
+    color: var(--textSecondColor);
+    border: 0;
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.styledBtn:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.simpleBtn{
+    display: block;
+    background-color: unset;
+    color: var(--textMainColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px;
+    transition: ease-in-out 0.2s;
+}
+
+.simpleBtn:hover{
+    color: var(--textMainColorhover) !important;
+    transform: translateY(-2px);
 }
 
 /* footer */
@@ -598,32 +623,12 @@ main{
         transform: translateY(0px);
     }
 
-    /* O container principal do dropdown */
-    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
-        width: 100%;
-        border-radius: 0px;
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn-user-menu {
         padding: 0px;
+        border-radius: 0px;
         display: block;
-    }
-
-    /* O link que ativa o dropdown */
-    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
-        width: 100%;
-        border-radius: 0px;
-        padding: 0px;
-        justify-content: center;
-    }
-
-    /* O menu que será exibido */
-    .dropdown-menu {
-        display: none; /* Esconde o menu por padrão */
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: fit-content;
-        z-index: 10;
-        list-style-type: none;
-        border-radius: 0;
+        width: 100%; 
+        min-width: unset;
     }
 
     .dropdown-menu li #lastBtn {

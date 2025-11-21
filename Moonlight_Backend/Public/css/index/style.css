@@ -86,7 +86,7 @@ html, body {
 
 .black-text{
     font-family: var(--font-default);
-    color: var(--textSecondColor);
+    color: var(--textSecondColor) !important;
 }
 
 .text-center{
@@ -137,12 +137,12 @@ html, body {
     align-self: center;
 }
 
-.container {
-    width: 100%; /* ocupa o maximo de espaço disponivel */
-    margin: 0 auto; /* equilibra e centraliza horizontalmente */
-    padding: 0 15px; /* distancia itens e logo horizontalmente da borda da tela */
-}
-
+/* .container { */
+    /* width: 100%; ocupa o maximo de espaço disponivel */
+    /* margin: 0 auto; equilibra e centraliza horizontalmente */
+    /* padding: 0 15px; distancia itens e logo horizontalmente da borda da tela */
+/* } */
+/* 
 @media (min-width: 576px) {
     .container {
         max-width: 540px;
@@ -177,6 +177,42 @@ html, body {
     .container {
         max-width: 1320px;
     }
+} */
+
+.cardImg{
+    border-radius: 5px 5px 0px 0px;
+}
+
+.styledBtn {
+    font-family: var(--font-default);
+    background-color: var(--btnBackgroundColor);
+    color: var(--textSecondColor);
+    border: 0;
+    border-radius: 5px;
+    transition: ease-in-out 0.3s;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.styledBtn:hover{
+    background-color: var(--btnBackgroundColorhover);
+}
+
+.simpleBtn{
+    display: block;
+    background-color: unset;
+    color: var(--textMainColor);
+    font-family: var(--font-default);
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0;
+    padding: 8px;
+    transition: ease-in-out 0.2s;
+}
+
+.simpleBtn:hover{
+    color: var(--textMainColorhover) !important;
+    transform: translateY(-2px);
 }
 
 
@@ -248,7 +284,7 @@ html, body {
     text-decoration: none;
     border-radius: 5px;
     padding: 8px;
-    transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.3s;
 }
 
 .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn:hover {
@@ -256,22 +292,51 @@ html, body {
     transform: translateY(-2px);
 }
 
-/* O container principal do dropdown */
-.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
-    position: relative;
-    display: inline-block;
+/*
+DROPDOWNS SECUNDARIOS:
+*/
+
+.dropdown-menu{
+    color: var(--textSecondColor) !important;
+    background-color: var(--btnBackgroundColor) !important;
+    text-decoration: none;
+    font-family: var(--font-default);
+    font-size: 14px;
 }
 
-/* O link que ativa o dropdown */
-.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
+.dropdown-item{
+    color: var(--textSecondColor) !important;
+    background-color: var(--btnBackgroundColor) !important;
+    text-decoration: none;
     font-family: var(--font-default);
-    /* font-size: 14px; */
+    font-size: 14px;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.dropdown-item:active{
+    background-color: var(--btnBackgroundColorhover) !important;
+}
+
+.dropdown-item:hover{
+    background-color: var(--btnBackgroundColorhover) !important;
+}
+
+/*
+DROPDOWN DO USUARIO
+*/
+
+/* O link que ativa o dropdown */
+.header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn-user-menu {
+    font-family: var(--font-default);
+    font-size: 14px;
     background-color: var(--btnBackgroundColor);
     color: var(--textSecondColor);
     padding: 8px;
     border-radius: 5px;
-    display: flex;
+    display: block;
     align-items: center;
+    width: max-content;
+    min-width: 150px;
     transition: ease-in-out 0.3s;
     text-decoration: none;
     -webkit-font-smoothing: antialiased;
@@ -279,62 +344,20 @@ html, body {
     text-rendering: optimizeLegibility;
 }
 
-.user-menu:hover {
+.nav-btn-user-menu:hover {
     background-color: var(--btnBackgroundColorhover) !important;
 }
 
 /* O ícone de seta para baixo */
-.dropdown-arrow {
+.dropdown-toggle {
+    display: inline-block;
     margin-left: 8px;
     transition: transform 0.3s ease;
 }
 
-/* O menu que será exibido */
-.dropdown-menu {
-    display: none; /* Esconde o menu por padrão */
-    position: absolute;
-    right: 0; /* Alinha o menu com o lado direito do link */
-    left: 0;
-    background-color: var(--btnBackgroundColor);
-    border: unset;
-    width: 100%;
-    z-index: 10;
-    list-style-type: none;
-    border-radius: 0 0 5px 5px;
-}
-
-/* Links dentro do menu */
-.dropdown-menu li a {
-    color: var(--textSecondColor);
-    background-color: var(--btnBackgroundColor);
-    padding: 8px;
-    text-decoration: none;
-    font-family: var(--font-default);
-    font-size: 14px;
-    display: block;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.dropdown-menu li a:hover {
-    background-color: var(--btnBackgroundColorhover);
-}
-
-.dropdown-menu li #lastBtn {
-    border-radius: 0 0 5px 5px;
-}
-
-/* Easter egg gigatonico do GTA SA: Mostra o menu quando o mouse clica no contêiner */
-.dropdown-container.active .dropdown-menu {
-    display: block;
-}
-
-/* Rotação da seta quando o menu está visível */
-.dropdown-container.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-.dropdown-container.active .user-menu{
-    border-radius: 5px 5px 0 0 !important;
+.nav-li .nav-btn[aria-expanded="true"] .dropdown-toggle,
+.nav-li .nav-btn-user-menu[aria-expanded="true"] .dropdown-toggle{
+    transform: rotate(180deg) !important;
 }
 
 main{
@@ -561,32 +584,12 @@ main{
         transform: translateY(0px);
     }
 
-    /* O container principal do dropdown */
-    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container {
-        width: 100%;
-        border-radius: 0px;
+    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .nav-btn-user-menu {
         padding: 0px;
+        border-radius: 0px;
         display: block;
-    }
-
-    /* O link que ativa o dropdown */
-    .header .container .flex .flex-col2 .header-nav .nav-ul .nav-li .dropdown-container .user-menu {
-        width: 100%;
-        border-radius: 0px;
-        padding: 0px;
-        justify-content: center;
-    }
-
-    /* O menu que será exibido */
-    .dropdown-menu {
-        display: none; /* Esconde o menu por padrão */
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: fit-content;
-        z-index: 10;
-        list-style-type: none;
-        border-radius: 0;
+        width: 100%; 
+        min-width: unset;
     }
 
     .dropdown-menu li #lastBtn {

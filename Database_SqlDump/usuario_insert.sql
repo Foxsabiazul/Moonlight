@@ -1,0 +1,1 @@
+insert into usuários (nm_user, email, senha, data_criacao, tipo) values ('Carlinhos', 'carlos@gmail.com', '$2y$10$eFtZ8CypSv3guw.ehsyNXuzSnQPOtMjQdDKxghKc/21GjMJ/z8xb6', '2025-10-30 17:54:59', 'admin');

@@ -2,10 +2,19 @@
     --bs-table-bg: none !important;
 }
 
-.dashboard-table{
-    overflow-y: auto;
-    overflow-x: auto;
-    height: auto;
+
+.table-responsive-scroll {
+    /* Permite rolagem horizontal se o conteúdo for muito largo */
+    overflow-x: auto; 
+    
+    /* Define uma altura máxima. Se o conteúdo for maior, ativa a rolagem vertical. */
+    max-height: 500px; /* Ajuste este valor conforme a necessidade visual (ex: 50vh) */
+
+    /* Permite rolagem vertical (se max-height for excedido) */
+    overflow-y: auto; 
+    
+    /* Opcional: Adiciona margem inferior para separar a tabela de outros elementos
+    margin-bottom: 1.5rem;  */
 }
 
 .dashboard-table thead tr {

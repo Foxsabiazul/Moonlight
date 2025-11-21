@@ -32,6 +32,28 @@ button{
     justify-content: center;
 }
 
+.account-info-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.account-header-info-content{
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.account-header-info-data{
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background-color: var(--secondColor);
+    font-weight: 700;
+    gap: 20px;
+}
+
 .formUser{
     display: flex;
     flex-direction: column;
@@ -173,6 +195,16 @@ button{
 
 #erro {
     margin-top: -15px;
+}
+
+@media(max-width: 1000px){
+    .account-header-info-data{
+        flex-direction: column;
+    }
+
+    .account-header-info-content{
+        align-self: center;
+    }
 }
 
 @media(max-width: 768px){

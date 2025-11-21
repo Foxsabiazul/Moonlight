@@ -34,42 +34,44 @@
             $dadosCategoria = $this->categoria->listarCategoria() ?? null;
             if($dadosCategoria): ?>
             <p class="white-text">Abaixo as Categorias cadastradas:</p>
-            <table class="table table-bordered table-striped dashboard-table">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Nome da Categoria</td>
-                        <td>Descricao</td>
-                        <td>Opções</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        foreach ($dadosCategoria as $dados) {
-                            ?>
-                            <tr>
-                                <td><?=$dados->id_categoria?></td>
-                                <td><?=$dados->nm_cat?></td>
-                                <td><?=$dados->desc_cat?></td>
-                                <td width="150px" id="opcoes">
-                                    <div class="text-center">
-                                        <a href="javascript:confirmarExclusao(event, <?=$dados->id_categoria?>, 'categoria')" class="formBtn p-x1 black-text mr-x1">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        <a href="<?= BASE_URL ?>/categoria/index/<?=$dados->id_categoria?>" class="formBtn p-x1 black-text ml-x1">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
-            </table>
-            <?php else: ?>
-            <h4 class="white-text">Não há categorias cadastradas, cadastre-as</h4>
-            <?php endif; ?>
+            <div class="table-responsive-scroll">
+                <table class="table table-bordered table-striped dashboard-table">
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nome da Categoria</td>
+                            <td>Descricao</td>
+                            <td>Opções</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach ($dadosCategoria as $dados) {
+                                ?>
+                                <tr>
+                                    <td><?=$dados->id_categoria?></td>
+                                    <td><?=$dados->nm_cat?></td>
+                                    <td><?=$dados->desc_cat?></td>
+                                    <td width="150px" id="opcoes">
+                                        <div class="text-center">
+                                            <a href="javascript:confirmarExclusao(event, <?=$dados->id_categoria?>, 'categoria')" class="formBtn p-x1 black-text mr-x1">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>/categoria/index/<?=$dados->id_categoria?>" class="formBtn p-x1 black-text ml-x1">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        ?>
+                    </tbody>
+                </table>
+                <?php else: ?>
+                <h4 class="white-text">Não há categorias cadastradas, cadastre-as</h4>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>
