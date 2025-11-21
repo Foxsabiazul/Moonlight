@@ -166,10 +166,29 @@ class GamesModel {
     }
 
     public function excluirGames($id) {
-        $sql = "DELETE FROM jogos WHERE id_games = :id_games LIMIT 1";
-        $consulta = $this->pdo->prepare($sql);
-        $consulta->bindParam(":id_games", $id);
+        try {
+            // ... (Lógica para excluir auditoriapreco com CASCADE ou a própria AuditoriaPreco já tem a regra)
 
-        return $consulta->execute();
+            // Tenta excluir o jogo principal (aqui o RESTRICT vai bloquear)
+            $sql = "DELETE FROM jogos WHERE id_games = :id_games LIMIT 1";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->bindParam(":id_games", $id);
+
+            $consulta->execute();
+            
+            return true; // Sucesso na exclusão
+            
+        } catch (\PDOException $e) {
+            
+
+            // Verifica se o erro é de Chave Estrangeira (23000 ou código 1451 no MySQL)
+            if ($e->getCode() == '23000' || str_contains($e->getMessage(), '1451')) {
+                $fk_error_message = "Este jogo não pode ser excluído, pois já foi vendido e faz parte do histórico de pedidos.";
+                return $fk_error_message; // Retorna a mensagem amigável
+            }
+            
+            // Retorna o erro inesperado
+            return "Ocorreu um erro inesperado ao tentar excluir o jogo. Detalhes: " . $e->getMessage();
+        }
     }
 }

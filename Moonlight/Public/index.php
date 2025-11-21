@@ -37,6 +37,10 @@ require __DIR__ .  "/../vendor/autoload.php";
 session_start();
 $controller = $_GET["param"] ?? "index";
 
+if(empty($controller)){
+    $controller = "index";
+}
+
     
 ?>
 <!DOCTYPE html>
@@ -129,6 +133,11 @@ $controller = $_GET["param"] ?? "index";
             }
         }
 
+        // function showDropdown() {
+        //     let dropdown = document.querySelector('.dropdown-container');
+        //     dropdown.classList.toggle("active");
+        // }
+
 
         function showMenu() {
             let bars = document.getElementById('fa-bars');
@@ -136,11 +145,6 @@ $controller = $_GET["param"] ?? "index";
 
             let menu = document.querySelector('.header-nav');
             menu.classList.toggle("active");
-        }
-
-        function showDropdown() {
-            let dropdown = document.querySelector('.dropdown-container');
-            dropdown.classList.toggle("active");
         }
 
         mostrarSenha = function() {
@@ -175,7 +179,13 @@ $controller = $_GET["param"] ?? "index";
                         </a>
                         <nav class="header-nav" id="header-nav">
                             <ul class="nav-ul">
-                                
+                                <li class="nav-li dropdown-center">
+                                    <a class="nav-btn" title="Categorias de Jogos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Categorias 
+                                        <span class="dropdown-toggle"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+
                                 <?php
                                     //pegar as categorias da API
                                     $link = "http://localhost/Moonlight/Moonlight_Backend/public/api/categorias.php";
@@ -183,8 +193,8 @@ $controller = $_GET["param"] ?? "index";
                                     $dadosCategoria = json_decode($dadosCategoria);
                                     foreach ($dadosCategoria as $dados) {
                                         ?>
-                                        <li class="nav-li">
-                                            <a class="nav-btn" 
+                                        <li>
+                                            <a class="dropdown-item black-text" 
                                             href="<?= BASE_URL ?>/categoria/index/<?=$dados->id_categoria?>">
                                                 <?=$dados->nm_cat?>
                                             </a>
@@ -192,53 +202,55 @@ $controller = $_GET["param"] ?? "index";
                                         <?php
                                     }
                                 ?>
+                                    </ul>
+                                </li>
                                 <?php
                                     if(isset($_SESSION['Logado_Na_Sessão'])){
                                         ?>
-                                            <li class="nav-li">
-                                                <div class="dropdown-container">
-                                                    <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
-                                                        <?php
-                                                            // Obtém a hora atual para definir a saudação
-                                                            date_default_timezone_set("America/Sao_Paulo");
-                                                            $hour = date('H');
-                                                            $greeting = "Olá";
+                                            <li class="nav-li dropdown-center">
+                                                <a class="nav-btn-user-menu" id="user-menu" title="Menu do usuario" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <?php
+                                                        // Obtém a hora atual para definir a saudação
+                                                        date_default_timezone_set("America/Sao_Paulo");
+                                                        $hour = date('H');
+                                                        $greeting = "Olá";
 
-                                                            // Define a saudação com base na hora do dia
-                                                            if ($hour >= 5 && $hour < 12) {
-                                                                $greeting = "Bom dia";
-                                                            } else if ($hour >= 12 && $hour < 18) {
-                                                                $greeting = "Boa tarde";
-                                                            } else {
-                                                                $greeting = "Boa noite";
-                                                            }
-                                                            
-                                                            $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
+                                                        // Define a saudação com base na hora do dia
+                                                        if ($hour >= 5 && $hour < 12) {
+                                                            $greeting = "Bom dia";
+                                                        } else if ($hour >= 12 && $hour < 18) {
+                                                            $greeting = "Boa tarde";
+                                                        } else {
+                                                            $greeting = "Boa noite";
+                                                        }
+                                                        
+                                                        $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
 
-                                                            // Exibe a saudação e o nome do usuário
-                                                            echo $greeting . ", " . $userName . "!";
-                                                        ?>
-                                                        <span class="dropdown-arrow">&#9660</span> 
-                                                        <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
+                                                        // Exibe a saudação e o nome do usuário
+                                                        echo $greeting . ", " . $userName . "!";
+                                                    ?>
+                                                    <span class="dropdown-toggle"></span> 
+                                                    <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
 
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <?php if($_SESSION['Logado_Na_Sessão']['tipo'] == 'admin'): ?>
-                                                        <li>
-                                                            <a href="http://localhost/Moonlight/Moonlight_Backend/Public/index">Entrar no administrativo</a>
-                                                        </li>
-                                                        <?php endif; ?>
-                                                        <li>
-                                                            <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <?php if($_SESSION['Logado_Na_Sessão']['tipo'] == 'admin'): ?>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="http://localhost/Moonlight/Moonlight_Backend/Public/index">Entrar no administrativo</a>
+                                                    </li>
+
+                                                    <?php endif; ?>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
+                                                    </li>
+
+                                                </ul>
                                             </li>
                                         <?php
                                     } else{
                                         ?>
                                         <li class="nav-li">
-                                            <a href="<?= BASE_URL ?>/usuario/access" class="styledBtn" title="Entrar">Fazer login</a>
+                                            <a href="<?= BASE_URL ?>/usuario/access" class="nav-btn-user-menu" title="Entrar">Fazer login</a>
                                         </li>
                                         <?php
                                     }
@@ -257,6 +269,20 @@ $controller = $_GET["param"] ?? "index";
                 $controller = $param[0] ?? "index";
                 $acao = $param[1] ?? "index";
                 $id = $param[2] ?? NULL;
+
+                // Verifica se a $acao é um número e se o $id ainda não foi definido.
+                // Isso cobre o formato: /controller/12 (onde 12 é o ID)
+                if (is_numeric($acao) && $id === NULL) {
+                    // Se for um número, move o valor de $acao para $id
+                    $id = $acao;
+                    // E define a $acao padrão como "index"
+                    $acao = "index";
+                } 
+                // Trata o caso padrão onde a Ação está vazia (Ex: /controller)
+                else if(empty($acao)){
+                    $acao = "index";
+                }
+
                 $controller = ucfirst($controller)."Controller";
                 
                 $page = "../Controller/{$controller}.php";

@@ -33,38 +33,36 @@
             <h2 class="white-text text-center">Jogos em destaque:</h2>
         </div>
         <div class="card-body">
-            <div class="row">
+            <div class="row card-deck">
             <?php 
                 //carregar o conteudo dos Jogos da API
                 $url = "{$link}/api/jogos.php";
                 $dadosJogos = file_get_contents($url);
                 $dadosJogos = json_decode($dadosJogos);
 
-                //print_r($dadosProdutos);
-
                 foreach($dadosJogos as $dados) {
 
                     $img = "{$link}/arquivos/{$dados->imagem}";
 
                     ?>
-                    <div class="col-12 col-md-4 text-center">
+                    <div class="card-item col-12 col-md-3 text-center">   
                         <div class="card">
-                            <img src="<?= $img ?>" class="w-100 cardImg">
-                            <br>
-                            <p class="white-text">
-                                <?= $dados->titulo ?>
-                            </p>
-                            <p class="white-text">
-                                R$ 
-                                <?= number_format($dados->preco,2,",",".") ?>
-                            </p>
-                            <br>
-                            <p>
-                                <a href="<?= BASE_URL ?>/games/index/<?= $dados->id_games ?>"
-                                class="styledBtn">
-                                    Detalhes do jogo
-                                </a>
-                            </p>
+                            <img src="<?= $img ?>" class="cardImg">
+                            <div class="card-content">
+                                <p class="white-text">
+                                    <?= $dados->titulo ?>
+                                </p>
+                                <p class="white-text">
+                                    R$ 
+                                    <?= number_format($dados->preco,2,",",".") ?>
+                                </p>
+                                <p class="card-button-wrapper">
+                                    <a href="<?= BASE_URL ?>/games/index/<?= $dados->id_games ?>"
+                                    class="styledBtn">
+                                        Detalhes do jogo
+                                    </a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <?php

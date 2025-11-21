@@ -178,12 +178,14 @@ class GamesController{
             $_SESSION['modalMessage'] = "O registro fornecido é inválido.";
         } else{
             $mensagem = $this->games->excluirGames($id);
-            if($mensagem == 1){
-                $_SESSION['modalTitle'] = "Registro excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido foi excluido.";
-            } else{
-                $_SESSION['modalTitle'] = "O Registro não foi excluído";
-                $_SESSION['modalMessage'] = "O registro fornecido não foi excluido por alguma falha interna.";
+            // Se a função retornar 'true' (excluído com sucesso)
+            if($mensagem === true){ 
+                $_SESSION['modalTitle'] = "Registro Excluído";
+                $_SESSION['modalMessage'] = "O jogo foi excluído com sucesso.";
+            } else { // Se a função retornar uma string (mensagem de erro personalizada ou erro PDO)
+                $_SESSION['modalTitle'] = "Falha na Exclusão";
+                // Usa a mensagem de erro retornada pelo Model
+                $_SESSION['modalMessage'] = $mensagem; 
             }
         }
 

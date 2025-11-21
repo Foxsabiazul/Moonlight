@@ -261,42 +261,41 @@ ob_start();
                                 <li class="nav-li">
                                     <a class="nav-btn" title="Listagem de Usuarios" href="<?= BASE_URL ?>/usuario">Usuarios</a>
                                 </li>
-                                <li class="nav-li">
-                                    <div class="dropdown-container">
-                                        <a href="javascript:showDropdown()" class="user-menu" id="user-menu" title="Menu do usuario">
-                                            <?php
-                                                // Obtém a hora atual para definir a saudação
-                                                date_default_timezone_set("America/Sao_Paulo");
-                                                $hour = date('H');
-                                                $greeting = "Olá";
+                                <li class="nav-li dropdown-center">
+                                    <a class="nav-btn-user-menu" id="user-menu" title="Menu do usuario" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?php
+                                            // Obtém a hora atual para definir a saudação
+                                            date_default_timezone_set("America/Sao_Paulo");
+                                            $hour = date('H');
+                                            $greeting = "Olá";
 
-                                                // Define a saudação com base na hora do dia
-                                                if ($hour >= 5 && $hour < 12) {
-                                                    $greeting = "Bom dia";
-                                                } else if ($hour >= 12 && $hour < 18) {
-                                                    $greeting = "Boa tarde";
-                                                } else {
-                                                    $greeting = "Boa noite";
-                                                }
-                                                
-                                                $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
+                                            // Define a saudação com base na hora do dia
+                                            if ($hour >= 5 && $hour < 12) {
+                                                $greeting = "Bom dia";
+                                            } else if ($hour >= 12 && $hour < 18) {
+                                                $greeting = "Boa tarde";
+                                            } else {
+                                                $greeting = "Boa noite";
+                                            }
+                                            
+                                            $userName = isset($_SESSION['Logado_Na_Sessão']) ? htmlspecialchars($_SESSION['Logado_Na_Sessão']["nm_user"]) : "Usuário";
 
-                                                // Exibe a saudação e o nome do usuário
-                                                echo $greeting . ", " . $userName . "!";
-                                            ?>
-                                            <span class="dropdown-arrow">&#9660</span> 
-                                            <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
+                                            // Exibe a saudação e o nome do usuário
+                                            echo $greeting . ", " . $userName . "!";
+                                        ?>
+                                        <span class="dropdown-toggle"></span> 
+                                        <!-- esse trecho no span é referente a um caracter de seta apontando pra baixo, usado assim para não precisar de uma imagem para representar essa seta. -->
 
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="http://localhost/Moonlight/Moonlight/Public/index">Entrar na loja</a>
-                                            </li>
-                                            <li>
-                                                <a href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item black-text" href="http://localhost/Moonlight/Moonlight/Public/index">Entrar no site</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
+                                        </li>
+
+                                    </ul>
                                 </li>
                             </ul>
                         </nav>
