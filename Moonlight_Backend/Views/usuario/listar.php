@@ -34,44 +34,46 @@
             $dadosUsuario = $this->usuario->listarUsuario() ?? NULL;
             if($dadosUsuario): ?>
             <p class="white-text">Abaixo os usuários cadastrados:</p>
-            <table class="table table-bordered table-striped dashboard-table">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Nome do Usuário</td>
-                        <td>E-mail</td>
-                        <td>Data_Criação</td>
-                        <td>Opções</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        foreach ($dadosUsuario as $dados) {
-                            ?>
-                            <tr>
-                                <td><?=$dados->id_user?></td>
-                                <td><?=$dados->nm_user?></td>
-                                <td><?=$dados->email?></td>
-                                <td><?=$dados->data_criacao?></td>
-                                <td width="150px" id="opcoes">
-                                    <div class="text-center">
-                                        <a href="javascript:confirmarExclusao(event, <?=$dados->id_user?>, 'usuario')" class="formBtn p-x1 black-text mr-x1">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        <a href="<?= BASE_URL ?>/usuario/index/<?=$dados->id_user?>" class="formBtn p-x1 black-text ml-x1">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
-            </table>
-            <?php else: ?>
-            <h3 class="white-text">Não há usuarios cadastrados, cadastre-os</h3>
-            <?php endif; ?>
+            <div class="table-responsive-scroll">
+                <table class="table table-bordered table-striped dashboard-table">
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nome do Usuário</td>
+                            <td>E-mail</td>
+                            <td>Data_Criação</td>
+                            <td>Opções</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach ($dadosUsuario as $dados) {
+                                ?>
+                                <tr>
+                                    <td><?=$dados->id_user?></td>
+                                    <td><?=$dados->nm_user?></td>
+                                    <td><?=$dados->email?></td>
+                                    <td><?=$dados->data_criacao?></td>
+                                    <td width="150px" id="opcoes">
+                                        <div class="text-center">
+                                            <a href="javascript:confirmarExclusao(event, <?=$dados->id_user?>, 'usuario')" class="formBtn p-x1 black-text mr-x1">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>/usuario/index/<?=$dados->id_user?>" class="formBtn p-x1 black-text ml-x1">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        ?>
+                    </tbody>
+                </table>
+                <?php else: ?>
+                <h3 class="white-text">Não há usuarios cadastrados, cadastre-os</h3>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>

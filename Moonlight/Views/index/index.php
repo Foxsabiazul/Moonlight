@@ -42,7 +42,9 @@
 
                 foreach($dadosJogos as $dados) {
 
-                    $img = "{$link}/arquivos/{$dados->imagem}";
+                    $imagem = isset($dados->imagem) ? $dados->imagem : 'placeholder_item.jpg';
+
+                    $img = "{$link}/arquivos/{$imagem}";
 
                     ?>
                     <div class="card-item col-12 col-md-3 text-center">   

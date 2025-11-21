@@ -1,0 +1,1 @@
+[2025-11-21 15:56:12] [DATABASE_ERROR] PDO Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens | Code: HY093 

@@ -133,11 +133,6 @@ if(empty($controller)){
             }
         }
 
-        // function showDropdown() {
-        //     let dropdown = document.querySelector('.dropdown-container');
-        //     dropdown.classList.toggle("active");
-        // }
-
 
         function showMenu() {
             let bars = document.getElementById('fa-bars');
@@ -234,11 +229,13 @@ if(empty($controller)){
 
                                                 </a>
                                                 <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                    </li>
                                                     <?php if($_SESSION['Logado_Na_Sessão']['tipo'] == 'admin'): ?>
                                                     <li>
-                                                        <a class="dropdown-item black-text" href="http://localhost/Moonlight/Moonlight_Backend/Public/index">Entrar no administrativo</a>
+                                                        <a class="dropdown-item black-text" href="http://localhost/Moonlight/Moonlight_Backend/Public/index"><i class="fa-solid fa-hammer"></i> Entrar no administrativo</a>
                                                     </li>
-
                                                     <?php endif; ?>
                                                     <li>
                                                         <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/logout" title="Sair" id="lastBtn"><i class="fas fa-power-off"></i> Sair</a>
@@ -262,7 +259,7 @@ if(empty($controller)){
             </div>
         </header>
 
-        <main>
+        <main style="background: url(http://localhost/Moonlight/Moonlight/Public/img/index/stars.gif);">
                 <?php
                 $param = explode("/", $controller);
 
@@ -284,25 +281,31 @@ if(empty($controller)){
                 }
 
                 $controller = ucfirst($controller)."Controller";
-                
                 $page = "../Controller/{$controller}.php";
+                $fullClassName = "Moonlight\\Controller\\{$controller}";
+                // como estamos usando o composer ele não vai funcionar aqui
+                // se você decidir usar a variavel $controller do jeito que estava iria quebrar, 
+                // por causa do 'use' lá em cima, ele pensa que vamos pegar o namespace pra chamar a classe.
+                    
 
                 if (file_exists($page)) {
 
-                    // como estamos usando o composer ele não vai funcionar aqui
-                    // se você decidir usar a variavel $controller do jeito que estava iria quebrar, 
-                    // por causa do 'use' lá em cima, ele pensa que vamos pegar o namespace pra chamar a classe.
-
-                    $fullClassName = "Moonlight\\Controller\\{$controller}";
-                    $link = "http://localhost/Moonlight/Moonlight_Backend/public";
-
                     $control = new $fullClassName();
-                    $control->$acao($id, $link);
 
-                } else include "../Views/index/erro.php";
+                    if(method_exists($control, $acao)){
+                        $link = "http://localhost/Moonlight/Moonlight_Backend/public";
+                        $control->$acao($id, $link);
+                    } else{
+                        header("Location: " . BASE_URL . "/index/erro404");
+                        exit;
+                    }
+
+                } else{
+                    header("Location: " . BASE_URL . "/index/erro404");
+                    exit;
+                }
                 ?>
         </main>
-
         <footer class="footer">
             <div class="footerClass">
                 <p>

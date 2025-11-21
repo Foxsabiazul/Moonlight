@@ -7,15 +7,14 @@
 
 namespace Moonlight\Config;
 
-class ModalMessage 
+class ModalMessage extends \Exception
 {
     private string $title;
-    private string $message;
 
     public function __construct(string $title, string $message)
     {
         $this->title = $title;
-        $this->message = $message;
+        parent::__construct($message);
     }
 
     public function getTitle(): string
@@ -23,8 +22,5 @@ class ModalMessage
         return $this->title;
     }
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
+
 }

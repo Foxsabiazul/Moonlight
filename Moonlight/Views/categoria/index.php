@@ -13,7 +13,9 @@
 
                 foreach($dadosJogos as $dados) {
 
-                    $img = "{$link}/arquivos/{$dados->imagem}";
+                    $imagem = isset($dados->imagem) ? $dados->imagem : 'placeholder_item.jpg';
+
+                    $img = "{$link}/arquivos/{$imagem}";
                     // http://localhost/Moonlight/Moonlight_Backend/public/arquivos/13123213412.jpg
 
                     ?>

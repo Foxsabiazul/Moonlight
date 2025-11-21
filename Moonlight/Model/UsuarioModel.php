@@ -1,6 +1,11 @@
 <?php
     namespace Moonlight\Model;
-    use PDO;
+
+use Exception;
+use Moonlight\Config\Logger;
+use Moonlight\Config\ModalMessage;
+use PDO;
+use PDOException;
 
     /**
      * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
@@ -19,9 +24,12 @@
 
         /**
          * @param array $dados Os dados do usuário, com a senha já com hash.
-         * @return int|bool
+         * @return int O ID do usuário inserido.
+         * @throws \Moonlight\Config\ModalMessage Se houver violação de regra de negócio (ex: e-mail duplicado).
+         * @throws \PDOException Se houver um erro de banco de dados inesperado.
+         * @throws \Exception Para falhas de execução desconhecidas.
          */
-        public function inserirUsuario(array $dados): int|bool {
+        public function inserirUsuario(array $dados): int {
             $sql = "INSERT INTO usuários (nm_user, email, senha, data_criacao, tipo) 
                     VALUES (:nm_user, :email, :senha, :data_criacao, :tipo)";
             
@@ -35,20 +43,31 @@
 
             try {
                 if ($consulta->execute()) {
+                    // Sucesso: Retorna o ID
                     return (int) $this->pdo->lastInsertId();
                 }
-                return false; // Falha na execução sem exceção do PDO
+                // Se execute falhou sem lançar exceção (raro no PDO), lançamos uma exceção genérica
+                throw new \Exception("Falha desconhecida ao executar inserção de usuário.");
 
             } catch (\PDOException $e) {
-
-                // Código de erro 23000 é para violação de integridade (incluindo UNIQUE key)
-                if ($e->getCode() == 23000) {
-                    // Logar o erro completo ($e) aqui é uma boa prática
-                    return -1; // Retorna -1 para indicar e-mail duplicado
-                }
                 
-                // Logar o erro genérico ($e) e retornar false para outros problemas
-                return false; // Falha genérica
+                // Código de erro 23000 é para violação de integridade (UNIQUE key, NOT NULL, FK)
+                if ($e->getCode() == 23000) {
+                    
+                    if (str_contains($e->getMessage(), 'email')) {
+                        // Isso interrompe o fluxo e envia a mensagem amigável para o Controller.
+                        // **LANÇA EXCEÇÃO DE REGRA DE NEGÓCIO**
+                        throw new ModalMessage(
+                            "E-mail já cadastrado.", 
+                            "O e-mail {$dados['email']} já está sendo usado. Tente fazer login."
+                        );
+                    }
+                    // Se for outra violação de 23000 (ex: NOT NULL não tratado), deixamos a PDOException propagar
+                }
+
+                // **LANÇA EXCEÇÃO DE BANCO DE DADOS**
+                // Propaga a PDOException para que o Controller a capture e logue.
+                throw $e;
             }
         }
 
@@ -59,6 +78,25 @@
          * Faz update na tabela Usuários, com base nos dados fornecidos d
          */
         public function atualizarUsuario(array $dados): bool {
+
+            $emailNovo = $dados['email'];
+            $idAtual = $dados['id_user']; // ID do usuário logado (Seguro)
+
+            // CHECAGEM DE E-MAIL DUPLICADO
+            // selecione o id de usuario onde o email é igual e o id de usuario é diferente do id do usuario atual
+            $sqlCheck = "SELECT id_user FROM usuários WHERE email = :email AND id_user != :id_atual LIMIT 1";
+            $consultaCheck = $this->pdo->prepare($sqlCheck);
+            $consultaCheck->bindParam(':email', $emailNovo);
+            $consultaCheck->bindParam(':id_atual', $idAtual);
+            $consultaCheck->execute();
+            
+            if ($consultaCheck->fetchColumn()) {
+                // Email já em uso por outro usuário. Lança exceção de regra de negocios.
+                throw new ModalMessage(
+                    "E-mail já em uso", 
+                    "O e-mail {$emailNovo} já pertence a outra conta. Escolha um novo e-mail."
+                );
+            }
             
             $setClauses = "nm_user = :nm_user, email = :email";
             $parameters = [
@@ -84,7 +122,11 @@
                 $consulta->bindParam($key, $parameters[$key]);
             }
 
-            return $consulta->execute();
+            try{
+                return $consulta->execute();
+            } catch(\PDOException $e){
+                throw $e;
+            }
         }
 
         // editar não é update, ele serve para resgatar os valores do banco para trazer à interface do formulario de Usuario
@@ -105,13 +147,27 @@
             return $consulta->execute();
         }
 
-        public function buscarPorEmail(string $email){
-            $sql = "select * from usuários where email = :email limit 1";
-            $consulta = $this->pdo->prepare($sql);
-            $consulta->bindParam(":email", $email);
-            $consulta->execute();
 
-            return $consulta->fetch(PDO::FETCH_OBJ);
+        /**
+         * @param string $email pesquisará os dados com base no email
+         * @return object com todos os dados.
+         * @throws \PDOException Se houver um erro de banco de dados inesperado.
+         */
+        public function buscarPorEmail(string $email): object {
+            try {
+                $sql = "SELECT id_user, nm_user, senha, data_criacao, tipo FROM usuários WHERE email = :email";
+                $consulta = $this->pdo->prepare($sql);
+                $consulta->bindParam(':email', $email);
+                $consulta->execute();
+                $dadosUsuario = $consulta->fetch(PDO::FETCH_OBJ);
+
+                return $dadosUsuario;
+
+            } catch (\PDOException $e) {
+                // Logamos erros graves de SQL e propagamos.
+                Logger::logError($e, "LOGIN_DB_ERROR");
+                throw $e;
+            }
         }
 
     }

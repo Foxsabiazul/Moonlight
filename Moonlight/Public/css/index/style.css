@@ -327,6 +327,7 @@ main{
     padding-top: 100px; /* padding top para deixar o conteudo principal a mostra sem ficar embaixo do header. Disclaimer importante, se você mexe nesse cara ele fica por baixo do header o que não é nem um pouco bacana */
     /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
     width: 100%;
+    padding-bottom: 0.1px;
     position: relative;
 }
 
