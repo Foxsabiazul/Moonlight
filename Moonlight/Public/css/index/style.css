@@ -556,6 +556,65 @@ main{
     color: var(--textMainColor)!important;
 }
 
+
+.title-text {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--textMainColor); /* Branco */
+    margin-bottom: 10px;
+    font-family: var(--font-default);
+}
+
+
+.price-text {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--textMainColor); 
+    margin-bottom: 25px;
+}
+
+
+.description-text {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--elementColor); 
+    text-align: left;
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: var(--textMainColor);
+    font-family: var(--font-default);
+}
+.buy-now-btn {
+    background-color: var(--btnBackgroundCtaColor); 
+    color: var(--textMainColor); 
+    animation: none; 
+}
+
+.buy-now-btn:hover {
+
+    background-color: var(--btnBackgroundCtaHoverColor); 
+    animation: glowCTA 2s infinite ease-in-out;
+}
+
+
+.add-cart-btn {
+    color: var(--textSecondColor); 
+}
+.game-detail-img {
+    max-width: 100%;
+    height: auto; 
+    max-height: 600px; 
+    object-fit: cover; 
+}
+@media (min-width: 992px) {
+    .game-details-body > .col-lg-4 { 
+        order: 2; /* Imagem à direita */
+        text-align: right;
+    }
+    .game-details-body > .col-lg-8 {
+        order: 1; /* Detalhes à esquerda */
+    }
+}
 @media(max-width:1000px){
 
     /* Responsivo */
