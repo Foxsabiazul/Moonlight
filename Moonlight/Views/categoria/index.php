@@ -11,7 +11,7 @@
                 <?php 
                     // Variável para rastrear se todos os jogos foram carregados
                     $totalCarregados = count($dadosJogos);
-                    $limitePorPagina = 8; // Assumindo que sua API usa limite 8
+                    $limitePorPagina = 8; // a API usa limite de 8 jogos
                     
                     foreach($dadosJogos as $dados) {
 
