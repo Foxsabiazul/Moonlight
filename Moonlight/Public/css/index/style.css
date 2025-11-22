@@ -541,6 +541,10 @@ main{
     backdrop-filter: blur(5px);
 }
 
+.tabela-carrinho{
+    background-color: var(--elementColor)!important;
+    color: var(--textMainColor)!important;
+}
 
 @media(max-width:1000px){
 

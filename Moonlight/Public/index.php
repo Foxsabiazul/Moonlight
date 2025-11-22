@@ -199,6 +199,9 @@ if(empty($controller)){
                                 ?>
                                     </ul>
                                 </li>
+
+                                    <li class="nav-li">
+                                        <a href="<?= BASE_URL ?>/Carrinho" class="nav-btn" title="Carrinho"><i class="fas fa-shopping-cart"></i>Carrinho</a>
                                 <?php
                                     if(isset($_SESSION['Logado_Na_Sessão'])){
                                         ?>

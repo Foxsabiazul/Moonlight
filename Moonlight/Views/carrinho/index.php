@@ -1,53 +1,71 @@
 <?php
-
-// Exemplo de dados fictícios adicionados ao carrinho (normalmente vindo de formulário)
-
-if(!isset($_SESSION["cart_item"])) {
-    $_SESSION["cart_item"] = [
-        ["code" => "P001", "name" => "Jogo A", "quantity" => 2, "price" => 50.00],
-        ["code" => "P002", "name" => "Jogo B", "quantity" => 1, "price" => 70.00]
-    ];
-}
-
-$total_quantity = 0;
-$total_price = 0;
+$totalGeral = 0;
+$itensCarrinho = $itensCarrinho ?? [];
 ?>
-<?php if(!empty($_SESSION["cart_item"])): ?>
-<div class="container mt-5">
-    <h2 class="Cart2">Carrinho de Compras</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr class="Clipper">
-                <th>Produto</th>
-                <th>Código</th>
-                <th>Quantidade</th>
-                <th>Preço Unitário</th>
-                <th>Preço Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($_SESSION["cart_item"] as $item):
-                $item_total = $item["quantity"] * $item["price"];
-                $total_quantity += $item["quantity"];
-                $total_price += $item_total;
-            ?>
-            <tr>
-                <td><?= htmlspecialchars($item["name"]) ?></td>
-                <td><?= htmlspecialchars($item["code"]) ?></td>
-                <td><?= $item["quantity"] ?></td>
-                <td>R$ <?= number_format($item["price"], 2, ',', '.') ?></td>
-                <td>R$ <?= number_format($item_total, 2, ',', '.') ?></td>
-            </tr>
-            <?php endforeach; ?>
-            <tr>
-                <td colspan="2" class="text-end"><strong>Total</strong></td>
-                <td><strong><?= $total_quantity ?></strong></td>
-                <td></td>
-                <td><strong>R$ <?= number_format($total_price, 2, ',', '.') ?></strong></td>
-            </tr>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p class="Pcat">Seu carrinho está vazio.</p>
-<?php endif; ?>
-</div>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="white-text text-center">Carrinho de Compras</h2>
+        </div>
+        <div class="card-body">
+            <table class="table tabela-carrinho">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 10%;">Imagem</th>
+                        <th scope="col" style="width: 70%;">Produto</th>
+                        <th scope="col" style="width: 20%;" class="text-right">Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                    if (!empty($itensCarrinho)) {
+                        foreach ($itensCarrinho as $item) {
+                            $precoItem = $item['preco_unitario'] * $item['quantidade'];
+                            $totalGeral += $precoItem;
+                            ?>
+
+                            <tr>
+                                <td>
+                                    <img src="/assets/img/jogos/<?php echo $item['imagem']; ?>"
+                                        alt="<?php echo $item['titulo']; ?>"
+                                        style="width: 100%; max-width: 80px; height: auto;">
+                                </td>
+
+                                <td><?php echo $item['titulo']; ?></td>
+
+                                <td class="text-right">R$ <?php echo number_format($item['preco_unitario'], 2, ',', '.'); ?>
+                                </td>
+
+                            </tr>
+
+                        <?php
+                        }
+                    } else {
+
+                        ?>
+                        <tr>
+                            <td colspan="3" class="text-center">Seu carrinho de compras está vazio.</td>
+                        </tr>
+                    <?php } ?>
+
+                </tbody>
+
+                <tfoot>
+                    <tr style="border-top: 2px solid #555;">
+                        <td colspan="2" class="text-right"><strong>Valor Total:</strong></td>
+
+                        <td class="text-right"><strong>R$
+                                <?php echo number_format($totalGeral, 2, ',', '.'); ?></strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="text-right mt-4 mb-5">
+                <a href="/checkout" class="btn btn-lg btn-success">
+                    <i class="fas fa-shopping-cart"></i> Finalizar Compra
+                </a>
+            </div>
+
+        </div>
