@@ -59,7 +59,7 @@
                                     <?= number_format($dados->preco,2,",",".") ?>
                                 </p>
                                 <p class="card-button-wrapper">
-                                    <a href="<?= BASE_URL ?>/games/index/<?= $dados->id_games ?>"
+                                    <a href="<?= BASE_URL?>/games/index/<?= $dados->id_games ?>"
                                     class="styledBtn">
                                         Detalhes do jogo
                                     </a>
