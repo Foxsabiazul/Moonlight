@@ -41,6 +41,9 @@ if(empty($controller)){
     $controller = "index";
 }
 
+$param = explode("/", $controller);
+
+$controller = $param[0] ?? "index";
     
 ?>
 <!DOCTYPE html>
@@ -61,21 +64,6 @@ if(empty($controller)){
     $cssMap = [
         "store" => [
             "/css/storePage/store.css"
-        ],
-        "product" => [
-            "/css/productPage/product.css"
-        ],
-        "FAQ" => [
-            "/css/faqPage/faq.css"
-        ],
-        "news" => [
-            "/css/newsPage/news.css"
-        ],
-        "cart" => [
-            "/css/cartPage/cart.css"
-        ],
-        "erro404" => [
-            "/css/index/erro404.css"
         ]
     ];
 
@@ -89,21 +77,14 @@ if(empty($controller)){
     ?>
     <?php
     $jsMap = [
-        "contact" => ["/assets/js/contact/contact.js"],
-        "store" => ["/assets/js/store/storeFilter.js"],
-        "product" => [
-            "/assets/js/product/product.js",
-            "/assets/js/product/cart.js"
-        ],
-        "cart" => [
-            "/assets/js/cart/loadcart.js"
-        ],
+        "categoria" => ["/js/index/pagination.js"]
     ];
 
     if (isset($jsMap[$controller])) {
         foreach ($jsMap[$controller] as $jsFile) {
-            if (file_exists($jsFile)) {
-                echo "<script src=" . BASE_URL . "\"$jsFile\"></script>";
+            $jsFile = BASE_URL . $jsFile;
+            if ($jsFile) {
+                echo "<script src=" . $jsFile . "></script>";
             }
         }
     }
@@ -262,11 +243,8 @@ if(empty($controller)){
             </div>
         </header>
 
-        <main style="background: url(http://localhost/Moonlight/Moonlight/Public/img/index/stars.gif);">
+        <main>
                 <?php
-                $param = explode("/", $controller);
-
-                $controller = $param[0] ?? "index";
                 $acao = $param[1] ?? "index";
                 $id = $param[2] ?? NULL;
 
