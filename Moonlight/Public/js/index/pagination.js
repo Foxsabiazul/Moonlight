@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusDiv.textContent = '';
                     
                     // Se a API retornou menos jogos que o limite (8), chegamos ao fim.
-                    if (jogos.length < 8) { 
+                    if (jogos.length <= 8) { 
                         btnCarregarMais.style.display = 'none';
                         statusDiv.textContent = 'Fim da lista de jogos.';
                     } else {
