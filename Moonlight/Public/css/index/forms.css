@@ -62,6 +62,12 @@ button{
     width: 350px;
 }
 
+.formSearch{
+    width: 100%;
+    display: grid;
+    justify-content: space-evenly;
+}
+
 .formLabel{
     font-family: var(--font-default);
     color: var(--textMainColor);
@@ -141,11 +147,24 @@ button{
     justify-content: center;
 }
 
+.input-search-group{
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .inputStyleGroup{
     flex-grow: 1;
     background-color: var(--inputBackground);
     border: 5px solid var(--inputBorder);
-    border-radius: 5px 0px 0px 5px !important;
+    border-radius: 5px 0px 0px 5px;
     transition: ease-in-out 0.3s;
     color: var(--textMainColor);
 }
@@ -166,8 +185,17 @@ button{
     height: 34px;
 }
 
+.searchBtn{
+    width: 30px;
+}
+
 .btnStyleGroup:hover{
     background-color: var(--btnBackgroundColorhover);
+}
+
+.select-group{
+    display: inline-flex;
+    gap: 5px;
 }
 
 .formBtn{
@@ -205,6 +233,33 @@ button{
     .account-header-info-content{
         align-self: center;
     }
+
+    .input-group-header .inputStyleGroup{
+        border-radius: 0;
+        text-align: center;
+    }
+
+    .input-group-header .btnStyleGroup{
+        border-radius: 0;
+    }
+
+    .input-group-header .inputStyleGroup::placeholder{
+        padding-left: 20px;
+        text-align: center;
+    }
+
+    .formSearch{
+        display: flex;
+    }
+
+    .select-group{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+
+
 }
 
 @media(max-width: 768px){
@@ -216,5 +271,17 @@ button{
     .inputForm-control{
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+}
+
+@media(max-width: 500px){
+    .formSearch{
+        display: grid;
+    }
+
+    .select-group{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 }

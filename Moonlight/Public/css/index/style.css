@@ -117,6 +117,10 @@ html, body {
     margin-bottom: 5px;
 }
 
+.jc-around{
+    justify-content: space-around !important;
+}
+
 .jc-between{
     justify-content: space-between !important;
 }

@@ -77,7 +77,11 @@ $controller = $param[0] ?? "index";
     ?>
     <?php
     $jsMap = [
-        "categoria" => ["/js/index/pagination.js"]
+        "categoria" => ["/js/index/pagination.js"],
+        "search" => [
+            "/js/index/pagination.js",
+            "/js/index/filter.js"
+        ]
     ];
 
     if (isset($jsMap[$controller])) {
@@ -155,6 +159,14 @@ $controller = $param[0] ?? "index";
                         </a>
                         <nav class="header-nav" id="header-nav">
                             <ul class="nav-ul">
+                                <li class="nav-li">
+                                    <form action="<?= BASE_URL ?>/search" method="GET" class="formSearchHeader">
+                                        <div class="input-group-header">
+                                            <input class="inputStyleGroup" type="text" name="termo" placeholder="Buscar jogos...">
+                                            <button type="submit" class="btnStyleGroup searchBtn"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </form>
+                                </li>
                                 <li class="nav-li dropdown-center">
                                     <a class="nav-btn" title="Categorias de Jogos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Categorias 

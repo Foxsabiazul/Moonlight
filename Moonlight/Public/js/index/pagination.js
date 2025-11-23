@@ -43,19 +43,43 @@ document.addEventListener('DOMContentLoaded', () => {
             // Pega o número da próxima página a partir do botão
             const nextPage = parseInt(btnCarregarMais.getAttribute('data-next-page'));
             // LÊ o ID da categoria que salvamos no botão
+            const termoBusca = btnCarregarMais.dataset.searchTermo;
+            const order = btnCarregarMais.dataset.order;
+            const filtro = btnCarregarMais.dataset.filtro;
+            const operador = btnCarregarMais.dataset.operador;
             const categoriaId = btnCarregarMais.dataset.categoriaId;
             
             // Trava o botão e mostra status
             btnCarregarMais.disabled = true;
             statusDiv.textContent = 'Carregando...';
 
-            // Monta a URL para sua API PHP, enviando o parâmetro 'page'
-            const url = `${apiEndpoint}?page=${nextPage}`; 
+            // Monta a Query String base
+            let queryString = `page=${nextPage}`; 
 
+            // Adiciona filtros se existirem
             if (categoriaId) {
-                // Se houver um ID, adiciona o parâmetro 'categoria' na URL
-                url += `&categoria=${categoriaId}`; 
+                // Se a categoria for um filtro em separado, use '&categoria='
+                queryString += `&categoria=${categoriaId}`; 
             }
+            
+            if (termoBusca) {
+                // A API espera o termo na variável 'termo'
+                queryString += `&termo=${encodeURIComponent(termoBusca)}`;
+            }
+            
+            // Adiciona filtros avançados e ordenação
+            if (order) {
+                queryString += `&order=${order}`;
+            }
+            if (filtro) {
+                queryString += `&filtro=${filtro}`;
+            }
+            if (operador) {
+                queryString += `&operador=${operador}`;
+            }
+
+            // Monta a URL final
+            const url = `${apiEndpoint}?${queryString}`;
 
             try {
                 // 1. ESPERA a resposta da sua API PHP
