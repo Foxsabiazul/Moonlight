@@ -3,7 +3,7 @@
 
 use DateTime;
 
-    class SearchController {
+    class SearchController extends Controller{
 
         // pagina de categorias.
 

@@ -2,6 +2,10 @@
 
 ob_start();
 
+//coisas do moonlight mesmo
+require __DIR__ .  "/../vendor/autoload.php";
+
+
 // ----------------------------------------------------
 // BASE_URL
 // ----------------------------------------------------
@@ -33,7 +37,12 @@ $base_path = rtrim($root_dir, '/');
 // Constrói a URL completa e define a constante sem a barra final
 define('BASE_URL', "{$protocol}://{$host}{$base_path}");
 
-require __DIR__ .  "/../vendor/autoload.php";
+// O __DIR__ aqui aponta para A:\...\Moonlight\Moonlight\Public.
+// O arquivo .env deve estar na raiz do projeto (A:\...\Moonlight\Moonlight\). 
+// Portanto, precisa subir um nível (dirname(__DIR__)) para encontrar o .env.
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));    
+$dotenv->safeLoad();
+
 session_start();
 $controller = $_GET["param"] ?? "index";
 
@@ -226,7 +235,10 @@ $controller = $param[0] ?? "index";
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Meu Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/pedidos/" title="Meus Pedidos"><i class="fa-solid fa-clipboard-list"></i> Meus Pedidos</a>
                                                     </li>
                                                     <?php if($_SESSION['Logado_Na_Sessão']['tipo'] == 'admin'): ?>
                                                     <li>

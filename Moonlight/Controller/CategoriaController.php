@@ -1,7 +1,7 @@
 <?php
     namespace Moonlight\Controller;
 
-    class CategoriaController {
+    class CategoriaController extends Controller{
 
         // pagina de categorias.
 

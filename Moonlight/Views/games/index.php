@@ -1,3 +1,12 @@
+<?php
+    if (!empty($dadosJogo)) {
+        $id_jogo = htmlspecialchars($dadosJogo->id_games);
+        // Verifique se o jogo está no carrinho
+        $estaNoCarrinho = isset($_SESSION["carrinho"][$id_jogo]);
+        $link_backend = $link;
+    }
+?>
+
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -38,15 +47,26 @@
 
                     <div class="d-flex flex-column flex-md-row mt-5 button-group">
                         
-                        <a href=" "
+                        <a href="<?= BASE_URL ?>/carrinho/adicionar/<?= $id_jogo ?>?redirect=carrinho"
                             class="styledBtn buy-now-btn">
                             Comprar Agora
                         </a>
                         
-                        <a href=""
-                            class="styledBtn add-cart-btn ml-md-3 mt-3 mt-md-0">
+                        <?php if ($estaNoCarrinho): ?>
+
+                        <a href="<?= BASE_URL ?>/carrinho/excluir/<?= $id_jogo ?>?redirect=detalhes"
+                        class="styledBtn remove-cart-btn ml-md-3 mt-3 mt-md-0 btn-danger">
+                            Remover do Carrinho
+                        </a>
+                        
+                    <?php else: ?>
+
+                        <a href="<?= BASE_URL ?>/carrinho/adicionar/<?= $id_jogo ?>"
+                        class="styledBtn add-cart-btn ml-md-3 mt-3 mt-md-0">
                             Adicionar ao Carrinho
                         </a>
+                        
+                    <?php endif; ?>
 
                     </div>
                     

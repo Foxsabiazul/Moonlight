@@ -1,7 +1,7 @@
 <?php
     namespace Moonlight\Controller;
 
-    class IndexController {
+    class IndexController extends Controller {
 
         public function index($id, $link) {
             require "../Views/index/index.php";

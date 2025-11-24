@@ -427,6 +427,11 @@ main{
     transform: translateY(-2px);
 }
 
+.checkout-header-container{
+    display: flex;
+    flex-direction: column;
+}
+
 /* footer */
 
 .footer{

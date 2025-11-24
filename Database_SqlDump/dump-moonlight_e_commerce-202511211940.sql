@@ -56,6 +56,7 @@ CREATE TABLE `Pedidos`(
     `id_user` BIGINT NOT NULL COMMENT 'Quem comprou',
     `data_pedido` TIMESTAMP NOT NULL COMMENT 'Data da compra',
     `total` DECIMAL(10, 2) NOT NULL COMMENT 'Valor total para o usuário',
+    `status` ENUM('iniciado', 'aprovado', 'recusado', 'reembolsado', 'cancelado') NOT NULL DEFAULT 'iniciado' COMMENT 'Status do Pedido',
     
     -- Chave Estrangeira (FK) com ON DELETE CASCADE
     CONSTRAINT `fk_pedidos_user` FOREIGN KEY (`id_user`) 
@@ -144,3 +145,6 @@ CREATE TABLE `AuditoriaPreco`(
     constraint `fk_auditoria_games` foreign key (`id_games`)
     	references `jogos` (`id_games`) ON DELETE CASCADE
 );
+
+ALTER TABLE pedidos
+ADD COLUMN status ENUM('iniciado', 'aprovado', 'recusado', 'reembolsado', 'cancelado') NOT NULL DEFAULT 'iniciado';
