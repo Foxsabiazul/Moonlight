@@ -14,8 +14,8 @@ use Moonlight\Model\PedidosModel;
 use Moonlight\config\Conexao;
 use Moonlight\config\Logger;
 
-// ⚠️ ATENÇÃO: Confirme se as variáveis de ambiente estão sendo carregadas! 
-// Se não usar .env, use a chave diretamente aqui: MercadoPagoConfig::setAccessToken("YOUR_ACCESS_TOKEN");
+
+//coloquei meu token aqui porque o mercado pago não lê o $_ENV, por isso fiquei muito tempo aqui ramelando.
 $token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? 'APP_USR-6033108192222642-112402-0f3bfaf0b51b22625c79b1e9d115b873-3008632819';
 error_log("MERCADOPAGO TOKEN: " . $token); // Deve mostrar o token real, nunca vazio!
 
@@ -89,7 +89,7 @@ try {
         };
 
         // Chame a função da sua PedidosModel!
-        $atualizado = $pedidosModel->atualizarStatusPedidoPorPreferenceID($external_reference, $novoStatus);
+        $atualizado = $pedidosModel->atualizarStatusPedidoPorExternalReference($external_reference, $novoStatus);
 
         if ($atualizado) {
             $texto = "Pedido atualizado com sucesso. Status: {$novoStatus} " . 'BD_SUCESSO';

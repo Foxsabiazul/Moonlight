@@ -39,7 +39,7 @@ class PedidosModel {
         return $consulta->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function atualizarStatusPedidoPorPreferenceID(string $external_reference, string $status){
+    public function atualizarStatusPedidoPorExternalReference(string $external_reference, string $status){
         
         $statusPermitidos = ['pendente', 'aprovado', 'reembolsado', 'cancelado'];
 

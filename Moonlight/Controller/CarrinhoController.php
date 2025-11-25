@@ -86,7 +86,7 @@
 
                 // o token tem que ser pego no mercado pago, passei ele pro .env
                 // no repositorio vai estar apenas o .env.example, pega o arquivo e deixe ele sem o ".example" no nome e insira o seu token lá.
-                $token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? '';
+                $token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? 'APP_USR-6033108192222642-112402-0f3bfaf0b51b22625c79b1e9d115b873-3008632819';
                 
                 MercadoPagoConfig::setAccessToken($token);
 
@@ -114,41 +114,36 @@
                 }
 
                 //  EXPLICAÇÃO IMPORTANTE:
-                // Pro esquema de validar status da compra de forma real e ficar bacana pro metabase funcionar,
-                // precisamos usar um endereço ip ou dominio publico pro mercado pago acessar,
-                // então pra conseguir esta proeza no localhost, precisamos usar o app "ngrok"
-                // ele criará um tunel seguro do localhost para um dominio na internet, aí o
-                // que o mercado pago mandar pra ele, ngrok envia pra cá.
-
-                // procurem: "ngrok download" e tentem executar ngrok http 80 quando baixarem,
-                // aí vc precisa logar e acessar essa url: https://dashboard.ngrok.com/get-started/your-authtoken
-                // copie o que está no command line e mande no terminal do ngrok que vc tem no pc, envie,
-                // logo em seguida execute o comando ngrok http 80 normalmente, 
-                // aí tu passa pra essa variavel aqui essa bomba
-                // que está no seu Forwarding:
-
-                // a URL do ngrok para IPN (SUBSTITUA PELA SUA URL ATUAL!)
-                // Esta URL precisa ser HTTPS/domínio público para o Mercado Pago enviar a notificação.
-                // Lembre-se: substitua pelo endereço que o ngrok te der AGORA no terminal aberto.
-
-                // Instant Payment Notification = IPN. 
-                // mecanismo de comunicação seguro e automático 
-                // USADO POR GATEWAYS para informar seu servidor
-                // sobre uma mudança de status em uma transação
+                // Vá para o arquivo ngrok.txt na pasta aprendizado para obter mais detalhes sobre este link.
                 $url_publica_ipn = "https://phlogistic-maison-sloshily.ngrok-free.dev";
+
+                // arquivo de notificacao para o mercado pago enviar o status de pagamento e atualizarmos no pedido.
                 $caminho_notificacao = "/Moonlight/Moonlight/Public/meli/notificacao.php";
 
+                // base_url_retorno basicamente é a parte onde o mercado pago leva o usuario após a compra. (preferi deixar levar pro link acima, pois o nosso site não é publicado (MP so aceita sites com https).)
                 $base_url_retorno = $url_publica_ipn . "/Moonlight/Moonlight/Public";
 
                 //usar em produção
                 // $payer->name = $_SESSION["Logado_Na_Sessão"]["nm_user"];
                 // $payer->email = $_SESSION["Logado_Na_Sessão"]["email"];
 
-                //usar pra testes
+                // para testes EM COMPRAS DE CARTÃO:
+
+                //credenciais de teste:
+
+                //Cartão	    Número	                Código de segurança	    Data de vencimento
+                // Mastercard    // 5031 4332 1540 6351   // 123                   // 11/30
+
+                //Pra ser aprovado escreva no nome do titular do cartão: APRO 
+                //CPF: 12345678909
+                //mais detalhes em: https://www.mercadopago.com.br/developers/panel/app
+
+                //USE esse email, pois se não, seu teste irá falhar.
+                                
                 $payer->name = $_SESSION["Logado_Na_Sessão"]["nm_user"];
                 $payer->email = "TESTUSER8052695651117258427@testuser.com";
 
-                $external_reference = uniqid('order_'); // Gera um ID único, como "order_656edadae2e98"
+                $external_reference = uniqid('order_'); // Gera um ID único, como "order_656edadae2e98" | usaremos ele pra poder atualizar status no banco.
 
                 $preferenceData = [
                     "payer" => [
@@ -169,8 +164,7 @@
                 try {
                     $preference_criada = $client->create($preferenceData);
 
-                    // Se chegou aqui, a preferência foi salva com sucesso.
-                    $preference_id = $preference_criada->id;
+                    $preference_id = $preference_criada->id; // vamos salvar no banco
 
                     // Verificação de segurança:
                     if (empty($preference_id)) {
@@ -178,10 +172,8 @@
                         throw new \Exception("A preferência foi salva, mas o ID retornado está vazio.");
                     }
 
-
                     $dataHoraAtual = date('Y-m-d H:i:s');
-                    // Mudei o status inicial de volta para "iniciado" (ou "pendente", se preferir)
-                    // porque o status "pendente" que você usou estava correto para o salvamento inicial.
+
                     $this->carrinho->salvarPedido($dataHoraAtual, $totalGeral, "pendente", $preference_id, $external_reference); 
 
                     require "../Views/carrinho/checkout.php";

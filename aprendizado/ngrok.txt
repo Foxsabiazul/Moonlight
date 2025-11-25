@@ -15,4 +15,10 @@
 // a URL do ngrok para IPN (SUBSTITUA PELA SUA URL ATUAL!)
 // Esta URL precisa ser HTTPS/domínio público para o Mercado Pago enviar a notificação.
 // Lembre-se: substitua pelo endereço que o ngrok te der AGORA no terminal aberto.
+
+// Instant Payment Notification = IPN. 
+// mecanismo de comunicação seguro e automático 
+// USADO POR GATEWAYS para informar seu servidor
+// sobre uma mudança de status em uma transação
 $url_publica_ipn = "https://phlogistic-maison-sloshily.ngrok-free.dev/";
+
