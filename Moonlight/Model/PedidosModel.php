@@ -38,4 +38,21 @@ class PedidosModel {
 
         return $consulta->fetchAll(PDO::FETCH_OBJ);
     }
+
+    public function atualizarStatusPedidoPorPreferenceID(string $external_reference, string $status){
+        
+        $statusPermitidos = ['pendente', 'aprovado', 'reembolsado', 'cancelado'];
+
+        if (!in_array($status, $statusPermitidos)) {
+            // Lançar exceção ou logar erro se o status for inválido
+            throw new \Exception("Status de pedido inválido fornecido: " . $status);
+        }
+
+        $sql = "UPDATE pedidos SET status = :status WHERE external_reference = :external_reference";
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->bindParam(":status", $status);
+        $consulta->bindParam(":external_reference", $external_reference);
+
+        return $consulta->execute();
+    }
 }

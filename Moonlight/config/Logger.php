@@ -10,6 +10,7 @@ class Logger
 {
     // caminho
     private static string $logFile = __DIR__ . '/../../logs/app_errors.log';
+    private static string $logDebugFile = __DIR__ . '/../../logs/app_debuging.log';
 
     /**
      * @param \Throwable $e entrega a exceção
@@ -44,4 +45,24 @@ class Logger
         
         error_log($logMessage);
     }
+
+    public static function log(string $texto = "mensagem para printar!"){
+
+        // Garante que o diretório exista
+        if (!is_dir(dirname(self::$logDebugFile))) {
+            //pra entender vá até a pasta aprendizado. (mucho texto 🐊);
+            mkdir(dirname(self::$logDebugFile), 0777, true);
+        }
+
+        $timestamp = (new \DateTime())->format('Y-m-d H:i:s');
+
+        $logMessage = "[$timestamp] [$texto]";
+
+        $logMessage .= "\n";
+
+        file_put_contents(self::$logDebugFile, $logMessage, FILE_APPEND);
+
+        error_log($logMessage);
+    }
+
 }

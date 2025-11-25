@@ -15,7 +15,8 @@ $totalGeral = 0;
             <p class="text-left white-text">
                 <strong class="text-left white-text">Pedido: <?= $dados->id_pedido ?></strong>
                 Data: <?= $dados->dt ?>
-            </p>
+                Status atual: <?= $dados->status ?>
+            </p> 
             <table class="table table-bordered table-striped">
                 <?php
                     $dadosJogos = $this->pedidos->listarItens($dados->id_pedido);

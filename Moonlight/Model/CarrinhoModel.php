@@ -18,15 +18,16 @@ class CarrinhoModel {
         $this->pdo = $pdo;
     }
 
-    public function salvarPedido($dataHoraAtual, $valorTotal, $status, $preference_id){
+    public function salvarPedido($dataHoraAtual, $valorTotal, $status, $preference_id, $external_reference){
 
-        $sqlPedido = "insert into pedidos (id_user, data_pedido, total, status, preference_id) values (:id_user, :data_pedido, :total, :status, :preference_id)";
+        $sqlPedido = "insert into pedidos (id_user, data_pedido, total, status, preference_id, external_reference) values (:id_user, :data_pedido, :total, :status, :preference_id, :external_reference)";
         $consulta = $this->pdo->prepare($sqlPedido);
         $consulta->bindParam(":id_user", $_SESSION["Logado_Na_Sessão"]["id_user"], PDO::PARAM_INT);
         $consulta->bindParam(":data_pedido", $dataHoraAtual);
         $consulta->bindParam(":total", $valorTotal);
         $consulta->bindParam(":status", $status);
         $consulta->bindParam(":preference_id", $preference_id);
+        $consulta->bindParam(":external_reference", $external_reference);
         
         try {
 

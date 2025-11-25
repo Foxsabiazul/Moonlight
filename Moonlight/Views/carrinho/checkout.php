@@ -13,7 +13,7 @@
             <p class="text-center">
                 <!-- Botão de pagamento -->
                 <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js"
-                        data-preference-id="<?php echo $preference->id; ?>"
+                        data-preference-id="<?php echo $preference_id; ?>"
                         data-button-label="Pagar com Mercado Pago (Boleto, Cartão de Crédito ou Débito)">
                 </script>
             </p>

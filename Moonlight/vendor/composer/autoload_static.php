@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4
+class ComposerStaticInitbeec0b26070f74a0884aaa7f465f4aca
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -26,6 +26,7 @@ class ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4
         'M' => 
         array (
             'Moonlight\\' => 10,
+            'MercadoPago\\' => 12,
         ),
         'G' => 
         array (
@@ -58,6 +59,10 @@ class ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
+        'MercadoPago\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mercadopago/dx-php/src/MercadoPago',
+        ),
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
@@ -80,9 +85,9 @@ class ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a65465ea0b7497a45f94438a94de1e4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbeec0b26070f74a0884aaa7f465f4aca::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbeec0b26070f74a0884aaa7f465f4aca::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbeec0b26070f74a0884aaa7f465f4aca::$classMap;
 
         }, null, ClassLoader::class);
     }
