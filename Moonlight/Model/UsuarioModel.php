@@ -155,7 +155,7 @@ use PDOException;
          * @return object com todos os dados.
          * @throws \PDOException Se houver um erro de banco de dados inesperado.
          */
-        public function buscarPorEmail(string $email): object {
+        public function buscarPorEmail(string $email): ?object {
             try {
                 $sql = "SELECT id_user, nm_user, senha, data_criacao, tipo FROM usuários WHERE email = :email";
                 $consulta = $this->pdo->prepare($sql);
@@ -163,7 +163,7 @@ use PDOException;
                 $consulta->execute();
                 $dadosUsuario = $consulta->fetch(PDO::FETCH_OBJ);
 
-                return $dadosUsuario;
+                return $dadosUsuario ?: null;
 
             } catch (\PDOException $e) {
                 // Logamos erros graves de SQL e propagamos.

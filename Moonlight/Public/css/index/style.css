@@ -363,6 +363,7 @@ main{
     height: 100%; 
     display: flex;
     flex-direction: column; /* Organiza os elementos verticalmente: Imagem, Conteúdo, Botão */
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .cardImg{

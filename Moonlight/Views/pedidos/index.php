@@ -31,7 +31,7 @@ $totalGeral = 0;
                     }
                 ?>
             </table>
-            <hr>
+            <hr class="white-text text-center">
             <?php
                 }
             }else{

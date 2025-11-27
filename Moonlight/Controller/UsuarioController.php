@@ -128,6 +128,8 @@ class UsuarioController extends Controller{
             ];
             $_SESSION['modalTitle'] = "Cadastro realizado com sucesso.";
             $_SESSION['modalMessage'] = "Usuário salvo e login efetuado.";
+            header("Location: " . BASE_URL . "/");
+            exit;
         } catch (ModalMessage $e) {
 
             // **ERRO DE REGRA DE NEGÓCIO** (Ex: E-mail duplicado)
@@ -234,7 +236,7 @@ class UsuarioController extends Controller{
 
         $dadosUsuario = $this->usuario->buscarPorEmail($email);
 
-        if (empty($dadosUsuario->id_user)) {
+        if (empty($dadosUsuario)) {
             // Lança exceção de REGRA DE NEGÓCIO (Usuário não encontrado)
             throw new ModalMessage(
                 "Credenciais Inválidas", 
@@ -246,7 +248,7 @@ class UsuarioController extends Controller{
             // Lança exceção de REGRA DE NEGÓCIO (Senha incorreta)
             throw new ModalMessage(
                 "Credenciais Inválidas",
-                "A senha fornecida para o e-mail '{$email}' está incorreta."
+                "A senha fornecida ou o e-mail '{$email}' estão incorretos."
             );
         }
 

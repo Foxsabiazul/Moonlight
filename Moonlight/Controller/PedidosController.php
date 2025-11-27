@@ -2,12 +2,7 @@
     namespace Moonlight\Controller;
 
     use Moonlight\config\Conexao;
-    use Moonlight\config\Logger;
-    use Moonlight\config\ModalMessage;
-    use Moonlight\Model\CarrinhoModel;
-use Moonlight\Model\PedidosModel;
-use PDO;
-    use Throwable;
+    use Moonlight\Model\PedidosModel;
 
     class PedidosController extends Controller {
 

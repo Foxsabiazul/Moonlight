@@ -8,7 +8,7 @@
 ?>
 
 <div class="container">
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <h2 class="white-text text-center">
                 <?= htmlspecialchars($dadosJogo ? $dadosJogo->titulo : $tituloJogo) ?>
@@ -47,6 +47,21 @@
 
                     <div class="d-flex flex-column flex-md-row mt-5 button-group" style="gap: 5px;">
                         
+                    <?php if ($possuiJogo && isset($dadosJogo->link)): ?>
+        
+                        <a href="<?= htmlspecialchars($dadosJogo->link) ?>" target="_blank"
+                            class="styledBtn buy-now-btn">
+                            Instalar Jogo
+                        </a>
+                        
+                    <?php elseif($possuiJogo && empty($dadosJogo->link)): ?>
+
+                        <a class="styledBtn buy-now-btn">
+                            Jogo indisponivel para download
+                        </a>
+
+                    <?php else: ?>
+
                         <a href="<?= BASE_URL ?>/carrinho/adicionar/<?= $id_jogo ?>?redirect=carrinho"
                             class="styledBtn buy-now-btn">
                             Comprar Agora
@@ -59,13 +74,15 @@
                             Remover do Carrinho
                         </a>
                         
-                    <?php else: ?>
+                        <?php else: ?>
 
                         <a href="<?= BASE_URL ?>/carrinho/adicionar/<?= $id_jogo ?>"
                         class="styledBtn add-cart-btn ml-md-3 mt-3 mt-md-0">
                             Adicionar ao Carrinho
                         </a>
                         
+                        <?php endif; ?>
+
                     <?php endif; ?>
 
                     </div>

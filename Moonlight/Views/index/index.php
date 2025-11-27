@@ -3,7 +3,7 @@
     <?php
     if(isset($_SESSION['Logado_Na_Sessão'])){
         ?>
-        <div class="card">
+        <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
             <div class="col-12">
                 <?php
                     date_default_timezone_set("America/Sao_Paulo");
@@ -28,7 +28,7 @@
     }
     ?>
 
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <h2 class="white-text text-center">Jogos em destaque:</h2>
         </div>
