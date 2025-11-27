@@ -74,6 +74,13 @@ class GamesModel {
         return $consulta->execute();
     }
 
+    public function inserirGamesVazios(int $valor) {
+        $sql = "CALL sp_inserir_jogos_massa(:valor)";
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->bindParam(":valor", $valor, PDO::PARAM_INT);
+        $consulta->execute();
+    }
+
     /**
      * @param array $dados Os dados do Jogo.
      * @return bool resposta ao usuario
@@ -149,6 +156,26 @@ class GamesModel {
                 FROM jogos j
                 INNER JOIN categorias c ON j.id_categoria = c.id_categoria
                 ORDER BY j.titulo"; 
+        $consulta = $this->pdo->prepare($sql);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * Lista apenas os jogos que estão 'Prontos para Venda', usando a função SQL.
+     * @return array|null Dados dos jogos.
+     */
+    public function listarGamesAtivosApenas() {
+        // [MODIFICAÇÃO] Usa a função SQL na cláusula WHERE para filtrar.
+        $sql = "SELECT 
+                    j.*, 
+                    c.nm_cat
+                FROM jogos j
+                INNER JOIN categorias c ON j.id_categoria = c.id_categoria
+                WHERE fn_verificar_jogo_pronto_venda(j.id_games) = TRUE
+                ORDER BY j.titulo";
+        
         $consulta = $this->pdo->prepare($sql);
         $consulta->execute();
 

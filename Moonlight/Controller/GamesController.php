@@ -1,7 +1,7 @@
 <?php
 namespace Moonlight\Controller;
 
-class GamesController
+class GamesController extends Controller
 {
 
     public function index($id, $link)

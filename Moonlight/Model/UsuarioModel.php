@@ -61,6 +61,7 @@ use PDOException;
                             "E-mail já cadastrado.", 
                             "O e-mail {$dados['email']} já está sendo usado. Tente fazer login."
                         );
+                        Logger::logError($e, "INSERT_DB_ERROR");
                     }
                     // Se for outra violação de 23000 (ex: NOT NULL não tratado), deixamos a PDOException propagar
                 }
@@ -125,6 +126,7 @@ use PDOException;
             try{
                 return $consulta->execute();
             } catch(\PDOException $e){
+                Logger::logError($e, "UPDATE_DB_ERROR");
                 throw $e;
             }
         }

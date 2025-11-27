@@ -1,6 +1,6 @@
 --faça insert aqui primeiro antes de jogos
 
-INSERT INTO `categorias` (`id_categoria`, `nm_cat`, `desc_cat`) VALUES
+INSERT INTO `Categorias` (`id_categoria`, `nm_cat`, `desc_cat`) VALUES
 (1, 'Ação', 'Gênero que enfatiza desafios físicos, como coordenação olho-mão e tempo de reação.'),
 (2, 'Corrida', 'Jogos que simulam corridas de veículos motorizados ou outros meios.'),
 (3, 'Estratégia', 'Jogos que exigem planejamento, táticas e manobras para alcançar a vitória.'),

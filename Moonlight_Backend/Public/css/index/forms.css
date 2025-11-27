@@ -112,6 +112,23 @@ button{
     justify-content: center;
 }
 
+.inputStyleGroup-c{
+    flex-grow: 1;
+    background-color: var(--inputBackground);
+    border: 5px solid var(--inputBorder);
+    border-radius: 5px 0px 0px 5px;
+    transition: ease-in-out 0.3s;
+    color: var(--textMainColor);
+}
+
+.inputStyleGroup-c:hover{
+    border: 5px solid var(--inputBorderhover);
+}
+
+.inputStyleGroup-c::placeholder{
+    font-family: var(--font-default);
+}
+
 .inputStyleGroup{
     background-color: var(--inputBackground);
     border: 5px solid var(--inputBorder);
@@ -134,6 +151,10 @@ button{
     border-radius: 0px 5px 5px 0px;
     transition: ease-in-out 0.3s;
     height: 34px;
+}
+
+.insertBtn{
+    width: 30px;
 }
 
 .btnStyleGroup:hover{

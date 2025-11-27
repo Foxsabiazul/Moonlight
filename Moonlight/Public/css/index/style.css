@@ -117,6 +117,10 @@ html, body {
     margin-bottom: 5px;
 }
 
+.jc-around{
+    justify-content: space-around !important;
+}
+
 .jc-between{
     justify-content: space-between !important;
 }
@@ -323,12 +327,22 @@ DROPDOWN DO USUARIO
     transform: rotate(180deg) !important;
 }
 
+
 main{
     padding-top: 100px; /* padding top para deixar o conteudo principal a mostra sem ficar embaixo do header. Disclaimer importante, se você mexe nesse cara ele fica por baixo do header o que não é nem um pouco bacana */
     /* valor padrao 100px LEVANDO EM CONTA O LOGO*/
     width: 100%;
     padding-bottom: 0.1px;
     position: relative;
+
+    background-image: url('http://localhost/Moonlight/Moonlight/Public/img/index/stars_layer_1_2x2px.png'), url('http://localhost/Moonlight/Moonlight/Public/img/index/stars_layer_2_2x2px.png'), url('http://localhost/Moonlight/Moonlight/Public/img/index/stars_layer_3_2x2px.png');
+    background-repeat: repeat;
+    /* Faz as imagens se moverem mais lentamente que o scroll */
+    background-attachment: fixed; 
+    
+    /* Configura o tamanho e posição inicial */
+    background-size: 150px 150px, 150px 150px, 150px 150px; 
+    background-position: 0 0, 10px 10px, 20px 20px;
 }
 
 .card {
@@ -363,7 +377,7 @@ main{
     padding: 8px;
     text-align: center;
     /* faz altura mínima para o conteúdo de texto */
-    min-height: 100px; /* valor que pode ser ajustado para titulos e preços mais longos */
+    min-height: 200px; /* valor que pode ser ajustado para titulos e preços mais longos */
     display: flex; /* permite que os filhos fiquem com vantagens de flexbox */
     flex-direction: column; /* derruba o conteudo pra baixo */
     justify-content: space-between; /* Distribui Titulo/Preço e Botão */
@@ -411,6 +425,11 @@ main{
 .simpleBtn:hover{
     color: var(--textMainColorhover) !important;
     transform: translateY(-2px);
+}
+
+.checkout-header-container{
+    display: flex;
+    flex-direction: column;
 }
 
 /* footer */

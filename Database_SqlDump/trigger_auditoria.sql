@@ -18,3 +18,13 @@ BEGIN
         );
     END IF;
 END
+
+--      Dentro de GamesModel na MoonlightBackend COALESCE(@usuario_logado, USER())
+--        $usuarioLogado = $_SESSION['Logado_Na_Sessão']['nm_user'] ?? 'Sistema Desconhecido';
+--
+--        Prepare e execute o comando SET @usuario_logado
+
+--        $sqlSetUser = "SET @usuario_logado = :usuario_logado";
+--        $stmtSetUser = $this->pdo->prepare($sqlSetUser);
+--        $stmtSetUser->bindParam(":usuario_logado", $usuarioLogado);
+--        $stmtSetUser->execute();

@@ -1,4 +1,13 @@
 RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?param=$1
+
+# Regra de Reescrita Principal:
+#    - Captura toda a URL na variável $1 (.*)
+#    - Redireciona para 'index.php' e passa a URL capturada como parâmetro 'param'.
+#    - [L] (Last): Indica que é a última regra a ser processada.
+#    - [QSA] (Query String Append): Ele anexa quaisquer outros parâmetros
+#      que existam na URL original (ex: ?termo=busca, ?page=2) à nova Query String 
+#      (index.php?param=$1).
+#      Isso permite que o 'SearchController' acesse $_GET['termo'] diretamente.
+RewriteRule ^(.*)$ index.php?param=$1 [L,QSA]

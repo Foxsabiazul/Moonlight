@@ -2,6 +2,10 @@
 
 ob_start();
 
+//coisas do moonlight mesmo
+require __DIR__ .  "/../vendor/autoload.php";
+
+
 // ----------------------------------------------------
 // BASE_URL
 // ----------------------------------------------------
@@ -19,7 +23,7 @@ $host = $_SERVER['HTTP_HOST'];
 $script_name = $_SERVER['SCRIPT_NAME'];
 
 // Remove o nome do arquivo 'index.php' e a pasta 'Public' do caminho do script
-// O $base_dir será o caminho do projeto no servidor (ex: /Moonlight/Moonlight/Public/)
+// O $base_path será o caminho do projeto no servidor (ex: /Moonlight/Moonlight/Public/)
 // Usamos dirname() duas vezes para subir de 'index.php' para 'Public' e depois subir de 'Public' para a raiz do projeto.
 
 // Encontra a raiz base onde o index.php está
@@ -33,7 +37,12 @@ $base_path = rtrim($root_dir, '/');
 // Constrói a URL completa e define a constante sem a barra final
 define('BASE_URL', "{$protocol}://{$host}{$base_path}");
 
-require __DIR__ .  "/../vendor/autoload.php";
+// O __DIR__ aqui aponta para A:\...\Moonlight\Moonlight\Public.
+// O arquivo .env deve estar na raiz do projeto (A:\...\Moonlight\Moonlight\). 
+// Portanto, precisa subir um nível (dirname(__DIR__)) para encontrar o .env.
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));    
+$dotenv->safeLoad();
+
 session_start();
 $controller = $_GET["param"] ?? "index";
 
@@ -41,6 +50,9 @@ if(empty($controller)){
     $controller = "index";
 }
 
+$param = explode("/", $controller);
+
+$controller = $param[0] ?? "index";
     
 ?>
 <!DOCTYPE html>
@@ -61,21 +73,6 @@ if(empty($controller)){
     $cssMap = [
         "store" => [
             "/css/storePage/store.css"
-        ],
-        "product" => [
-            "/css/productPage/product.css"
-        ],
-        "FAQ" => [
-            "/css/faqPage/faq.css"
-        ],
-        "news" => [
-            "/css/newsPage/news.css"
-        ],
-        "cart" => [
-            "/css/cartPage/cart.css"
-        ],
-        "erro404" => [
-            "/css/index/erro404.css"
         ]
     ];
 
@@ -89,21 +86,18 @@ if(empty($controller)){
     ?>
     <?php
     $jsMap = [
-        "contact" => ["/assets/js/contact/contact.js"],
-        "store" => ["/assets/js/store/storeFilter.js"],
-        "product" => [
-            "/assets/js/product/product.js",
-            "/assets/js/product/cart.js"
-        ],
-        "cart" => [
-            "/assets/js/cart/loadcart.js"
-        ],
+        "categoria" => ["/js/index/pagination.js"],
+        "search" => [
+            "/js/index/pagination.js",
+            "/js/index/filter.js"
+        ]
     ];
 
     if (isset($jsMap[$controller])) {
         foreach ($jsMap[$controller] as $jsFile) {
-            if (file_exists($jsFile)) {
-                echo "<script src=" . BASE_URL . "\"$jsFile\"></script>";
+            $jsFile = BASE_URL . $jsFile;
+            if ($jsFile) {
+                echo "<script src=" . $jsFile . "></script>";
             }
         }
     }
@@ -174,6 +168,14 @@ if(empty($controller)){
                         </a>
                         <nav class="header-nav" id="header-nav">
                             <ul class="nav-ul">
+                                <li class="nav-li">
+                                    <form action="<?= BASE_URL ?>/search" method="GET" class="formSearchHeader">
+                                        <div class="input-group-header">
+                                            <input class="inputStyleGroup" type="text" name="termo" placeholder="Buscar jogos...">
+                                            <button type="submit" class="btnStyleGroup searchBtn"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </form>
+                                </li>
                                 <li class="nav-li dropdown-center">
                                     <a class="nav-btn" title="Categorias de Jogos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Categorias 
@@ -233,7 +235,13 @@ if(empty($controller)){
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Meu Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/biblioteca/" title="Minha Biblioteca"><i class="fa-solid fa-gamepad"></i> Minha Biblioteca</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/pedidos/" title="Meus Pedidos"><i class="fa-solid fa-clipboard-list"></i> Meus Pedidos</a>
                                                     </li>
                                                     <?php if($_SESSION['Logado_Na_Sessão']['tipo'] == 'admin'): ?>
                                                     <li>
@@ -262,11 +270,8 @@ if(empty($controller)){
             </div>
         </header>
 
-        <main style="background: url(http://localhost/Moonlight/Moonlight/Public/img/index/stars.gif);">
+        <main>
                 <?php
-                $param = explode("/", $controller);
-
-                $controller = $param[0] ?? "index";
                 $acao = $param[1] ?? "index";
                 $id = $param[2] ?? NULL;
 

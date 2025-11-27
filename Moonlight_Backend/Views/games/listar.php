@@ -18,22 +18,46 @@
 <div class="container">
     <div class="card">
         <div class="card-header jc-between">
-            <h2 class="float-start as-center white-text">Lista de Jogos</h2>
+            <h2 class="float-start as-center white-text" id="listaTitulo"><?= $tituloLista ?? 'Lista de Jogos' ?></h2>
             <div class="float-end">
                 <a href="<?= BASE_URL ?>/games" title="Novo Registro" class="simpleBtn p-x1 textdec-Debloat white-text">
                     <i class="fas fa-file"></i> Novo Registro
                 </a>
 
                 <a href="<?= BASE_URL ?>/games/listar" title="Listar" class="simpleBtn p-x1 textdec-Debloat white-text">
-                    <i class="fas fa-file"></i> Listar
+                    <i class="fas fa-file"></i> Listar todos os jogos
                 </a>
+
+                <a href="<?= BASE_URL ?>/games/listar?filtro=jogosativos" title="Jogos Prontos para Venda" class="simpleBtn p-x1 textdec-Debloat white-text mr-x1">
+                    <i class="fas fa-check-circle"></i> Listar apenas os jogos ativos
+                </a>
+
             </div>
         </div>
         <div class="card-body">
             <?php
-                $dadosGames = $this->games->listarGames() ?? null;
-                if($dadosGames): ?>
-            <p class="white-text">Abaixo os jogos cadastrados:</p>
+                
+                if(isset($dadosGames) && $dadosGames): ?>
+            <div class="d-flex column jc-between ai-center mb-4">
+                <p class="white-text float-start" style="margin-bottom: 0 !important;">Abaixo os jogos cadastrados:</p>
+                <?php
+                $dadosCategoria = $this->categoria->listarCategoria() ?? null; 
+                    if(!$dadosCategoria){
+                        $gambiarraInsanaPraUrlPegar = BASE_URL;
+                        echo "<a href='{$gambiarraInsanaPraUrlPegar}/categoria' class='simpleBtn p-x1 white-text'>Você ainda não criou alguma categoria, faça agora.</a>";
+                    } else{
+                        ?>
+                            <form action="<?= BASE_URL ?>/games/listar" method="GET" style="width: 300px;" class="formSearchHeader float-end">
+                                <label style="text-align: left;" class="formLabel text-center" for="insert">Inserir quantia de jogos:</label>
+                                <div class="input-group">
+                                    <input class="inputStyleGroup-c" type="number" step="1" min="1" max="10" id="insert" name="insert" placeholder="Inserir quantia de jogos vazios...">
+                                    <button type="submit" class="btnStyleGroup insertBtn"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        <?php
+                    }
+                ?>
+            </div>
             <div class="table-responsive-scroll">
                 <table class="table table-bordered table-striped dashboard-table">
                     <thead>
@@ -51,7 +75,6 @@
                         <?php
                             foreach ($dadosGames as $dados) {
                                 $imagem = isset($dados->imagem) ? $dados->imagem : 'placeholder_item.jpg';
-
                                 ?>
                                 <tr>
                                     <td><?=$dados->id_games?></td>

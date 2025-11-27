@@ -1,0 +1,24 @@
+//  EXPLICAÇÃO IMPORTANTE:
+// Pro esquema de validar status da compra de forma real e ficar bacana pro metabase funcionar,
+// precisamos usar um endereço ip ou dominio publico pro mercado pago acessar,
+// então pra conseguir esta proeza no localhost, precisamos usar o app "ngrok"
+// ele criará um tunel seguro do localhost para um dominio na internet, aí o
+// que o mercado pago mandar pra ele, ngrok envia pra cá.
+
+// procurem: "ngrok download" e tentem executar ngrok http 80 quando baixarem,
+// aí vc precisa logar e acessar essa url: https://dashboard.ngrok.com/get-started/your-authtoken
+// copie o que está no command line e mande no terminal do ngrok que vc tem no pc, envie,
+// logo em seguida execute o comando ngrok http 80 normalmente, 
+// aí tu passa pra essa variavel aqui essa bomba
+// que está no seu Forwarding:
+
+// a URL do ngrok para IPN (SUBSTITUA PELA SUA URL ATUAL!)
+// Esta URL precisa ser HTTPS/domínio público para o Mercado Pago enviar a notificação.
+// Lembre-se: substitua pelo endereço que o ngrok te der AGORA no terminal aberto.
+
+// Instant Payment Notification = IPN. 
+// mecanismo de comunicação seguro e automático 
+// USADO POR GATEWAYS para informar seu servidor
+// sobre uma mudança de status em uma transação
+$url_publica_ipn = "https://phlogistic-maison-sloshily.ngrok-free.dev/";
+

@@ -58,7 +58,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-
 html, body {
     margin: 0;
     padding: 0;
@@ -131,6 +130,10 @@ html, body {
 
 .p-x1{
     padding: 8px;
+}
+
+.ai-center{
+    align-items: center;
 }
 
 .as-center{

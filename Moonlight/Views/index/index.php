@@ -47,7 +47,7 @@
                     $img = "{$link}/arquivos/{$imagem}";
 
                     ?>
-                    <div class="card-item col-12 col-md-3 text-center">   
+                    <div class="card-item col-12 col-md-4 col-lg-3 text-center">   
                         <div class="card">
                             <img src="<?= $img ?>" class="cardImg">
                             <div class="card-content">

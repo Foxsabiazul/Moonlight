@@ -16,6 +16,7 @@ function fecharModalExclusao(){
     modalOverlay.style.opacity = "0";
 }
 
+
 window.onload = () =>{
     const modalcontainer = document.getElementById('modal-container');
     const modaloverlay = document.getElementById('modal-overlay');
