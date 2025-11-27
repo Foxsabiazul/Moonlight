@@ -195,7 +195,7 @@ button{
 
 .select-group{
     display: inline-flex;
-    gap: 5px;
+    gap: 25px;
 }
 
 .formBtn{

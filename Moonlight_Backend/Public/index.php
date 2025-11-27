@@ -253,6 +253,9 @@ ob_start();
                         <nav class="header-nav" id="header-nav">
                             <ul class="nav-ul">
                                 <li class="nav-li">
+                                    <a href="<?= BASE_URL ?>" class="nav-btn">Dashboards</a>
+                                </li>
+                                <li class="nav-li">
                                     <a class="nav-btn" title="Listagem de Categorias" href="<?= BASE_URL ?>/categoria">Categorias</a>
                                 </li>
                                 <li class="nav-li">

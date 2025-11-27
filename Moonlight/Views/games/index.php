@@ -45,7 +45,7 @@
                         </p>
                     <?php endif; ?>
 
-                    <div class="d-flex flex-column flex-md-row mt-5 button-group">
+                    <div class="d-flex flex-column flex-md-row mt-5 button-group" style="gap: 5px;">
                         
                         <a href="<?= BASE_URL ?>/carrinho/adicionar/<?= $id_jogo ?>?redirect=carrinho"
                             class="styledBtn buy-now-btn">

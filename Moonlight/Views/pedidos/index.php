@@ -7,7 +7,7 @@ $totalGeral = 0;
         <div class="card-header">
             <h2 class="white-text text-center">Meus Pedidos</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="max-height:600px; overflow-y:auto">
             <?php
             if (!empty($dadosPedidos)) {
                 foreach ($dadosPedidos as $dados) {

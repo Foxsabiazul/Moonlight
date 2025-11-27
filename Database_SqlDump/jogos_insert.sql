@@ -1,6 +1,6 @@
 -- antes de fazer insert em jogos, primeiro faça insert em categoria.
 
-INSERT INTO `jogos` (`id_categoria`, `titulo`, `descricao`, `preco`, `imagem`, `link`, `data_lancamento`, `ativo`) VALUES
+INSERT INTO `Jogos` (`id_categoria`, `titulo`, `descricao`, `preco`, `imagem`, `link`, `data_lancamento`, `ativo`) VALUES
 (4, 'Cyberpunk 2077', 'RPG de ação e aventura em mundo aberto ambientado em Night City, uma megalópole obcecada por poder, glamour e modificações corporais.', 199.99, '1763675630.jpg', 'https://store.steampowered.com/app/1091500/', '2020-12-10', 'S'),
 (4, 'Doom Eternal', 'Retorno do Slayer com uma sede de vingança insaciável contra as forças do Inferno.', 149.99, '1763675061.jpg', 'https://store.steampowered.com/app/782330/', '2020-03-20', 'S'),
 (6, 'The Witness', 'Um jogo de exploração em primeira pessoa em uma ilha misteriosa, resolvendo mais de 500 quebra-cabeças.', 74.90, '1763677830.jpg', 'https://www.epicgames.com/store/pt-BR/p/the-witness', '2016-01-26', 'S'),

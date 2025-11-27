@@ -29,7 +29,7 @@
         <div class="card-body">
             <form action="<?= BASE_URL ?>/search" method="GET" class="formSearch as-center">
                 <div class="input-search-group">
-                    <input class="inputStyleGroup" type="<?= $inputType ?>" name="termo" placeholder="Buscar jogos..." 
+                    <input class="inputStyleGroup" type="<?= $inputType ?>" name="termo" placeholder="Buscar jogos, preços e etc com base nos filtros..." 
                     value="<?= htmlspecialchars($_GET['termo'] ?? '') ?>" id="termoInput">
                     <button type="submit" class="btnStyleGroup searchBtn"><i class="fas fa-search"></i></button>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="group">
                         <label style="text-align: left;" class="formLabel" for="order">Ordenar por:</label>
                         <select name="order" id="order" class="selectForm-control">
-                            <option value="">Selecione em que ordem virá.</option>
+                            <option value="">Ordem padrão <span>▼</span></option>
                             <option value="titulo" <?= (($_GET['order'] ?? '') == 'titulo') ? 'selected' : '' ?>>Nome do jogo</option>
                             <option value="preco" <?= (($_GET['order'] ?? '') == 'preco') ? 'selected' : '' ?>>Preço</option>
                             <option value="data_lancamento" <?= (($_GET['order'] ?? '') == 'data_lancamento') ? 'selected' : '' ?>>Data de Lançamento</option>
@@ -47,7 +47,7 @@
                     <div class="group">
                         <label style="text-align: left;" class="formLabel" for="filtro-select">Filtrar por:</label>
                         <select class="selectForm-control" name="filtro" id="filtro-select">
-                            <option value="">Filtrar por:</option>
+                            <option value="">Filtrar padrão <span>▼</span></option>
                             <option value="titulo" <?= (($_GET['filtro'] ?? '') == 'titulo') ? 'selected' : '' ?>>Nome do jogo</option>
                             <option value="preco" <?= (($_GET['filtro'] ?? '') == 'preco') ? 'selected' : '' ?>>Preço do jogo</option>
                             <option value="data_lancamento" <?= (($_GET['filtro'] ?? '') == 'data_lancamento') ? 'selected' : '' ?>>Data de lançamento</option>
@@ -68,7 +68,7 @@
                     <div class="group">
                         <label style="text-align: left;" class="formLabel" for="categoria">Filtrar por categoria:</label>
                         <select class="selectForm-control" name="categoria" id="categoria">
-                            <option value="">Filtrar por todas as categorias:</option>
+                            <option value="">Filtrar por todas as categorias <span>▼</span></option>
                             <?php
                                 //pegar as categorias da API
                                 $link = "http://localhost/Moonlight/Moonlight_Backend/public/api/categorias.php";
@@ -91,11 +91,16 @@
             </form>
             <div id="lista-de-jogos" class="row card-deck">
                 <?php 
+                $totalCarregados = count($dadosJogos);
+                $limitePorPagina = 8; // a API usa limite de 8 jogos
+                $link = "http://localhost/Moonlight/Moonlight_Backend/public";
+
+                if(!empty($dadosJogos)){
                     // Variável para rastrear se todos os jogos foram carregados
-                    $totalCarregados = count($dadosJogos);
-                    $limitePorPagina = 8; // a API usa limite de 8 jogos
-                    $link = "http://localhost/Moonlight/Moonlight_Backend/public";
                     
+                    ?>
+                    <hr class="white-text text-center mt-4">
+                    <?php
                     foreach($dadosJogos as $dados) {
 
                         $imagem = isset($dados->imagem) ? $dados->imagem : 'placeholder_item.jpg';
@@ -125,6 +130,15 @@
                         </div>
                         <?php
                     }
+                } else{
+
+                ?>
+                <hr class="white-text text-center mt-4">
+                <h3 class="white-text text-center mt-4">
+                    <?= $resultado ?>
+                </h3>
+                <?php 
+                }
                 ?>
                 </div>
                 

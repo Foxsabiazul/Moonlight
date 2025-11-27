@@ -79,6 +79,26 @@ class GamesController{
     }
 
     public function listar() {
+        $filtro = $_GET["filtro"] ?? null;
+        $valorJogosVazios = $_GET["insert"] ?? null;
+
+        if($valorJogosVazios){
+            $this->games->inserirGamesVazios($valorJogosVazios);
+            $_SESSION['modalTitle'] = "Inserção Concluída";
+            $_SESSION['modalMessage'] = "Operação de inserção de {$valorJogosVazios} jogos feita com exito.";
+            header("Location: " . BASE_URL . "/games/listar");
+            exit;
+        }
+
+        $tituloLista = "Lista de Jogos";
+
+        if($filtro === 'jogosativos'){
+            $dadosGames = $this->games->listarGamesAtivosApenas() ?? null;
+            $tituloLista = "Lista de Jogos ativos";
+        } else {
+            $dadosGames = $this->games->listarGames() ?? null;
+        }
+
         require "../Views/games/listar.php";
     }
 

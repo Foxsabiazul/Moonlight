@@ -13,7 +13,11 @@
                 </a>
 
                 <a href="<?= BASE_URL ?>/games/listar" title="Listar" class="simpleBtn p-x1 textdec-Debloat white-text">
-                    <i class="fas fa-file"></i> Listar
+                    <i class="fas fa-file"></i> Listar todos os jogos
+                </a>
+
+                <a href="<?= BASE_URL ?>/games/listar?filtro=jogosativos" title="Jogos Prontos para Venda" class="simpleBtn p-x1 textdec-Debloat white-text mr-x1">
+                    <i class="fas fa-check-circle"></i> Listar apenas os jogos ativos
                 </a>
             </div>
         </div>

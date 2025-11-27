@@ -64,7 +64,7 @@ use Moonlight_Backend\config\Conexao;
         exit;
     }
 
-    if (!empty($termo)) {
+    if (!empty($termo) || !empty($order)) {
         
         // --- LÓGICA DE BUSCA AVANÇADA (Termo não vazio) ---
 

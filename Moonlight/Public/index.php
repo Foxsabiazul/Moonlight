@@ -23,7 +23,7 @@ $host = $_SERVER['HTTP_HOST'];
 $script_name = $_SERVER['SCRIPT_NAME'];
 
 // Remove o nome do arquivo 'index.php' e a pasta 'Public' do caminho do script
-// O $base_dir será o caminho do projeto no servidor (ex: /Moonlight/Moonlight/Public/)
+// O $base_path será o caminho do projeto no servidor (ex: /Moonlight/Moonlight/Public/)
 // Usamos dirname() duas vezes para subir de 'index.php' para 'Public' e depois subir de 'Public' para a raiz do projeto.
 
 // Encontra a raiz base onde o index.php está
@@ -236,6 +236,9 @@ $controller = $param[0] ?? "index";
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <a class="dropdown-item black-text" href="<?= BASE_URL ?>/usuario/" title="Meu Perfil"><i class="fa-solid fa-user"></i> Minha Conta</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item black-text" href="<?= BASE_URL ?>/biblioteca/" title="Minha Biblioteca"><i class="fa-solid fa-gamepad"></i> Minha Biblioteca</a>
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item black-text" href="<?= BASE_URL ?>/pedidos/" title="Meus Pedidos"><i class="fa-solid fa-clipboard-list"></i> Meus Pedidos</a>

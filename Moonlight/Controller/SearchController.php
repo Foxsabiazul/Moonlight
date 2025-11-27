@@ -53,7 +53,7 @@ use DateTime;
                 }
             } else {
                 // Se não houver termo, mostra todos, e a API deve ignorar os filtros vazios
-                $tituloBusca = "Nenhum termo de busca fornecido. Exibindo jogos de todas as categorias.";
+                $tituloBusca = "Nenhum termo de busca fornecido.";
             }
 
             if (!empty($order)) {
@@ -75,6 +75,8 @@ use DateTime;
             $dadosJSON = file_get_contents($url);
 
             $dadosJogos = json_decode($dadosJSON) ?? [];
+
+            $resultado = (empty($dadosJogos)) ? "Não encontramos jogos com base na sua pesquisa 😵‍💫" : "";
         
 
             require "../Views/search/index.php";
