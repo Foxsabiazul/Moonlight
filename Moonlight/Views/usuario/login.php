@@ -1,5 +1,5 @@
 <div class="login">
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <img src="<?= BASE_URL ?>/img/index/Moonlight.png" class="img-fluid logo-image" alt="Moonlight">
         </div>

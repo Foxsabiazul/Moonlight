@@ -1,6 +1,6 @@
 <div class="container">
 
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <div class="account-info-container">
                 <h2 class='white-text text-center p-x1'>Olá, <?= htmlspecialchars($userName) ?></h2>

@@ -2,7 +2,7 @@
 
 ?>
 <div class="container">
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <div class="checkout-header-container">
                 <h2 class="white-text text-center">Checkout da Compra</h2>

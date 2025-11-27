@@ -4,7 +4,7 @@ $itensCarrinho = isset($_SESSION["carrinho"]) ? $_SESSION["carrinho"] : NULL;
 ?>
 
 <div class="container">
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header">
             <h2 class="white-text text-center">Carrinho de Compras</h2>
         </div>

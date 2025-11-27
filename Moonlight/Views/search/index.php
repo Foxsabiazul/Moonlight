@@ -15,7 +15,7 @@
 
 <div class="container">
 
-    <div class="card">
+    <div class="card" style="animation: fadeIn 0.5s ease-in-out;">
         <div class="card-header jc-between">
             <div class="queue">
                 <h2 class="white-text text-left">
@@ -34,7 +34,7 @@
                     <button type="submit" class="btnStyleGroup searchBtn"><i class="fas fa-search"></i></button>
                 </div>
 
-                <div class="select-group">
+                <div class="select-group" style="animation: fadeIn 0.5s ease-in-out;">
                     <div class="group">
                         <label style="text-align: left;" class="formLabel" for="order">Ordenar por:</label>
                         <select name="order" id="order" class="selectForm-control">
