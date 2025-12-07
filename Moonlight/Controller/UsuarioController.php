@@ -39,7 +39,7 @@ class UsuarioController extends Controller{
     }
 
     // metódo de sanitização para limpar os espaços vazios que vem de formulario.
-    public function sanitizacao(array $inputData): array
+    private function sanitizacao(array $inputData): array
     {
         $nome = Sanitizador::sanitizar($inputData["nome"] ?? '');
         $email = Sanitizador::sanitizar($inputData['email'] ?? '');
@@ -55,81 +55,133 @@ class UsuarioController extends Controller{
 
     }
 
-    // salvar é ativado sozinho como rota de formulario enviado nessa url aqui: /usuario/salvar
-    public function salvar() {
-        
-        // pegamos tudo o que vem do formulario
-        $inputData = $_POST;
+    private function validacao(array $cleanData, string $metodo) :void
+    {
+        $nm_user = $cleanData["nm_user"];
+        $email = $cleanData["email"];
+        $senha = $cleanData["senha"];
+        $senhaRedigitada = $cleanData["senhaRedigitada"];
 
-        /**
-         *  VALIDAÇÃO DE FORMULÁRIO (PRIMEIRA CAMADA)
-         */
 
-        $cleanData = $this->sanitizacao($inputData); // Pega e sanitiza o que veio do formulario de Usuario.
-        $validacaoFalhou = false;
-
-        if (empty($cleanData['nm_user'])) { // nome de usuario necessario
+        if($metodo === "funcaoSalvar" || $metodo === "funcaoAtualizar"){
             /**
-             * modalTitle e Message servem para dar mensagens personalizadas ao usuario com um Modal.
-             * nao se preocupe com a ativação do modal, ele é ativado sozinho quando chega uma mensagem à ele.
-             * ele está em Views/Components/FlashMessage.php
+             *  VALIDAÇÃO DE FORMULÁRIO (PRIMEIRA CAMADA)
              */
-            $_SESSION['modalTitle'] = "Nome de usuario Inválido";
-            $_SESSION['modalMessage'] = "Por favor, preencha o nome do usuário.";
-            $validacaoFalhou = true;
-        } else if(empty($cleanData['email'])){
-            $_SESSION['modalTitle'] = "E-mail Inválido.";
-            $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
-            $validacaoFalhou = true;
-        } else if (!filter_var($cleanData['email'], FILTER_VALIDATE_EMAIL)) { // email precisa ser valido
-            $_SESSION['modalTitle'] = "Email inválido";
-            $_SESSION['modalMessage'] = "Por favor, preencha com um e-mail válido.";
-            $validacaoFalhou = true;
-        } else if (empty($cleanData['senha'])) { // se for um registro novo de usuario, a senha precisa estar preenchida (se for atualização aí tanto faz, vai continuar a mesma senha do banco).
-            $_SESSION['modalTitle'] = "Senha inválida";
-            $_SESSION['modalMessage'] = "Por favor, preencha a senha.";
-            $validacaoFalhou = true;
-        } else if ($cleanData['senha'] != $cleanData['senhaRedigitada']) { // se a senha for diferente da que está redigitada.
-            $_SESSION['modalTitle'] = "Senha inválida";
-            $_SESSION['modalMessage'] = "As senhas não estão iguais.";
-            $validacaoFalhou = true;
+            $validacaoFalhou = false;
+
+            if (empty($nm_user)) { // nome de usuario necessario
+                /**
+                 * modalTitle e Message servem para dar mensagens personalizadas ao usuario com um Modal.
+                 * nao se preocupe com a ativação do modal, ele é ativado sozinho quando chega uma mensagem à ele.
+                 * ele está em Views/Components/FlashMessage.php
+                 */
+                $_SESSION['modalTitle'] = "Nome de usuario Inválido";
+                $_SESSION['modalMessage'] = "Por favor, preencha o nome do usuário.";
+                $validacaoFalhou = true;
+            } else if(strlen($nm_user) > 80 || strlen($nm_user) < 3) {
+                $_SESSION['modalTitle'] = "Nome de usuario Inválido";
+                $_SESSION['modalMessage'] = "Seu nome deve ter entre 3 ou 80 caracteres.";
+                $validacaoFalhou = true;
+            } else if(empty($email)){
+                $_SESSION['modalTitle'] = "E-mail Inválido.";
+                $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
+                $validacaoFalhou = true;
+                
+            } else if(strlen($email) > 255){
+                $_SESSION['modalTitle'] = "E-mail Inválido.";
+                $_SESSION['modalMessage'] = "O Email Inserido é inválido. Seu email deve ser de no maximo 255 caracteres.";
+                $validacaoFalhou = true;
+
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // email precisa ser valido
+                $_SESSION['modalTitle'] = "Email inválido";
+                $_SESSION['modalMessage'] = "Por favor, preencha com um e-mail válido.";
+                $validacaoFalhou = true;
+            } else if (empty($senha)) { // se for um registro novo de usuario, a senha precisa estar preenchida (se for atualização aí tanto faz, vai continuar a mesma senha do banco).
+                $_SESSION['modalTitle'] = "Senha inválida";
+                $_SESSION['modalMessage'] = "Por favor, preencha a senha.";
+                $validacaoFalhou = true;
+            } else if(strlen($senha) > 72 || strlen($senha) < 8 || !$this->validarComplexidadeSenha($senha)){
+                $_SESSION['modalTitle'] = "Senha inválida";
+                $_SESSION['modalMessage'] = "Sua senha deve ser de no maximo 72 caracteres, minimo de 8 e deve conter: letra maiúscula, minúscula, número e símbolo.";
+                $validacaoFalhou = true;
+                
+            } else if ($senha != $senhaRedigitada) { // se a senha for diferente da que está redigitada.
+                $_SESSION['modalTitle'] = "Senha inválida";
+                $_SESSION['modalMessage'] = "As senhas não estão iguais.";
+                $validacaoFalhou = true;
+            }
+
+            if($validacaoFalhou && ($metodo != "funcaoAtualizar")){ // se validacao falhou é true ou existe, então só redirecione o usuario para /usuario
+                header("Location: " . BASE_URL . "/usuario/signup");
+                exit;
+            } else{
+                header("Location: " . BASE_URL . "/usuario/");
+                exit;
+            }
+
+        } else if($metodo === "funcaoLogin"){
+            // VALIDAÇÃO DE FORMULÁRIO (PRIMEIRA CAMADA)
+
+            if(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $_SESSION['modalTitle'] = "E-mail Inválido.";
+                $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
+                header("Location: " . BASE_URL . "/usuario/access");
+                exit;
+            } else if (empty($senha)) {
+                $_SESSION['modalTitle'] = "Digite a senha.";
+                $_SESSION['modalMessage'] = "A senha não está preenchida no formulário.";
+                header("Location: " . BASE_URL . "/usuario/access");
+                exit;
+            }
         }
 
-        if($validacaoFalhou){ // se validacao falhou é true ou existe, então só redirecione o usuario para /usuario
-            header("Location: " . BASE_URL . "/usuario/signup");
-            exit;
-        }
 
-        // operação vai tentar ir pro banco
-        $this->persistirUsuario($cleanData);
     }
 
-    private function persistirUsuario(array $cleanData){
+    // salvar é ativado sozinho como rota de formulario enviado nessa url aqui: /usuario/salvar
+    public function salvar() {
+
+        $inputData = $_POST;
+
+        $cleanData = $this->sanitizacao($inputData); // Pega e sanitiza o que veio do formulario de Usuario.
+
+        $this->validacao($cleanData, "funcaoSalvar"); // Valida os dados com condições simples.
+
+        $validatedData = $cleanData; // se os dados foram validados nas condições do metodo acima, então o cleanData são Dados Validados. 
+
+        // operação vai tentar ir pro banco
+        $this->persistirUsuario($validatedData); // e finalizamos formatando os dados para ir ao banco se a operação for bem concluida.
+    }
+
+    private function persistirUsuario(array $validatedData){
 
         // OPERAÇÃO DE BANCO DE DADOS (SEGUNDA CAMADA com Exceções)
+
         try{
             // Prepara os dados
-            $cleanData['tipo'] = "cliente";
-            $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
-            $cleanData['data_criacao'] = (new \DateTime())->format('Y-m-d H:i:s');
+            $validatedData['tipo'] = "cliente";
+            $validatedData['senha'] = password_hash($validatedData['senha'], PASSWORD_DEFAULT);
+            $validatedData['data_criacao'] = (new \DateTime())->format('Y-m-d H:i:s');
 
             // Insere o usuário no banco (aqui pode lançar ModalMessage ou PDOException)
-            $id = $this->usuario->inserirUsuario($cleanData); // Chamada ÚNICA!
+            $id = $this->usuario->inserirUsuario($validatedData); // Chamada ÚNICA!
 
             // SUCESSO! (O ID foi retornado sem exceções)
-            $cleanData['id_user'] = $id; 
+            $validatedData['id_user'] = $id; 
             
             $_SESSION['Logado_Na_Sessão'] = [
-                "id_user" => $cleanData['id_user'], 
-                "nm_user" => $cleanData['nm_user'],
-                "email" => $cleanData['email'],
-                "data_criacao" => $cleanData['data_criacao'],
-                "tipo"=> $cleanData['tipo']
+                "id_user" => $validatedData['id_user'], 
+                "nm_user" => $validatedData['nm_user'],
+                "email" => $validatedData['email'],
+                "data_criacao" => $validatedData['data_criacao'],
+                "tipo"=> $validatedData['tipo']
             ];
+
             $_SESSION['modalTitle'] = "Cadastro realizado com sucesso.";
             $_SESSION['modalMessage'] = "Usuário salvo e login efetuado.";
             header("Location: " . BASE_URL . "/");
             exit;
+
         } catch (ModalMessage $e) {
 
             // **ERRO DE REGRA DE NEGÓCIO** (Ex: E-mail duplicado)
@@ -168,28 +220,20 @@ class UsuarioController extends Controller{
         $inputData = $_POST;
         $cleanData = $this->sanitizacao($inputData); // Pega e sanitiza o que veio do formulario de login
 
-        $email = $cleanData["email"]; // transformamos os dados do array em variaveis para facilitar leitura.
-        $senha = $cleanData["senha"];
+        $this->validacao($cleanData, "funcaoLogin"); // Valida os dados com condições simples.
 
+        $validatedData = $cleanData; // se os dados foram validados nas condições do metodo acima, então o cleanData são Dados Validados. 
 
-        // VALIDAÇÃO DE FORMULÁRIO (PRIMEIRA CAMADA)
-
-        if(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $_SESSION['modalTitle'] = "E-mail Inválido.";
-            $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
-            header("Location: " . BASE_URL . "/usuario/access");
-            exit;
-        } else if (empty($senha)) {
-            $_SESSION['modalTitle'] = "Digite a senha.";
-            $_SESSION['modalMessage'] = "A senha não está preenchida no formulário.";
-            header("Location: " . BASE_URL . "/usuario/access");
-            exit;
-        }
+        $email = $validatedData["email"]; // transformamos os dados do array em variaveis para facilitar leitura.
+        $senha = $validatedData["senha"];
 
         /**
          * verificamos se os dados batem com o do banco e permitimos o login se estiver correto!
          */
+        $this->persistirLogin($email, $senha);
+    }
 
+    private function persistirLogin(string $email, string $senha){
         try{
             $dadosUsuario = $this->verificarUsuarioPorEmail($email, $senha);
             
@@ -242,6 +286,7 @@ class UsuarioController extends Controller{
                 "Credenciais Inválidas", 
                 "Usuário com o e-mail '{$email}' não foi encontrado."
             );
+
         } else if(!password_verify($senha, $dadosUsuario->senha)){
             //se senha no banco não estiver com hash ou a senha nao bate com o hash, cai aqui.
 
@@ -250,6 +295,7 @@ class UsuarioController extends Controller{
                 "Credenciais Inválidas",
                 "A senha fornecida ou o e-mail '{$email}' estão incorretos."
             );
+
         }
 
         return $dadosUsuario;
@@ -270,27 +316,23 @@ class UsuarioController extends Controller{
 
         $cleanData['id_user'] = $id_user;
         
-        if (empty($cleanData['nm_user']) || empty($cleanData['email']) || !filter_var($cleanData['email'], FILTER_VALIDATE_EMAIL) || empty($cleanData['senha'])) {
-            $_SESSION['modalTitle'] = "Erro de Validação";
-            $_SESSION['modalMessage'] = "Por favor, preencha o nome, um e-mail válido e a senha.";
-            header("Location: " . BASE_URL . "/usuario");
-            exit;
-        } else if($cleanData['senha'] != $cleanData['senhaRedigitada']) { // se a senha for diferente da que está redigitada.
-            $_SESSION['modalTitle'] = "Senha inválida";
-            $_SESSION['modalMessage'] = "As senhas não estão iguais.";
-            header("Location: " . BASE_URL . "/usuario");
-            exit;
-        }
+        $this->validacao($cleanData, "funcaoAtualizar"); // Valida os dados com condições simples.
 
+        $validatedData = $cleanData; // se os dados foram validados nas condições do metodo acima, então o cleanData são Dados Validados. 
+
+        //finaliza a operação colocando os dados no banco.
+        $this->persistirAtualizar($validatedData);
+    }
+
+    private function persistirAtualizar(array $validatedData){
         try{
-            
-            $cleanData['senha'] = password_hash($cleanData['senha'], PASSWORD_DEFAULT);
+            $validatedData['senha'] = password_hash($validatedData['senha'], PASSWORD_DEFAULT);
 
-            $sucesso = $this->usuario->atualizarUsuario($cleanData);
+            $sucesso = $this->usuario->atualizarUsuario($validatedData);
 
             if($sucesso){
-                $_SESSION["Logado_Na_Sessão"]["nm_user"] = $cleanData['nm_user'];
-                $_SESSION['Logado_Na_Sessão']['email'] = $cleanData['email'];
+                $_SESSION["Logado_Na_Sessão"]["nm_user"] = $validatedData['nm_user'];
+                $_SESSION['Logado_Na_Sessão']['email'] = $validatedData['email'];
 
                 $_SESSION['modalTitle'] = "Sucesso!";
                 $_SESSION['modalMessage'] = "Suas informações pessoais foram salvas com sucesso.";
@@ -324,6 +366,22 @@ class UsuarioController extends Controller{
          */
         header("Location: " . BASE_URL . "/index");
         exit;
+    }
+
+    /**
+     * Verifica se a senha atende aos requisitos de segurança (minúscula, maiúscula, número, símbolo).
+     * @param string $senha A senha a ser verificada.
+     * @return bool TRUE se a senha atender aos requisitos, FALSE caso contrário.
+     */
+    private function validarComplexidadeSenha(string $senha): bool
+    {
+        // Esta Regex utiliza lookaheads (?=...) para garantir a presença de cada requisito,
+        // independentemente da ordem.
+        $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+        
+        // Usamos preg_match para verificar se a string $senha corresponde ao padrão.
+        // O preg_match retorna 1 se o padrão foi encontrado, 0 se não, e FALSE em caso de erro.
+        return (bool) preg_match($pattern, $senha);
     }
 	
 }
