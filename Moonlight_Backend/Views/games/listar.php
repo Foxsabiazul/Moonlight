@@ -51,7 +51,7 @@
                                 <label style="text-align: left;" class="formLabel text-center" for="insert">Inserir quantia de jogos:</label>
                                 <div class="input-group">
                                     <input class="inputStyleGroup-c" type="number" step="1" min="1" max="10" id="insert" name="insert" placeholder="Inserir quantia de jogos vazios...">
-                                    <button type="submit" class="btnStyleGroup insertBtn"><i class="fas fa-search"></i></button>
+                                    <button type="submit" class="btnStyleGroup insertBtn"><i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </form>
                         <?php

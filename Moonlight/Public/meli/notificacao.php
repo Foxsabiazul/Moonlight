@@ -16,7 +16,7 @@ use Moonlight\config\Logger;
 
 
 //coloquei meu token aqui porque o mercado pago não lê o $_ENV, por isso fiquei muito tempo aqui ramelando.
-$token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? 'APP_USR-6033108192222642-112402-0f3bfaf0b51b22625c79b1e9d115b873-3008632819';
+$token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? 'algumtokenrealaqui';
 error_log("MERCADOPAGO TOKEN: " . $token); // Deve mostrar o token real, nunca vazio!
 
 if (!$token) {

@@ -4,7 +4,8 @@
 
     use Moonlight_Backend\config\Sanitizador;
     use Moonlight_Backend\config\Conexao;
-    use Moonlight_Backend\Model\UsuarioModel;
+use Moonlight_Backend\Config\ModalMessage;
+use Moonlight_Backend\Model\UsuarioModel;
     use PDO;
 
 class UsuarioController{
@@ -35,6 +36,31 @@ class UsuarioController{
             "senhaRedigitada" => $senhaRedigitada,
             "tipo" => $tipo
         ];
+
+    }
+
+    private function validacao(array $cleanData, string $metodo) :void
+    {
+        
+        $email = $cleanData["email"];
+        $senha = $cleanData["senha"];
+
+        if($metodo === "funcaoLogin"){
+            // VALIDAÇÃO DE FORMULÁRIO (PRIMEIRA CAMADA)
+
+            if(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $_SESSION['modalTitle'] = "E-mail Inválido.";
+                $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
+                header("Location: " . BASE_URL . "/usuario/access");
+                exit;
+            } else if (empty($senha)) {
+                $_SESSION['modalTitle'] = "Digite a senha.";
+                $_SESSION['modalMessage'] = "A senha não está preenchida no formulário.";
+                header("Location: " . BASE_URL . "/usuario/access");
+                exit;
+            }
+        }
+
 
     }
 
@@ -147,36 +173,97 @@ class UsuarioController{
         }
     }
 
-    // usado no index.php da public para fazer o login do usuario:
     public function login() {
 
         // pegamos tudo o que vem do formulario
         $inputData = $_POST;
         $cleanData = $this->sanitizacao($inputData); // Pega e sanitiza o que veio do formulario de login
 
-        $email = $cleanData["email"]; // transformamos os dados do array em variaveis para facilitar leitura.
-        $senha = $cleanData["senha"];
+        $this->validacao($cleanData, "funcaoLogin"); // Valida os dados com condições simples.
 
-        /**
-         * fazemos validação aqui
-         */
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['modalTitle'] = "E-mail Inválido.";
-            $_SESSION['modalMessage'] = "O Email Inserido é inválido. Tente Novamente com um válido.";
-            header("Location: " . BASE_URL . "/index");
-            exit;
-        } else if (empty($senha)) {
-            $_SESSION['modalTitle'] = "Digite a senha.";
-            $_SESSION['modalMessage'] = "A senha não está preenchida no formulário. Digite a senha.";
-            header("Location: " . BASE_URL . "/index");
-            exit;
-        }
+        $validatedData = $cleanData; // se os dados foram validados nas condições do metodo acima, então o cleanData são Dados Validados. 
+
+        $email = $validatedData["email"]; // transformamos os dados do array em variaveis para facilitar leitura.
+        $senha = $validatedData["senha"];
 
         /**
          * verificamos se os dados batem com o do banco e permitimos o login se estiver correto!
          */
+        $this->persistirLogin($email, $senha);
+    }
 
-        $this->verificar($email, $senha);
+    private function persistirLogin(string $email, string $senha){
+        try{
+            $dadosUsuario = $this->verificarUsuarioPorEmail($email, $senha);
+            
+            $_SESSION['Logado_Na_Sessão'] = array(
+                "id_user"=>$dadosUsuario->id_user,
+                "nm_user"=>$dadosUsuario->nm_user,
+                "email" => $email,
+                "data_criacao"=>$dadosUsuario->data_criacao,
+                "tipo"=>$dadosUsuario->tipo
+            );
+
+            header("Location: " . BASE_URL . "/index");
+            exit;
+        
+        } catch (\Moonlight\Config\ModalMessage $e) {
+            
+            // **ERRO DE REGRA DE NEGÓCIO** (Usuário não encontrado ou senha errada)
+            \Moonlight\Config\Logger::logError($e, "LOGIN_FAILED");
+
+            $_SESSION['modalTitle'] = $e->getTitle();
+            $_SESSION['modalMessage'] = $e->getMessage();
+            
+        } catch (\PDOException $e) {
+            // **ERRO GRAVE DE BANCO DE DADOS**
+            \Moonlight\Config\Logger::logError($e, "DATABASE_ERROR");
+
+            $_SESSION['modalTitle'] = "Falha Crítica";
+            $_SESSION['modalMessage'] = "Ocorreu uma falha interna no sistema de login.";
+            
+        } catch (\Throwable $e) {
+            // **ERRO GENÉRICO**
+            \Moonlight\Config\Logger::logError($e, "CRITICAL_ERROR");
+
+            $_SESSION['modalTitle'] = "Erro Crítico";
+            $_SESSION['modalMessage'] = "O sistema encontrou um erro inesperado.";
+        }
+
+        header("Location: " . BASE_URL . "/usuario/access");
+        exit;
+    }
+
+    // Método usado pro metodo login verificar as credenciais do usuário no banco por meio do email e comparando as senhas.
+    private function verificarUsuarioPorEmail(string $email, string $senha): object {
+
+        $dadosUsuario = $this->usuario->buscarPorEmail($email);
+
+        if (empty($dadosUsuario)) {
+            // Lança exceção de REGRA DE NEGÓCIO (Usuário não encontrado)
+            throw new ModalMessage(
+                "Credenciais Inválidas", 
+                "Usuário com o e-mail '{$email}' não foi encontrado."
+            );
+
+        } else if($dadosUsuario->tipo != 'admin'){
+            throw new ModalMessage(
+                "Usuario Inválido",
+                "Você não tem permissão para acessar."
+            );
+
+        } else if(!password_verify($senha, $dadosUsuario->senha)){
+            //se senha no banco não estiver com hash ou a senha nao bate com o hash, cai aqui.
+
+            // Lança exceção de REGRA DE NEGÓCIO (Senha incorreta)
+            throw new ModalMessage(
+                "Credenciais Inválidas",
+                "A senha fornecida ou o e-mail '{$email}' estão incorretos."
+            );
+
+        }
+
+        return $dadosUsuario;
     }
 
     public function excluir($id) {
@@ -198,52 +285,6 @@ class UsuarioController{
         exit;
     }
 
-    // Método usado pro metodo login verificar as credenciais do usuário no banco por meio do email e comparando as senhas.
-    public function verificar(string $email, string $senha) {
-
-        $dadosUsuario = $this->usuario->buscarPorEmail($email);
-        $loginFalhou = false;
-
-        if(empty($dadosUsuario->id_user)) {
-            $_SESSION['modalTitle'] = "Usuario Inválido";
-            $_SESSION['modalMessage'] = "Usuario não foi encontrado.";
-            $loginFalhou = true;
-
-        } else if($dadosUsuario->tipo != 'admin'){
-            $_SESSION['modalTitle'] = "Usuario Inválido";
-            $_SESSION['modalMessage'] = "Você não tem permissão para acessar.";
-            $loginFalhou = true;
-
-        } else if(!password_verify($senha, $dadosUsuario->senha)){
-            /**
-             * ATENÇÃO: APENAS PARA NÃO PERDER TEMPO BATENDO CABEÇA IGUAL EU,
-             * SE A SENHA DO BANCO NÃO ESTÁ COM HASH
-             * ele vai falhar na comparação mesmo que você tenha acertado a senha
-             * que está inserida no banco.
-             * password_verify serve para verificar se a senha bate com algum hash que ele pode ter feito
-             * se não bate com o hash aí ele manda um false e cai aqui dentro.
-             */
-            $_SESSION['modalTitle'] = "Email ou Senha Invalidos";
-            $_SESSION['modalMessage'] = "Os dados fornecidos não coincidem.";
-            $loginFalhou = true;
-        }
-
-        if($loginFalhou){
-            header("Location: " . BASE_URL . "/index");
-            exit;
-        } else{
-            $_SESSION['Logado_Na_Sessão'] = array(
-                "id_user"=>$dadosUsuario->id_user,
-                "nm_user"=>$dadosUsuario->nm_user,
-                "data_criacao"=>$dadosUsuario->data_criacao,
-                "tipo"=>$dadosUsuario->tipo
-            );
-
-            header("Location: " . BASE_URL . "/index");
-            exit;
-        }
-    }
-
     public function logout(){
         /**
          * tiramos o $_SESSION da sessão logada do usuario.
@@ -254,6 +295,22 @@ class UsuarioController{
          */
         header("Location: " . BASE_URL . "/index");
         exit;
+    }
+
+    /**
+     * Verifica se a senha atende aos requisitos de segurança (minúscula, maiúscula, número, símbolo).
+     * @param string $senha A senha a ser verificada.
+     * @return bool TRUE se a senha atender aos requisitos, FALSE caso contrário.
+     */
+    private function validarComplexidadeSenha(string $senha): bool
+    {
+        // Esta Regex utiliza lookaheads (?=...) para garantir a presença de cada requisito,
+        // independentemente da ordem.
+        $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+        
+        // Usamos preg_match para verificar se a string $senha corresponde ao padrão.
+        // O preg_match retorna 1 se o padrão foi encontrado, 0 se não, e FALSE em caso de erro.
+        return (bool) preg_match($pattern, $senha);
     }
 	
 }

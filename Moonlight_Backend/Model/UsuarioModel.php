@@ -1,6 +1,8 @@
 <?php
     namespace Moonlight_Backend\Model;
-    use PDO;
+
+use Moonlight_Backend\config\Logger;
+use PDO;
 
     /**
      * namespace serve pra definir caminhos para autoload de classes e para nao se confundir com metódos publicos do php. (o Composer precisa disso!)
@@ -98,13 +100,26 @@
             return $consulta->execute();
         }
 
-        public function buscarPorEmail(string $email){
-            $sql = "select * from usuários where email = :email limit 1";
-            $consulta = $this->pdo->prepare($sql);
-            $consulta->bindParam(":email", $email);
-            $consulta->execute();
+        /**
+         * @param string $email pesquisará os dados com base no email
+         * @return object com todos os dados.
+         * @throws \PDOException Se houver um erro de banco de dados inesperado.
+         */
+        public function buscarPorEmail(string $email): ?object {
+            try {
+                $sql = "SELECT id_user, nm_user, senha, data_criacao, tipo FROM usuários WHERE email = :email";
+                $consulta = $this->pdo->prepare($sql);
+                $consulta->bindParam(':email', $email);
+                $consulta->execute();
+                $dadosUsuario = $consulta->fetch(PDO::FETCH_OBJ);
 
-            return $consulta->fetch(PDO::FETCH_OBJ);
+                return $dadosUsuario ?: null;
+
+            } catch (\PDOException $e) {
+                // Logamos erros graves de SQL e propagamos.
+                Logger::logError($e, "LOGIN_DB_ERROR");
+                throw $e;
+            }
         }
 
     }

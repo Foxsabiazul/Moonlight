@@ -86,7 +86,7 @@
 
                 // o token tem que ser pego no mercado pago, passei ele pro .env
                 // no repositorio vai estar apenas o .env.example, pega o arquivo e deixe ele sem o ".example" no nome e insira o seu token lá.
-                $token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? 'APP_USR-6033108192222642-112402-0f3bfaf0b51b22625c79b1e9d115b873-3008632819';
+                $token = $_ENV['MERCADOPAGO_ACCESS_TOKEN'] ?? "algumtokenrealaqui";
                 
                 MercadoPagoConfig::setAccessToken($token);
 

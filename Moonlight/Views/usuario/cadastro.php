@@ -9,20 +9,34 @@
                 <br>
                 <label class="formLabel" for="nome">Nome do Usuário:</label>
                 <input type="text" name="nome" id="nome" required class="inputStyle"
-                    data-parsley-required-message="Preencha o nome" placeholder="Digite seu nome">
+                    data-parsley-required-message="Preencha o nome" placeholder="Digite seu nome" 
+                    maxlength="80" 
+                    data-parsley-maxlength="80"
+                    data-parsley-minlength="3"
+                    data-parsley-minlength-message="O nome precisa ter pelo menos 3 caracteres."
+                >
                 <br>
                 <label class="formLabel" for="email">E-mail:</label>
                 <input type="email" name="email" class="inputStyle" id="email"
                 placeholder="Digite seu email" required
                 data-parsley-required-message="Preencha o e-mail"
-                data-parsley-type-message="Digite um e-mail válido">
+                data-parsley-type-message="Digite um e-mail válido"
+                maxlength="255"
+                data-parsley-maxlength="255">
                 <br>
                 <label class="formLabel" for="senha">Senha:</label>
                 <div class="input-group">
                     <input type="password" name="senha" class="inputStyleGroup" id="senha" 
-                    placeholder="Digite sua senha" required
-                    data-parsley-required-message="Preencha a senha"
-                    data-parsley-errors-container="#erro">
+                        placeholder="Digite sua senha" required
+                        data-parsley-required-message="Preencha a senha"
+                        data-parsley-errors-container="#erro"
+                        maxlength="72"
+                        data-parsley-minlength="8"
+                        data-parsley-minlength-message="A senha deve ter no mínimo 8 caracteres."
+                        
+                        data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                        data-parsley-pattern-message="A senha deve conter: letra maiúscula, minúscula, número e símbolo."
+                    >
                     <button class="btnStyleGroup" type="button" onclick="mostrarSenha()">
                         <i class="fas fa-eye"></i>
                     </button>
