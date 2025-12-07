@@ -1,13 +1,14 @@
 -- -----------------------------------------
 -- Create database and use
 -- -----------------------------------------
-CREATE DATABASE IF NOT EXISTS moonlight_e_commerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE moonlight_e_commerce;
+CREATE DATABASE IF NOT EXISTS if0_40522658_moonlight_e_commerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE if0_40522658_moonlight_e_commerce;
 
 -- -----------------------------------------
--- Table: Usuários
+-- Table: usuários
 -- -----------------------------------------
-CREATE TABLE `Usuários` (
+-- Renomeada de Usuários para usuários
+CREATE TABLE `usuários` (
     `id_user` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `nm_user` VARCHAR(255) NOT NULL COMMENT 'Nome do usuário',
     `email` VARCHAR(150) NOT NULL UNIQUE COMMENT 'Único (login)',
@@ -17,18 +18,20 @@ CREATE TABLE `Usuários` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------
--- Table: Categorias
+-- Table: categorias
 -- -----------------------------------------
-CREATE TABLE `Categorias` (
+-- Renomeada de Categorias para categorias
+CREATE TABLE `categorias` (
     `id_categoria` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `nm_cat` VARCHAR(255) NOT NULL,
     `desc_cat` VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------
--- Table: Jogos
+-- Table: jogos
 -- -----------------------------------------
-CREATE TABLE `Jogos` (
+-- Renomeada de Jogos para jogos
+CREATE TABLE `jogos` (
     `id_games` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `id_categoria` BIGINT NOT NULL,
     `titulo` VARCHAR(255) NOT NULL COMMENT 'Nome do jogo',
@@ -39,17 +42,18 @@ CREATE TABLE `Jogos` (
     `data_lancamento` DATE NOT NULL COMMENT 'Data de lançamento',
     `ativo` ENUM('S', 'N') NOT NULL,
     CONSTRAINT `fk_jogos_categoria` FOREIGN KEY (`id_categoria`)
-        REFERENCES `Categorias`(`id_categoria`)
+        REFERENCES `categorias`(`id_categoria`) -- Atualizado para categorias
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE INDEX `idx_jogos_titulo` ON `Jogos` (`titulo`);
-CREATE INDEX `idx_jogos_preco` ON `Jogos` (`preco`);
+CREATE INDEX `idx_jogos_titulo` ON `jogos` (`titulo`);
+CREATE INDEX `idx_jogos_preco` ON `jogos` (`preco`);
 
 -- -----------------------------------------
--- Table: Pedidos
+-- Table: pedidos
 -- -----------------------------------------
-CREATE TABLE `Pedidos` (
+-- Renomeada de Pedidos para pedidos
+CREATE TABLE `pedidos` (
     `id_pedido` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `id_user` BIGINT NOT NULL,
     `data_pedido` DATETIME NOT NULL COMMENT 'Data da compra',
@@ -58,65 +62,69 @@ CREATE TABLE `Pedidos` (
     `external_reference` VARCHAR(50) NOT NULL COMMENT 'id pro mercado pago encontrar e notificar',
     `status` ENUM('pendente', 'aprovado', 'reembolsado', 'cancelado') NOT NULL DEFAULT 'pendente',
     CONSTRAINT `fk_pedidos_user` FOREIGN KEY (`id_user`)
-        REFERENCES `Usuários`(`id_user`)
+        REFERENCES `usuários`(`id_user`) -- Atualizado para usuários
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------
--- Table: ItensCompra
+-- Table: itenscompra
 -- -----------------------------------------
-CREATE TABLE `ItensCompra` (
+-- Renomeada de ItensCompra para itenscompra
+CREATE TABLE `itenscompra` (
     `id_pedido` BIGINT NOT NULL,
     `id_games` BIGINT NOT NULL,
     `preco` DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (`id_pedido`, `id_games`),
     CONSTRAINT `fk_itenscompra_pedido` FOREIGN KEY (`id_pedido`)
-        REFERENCES `Pedidos`(`id_pedido`)
+        REFERENCES `pedidos`(`id_pedido`) -- Atualizado para pedidos
         ON DELETE CASCADE,
     CONSTRAINT `fk_itenscompra_jogo` FOREIGN KEY (`id_games`)
-        REFERENCES `Jogos`(`id_games`)
+        REFERENCES `jogos`(`id_games`) -- Atualizado para jogos
         ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE INDEX `idx_itemcompra_pedido` ON `ItensCompra` (`id_pedido`);
-CREATE INDEX `idx_itemcompra_games` ON `ItensCompra` (`id_games`);
+CREATE INDEX `idx_itemcompra_pedido` ON `itenscompra` (`id_pedido`);
+CREATE INDEX `idx_itemcompra_games` ON `itenscompra` (`id_games`);
 
 -- -----------------------------------------
--- Table: Biblioteca
+-- Table: biblioteca
 -- -----------------------------------------
-CREATE TABLE `Biblioteca` (
+-- Renomeada de Biblioteca para biblioteca
+CREATE TABLE `biblioteca` (
     `id_user` BIGINT NOT NULL,
     `id_games` BIGINT NOT NULL,
     `data_adicao` DATETIME NOT NULL,
     PRIMARY KEY (`id_user`, `id_games`),
     CONSTRAINT `fk_biblioteca_user` FOREIGN KEY (`id_user`)
-        REFERENCES `Usuários`(`id_user`)
+        REFERENCES `usuários`(`id_user`) -- Atualizado para usuários
         ON DELETE CASCADE,
     CONSTRAINT `fk_biblioteca_jogo` FOREIGN KEY (`id_games`)
-        REFERENCES `Jogos`(`id_games`)
+        REFERENCES `jogos`(`id_games`) -- Atualizado para jogos
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------
--- Table: Favoritos
+-- Table: favoritos
 -- -----------------------------------------
-CREATE TABLE `Favoritos` (
+-- Renomeada de Favoritos para favoritos
+CREATE TABLE `favoritos` (
     `id_user` BIGINT NOT NULL,
     `id_games` BIGINT NOT NULL,
     `fav_star` ENUM('1','2','3','4','5','indefinido') NOT NULL DEFAULT 'indefinido',
     PRIMARY KEY (`id_user`, `id_games`),
     CONSTRAINT `fk_favoritos_user` FOREIGN KEY (`id_user`)
-        REFERENCES `Usuários`(`id_user`)
+        REFERENCES `usuários`(`id_user`) -- Atualizado para usuários
         ON DELETE CASCADE,
     CONSTRAINT `fk_favoritos_jogo` FOREIGN KEY (`id_games`)
-        REFERENCES `Jogos`(`id_games`)
+        REFERENCES `jogos`(`id_games`) -- Atualizado para jogos
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------
--- Table: AuditoriaPreco
+-- Table: auditoriapreco
 -- -----------------------------------------
-CREATE TABLE `AuditoriaPreco` (
+-- Renomeada de AuditoriaPreco para auditoriapreco
+CREATE TABLE `auditoriapreco` (
     `id_audipreco` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `id_games` BIGINT NOT NULL,
     `preco_antigo` DECIMAL(10,2) NOT NULL,
@@ -124,7 +132,7 @@ CREATE TABLE `AuditoriaPreco` (
     `data_alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `usuario_alteracao` VARCHAR(255),
     CONSTRAINT `fk_auditoria_games` FOREIGN KEY (`id_games`)
-        REFERENCES `Jogos`(`id_games`)
+        REFERENCES `jogos`(`id_games`) -- Atualizado para jogos
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -133,11 +141,11 @@ CREATE TABLE `AuditoriaPreco` (
 -- -----------------------------------------
 DELIMITER $$
 CREATE TRIGGER `trg_auditar_preco_jogo`
-AFTER UPDATE ON `Jogos`
+AFTER UPDATE ON `jogos`
 FOR EACH ROW
 BEGIN
     IF OLD.preco <> NEW.preco THEN
-        INSERT INTO `AuditoriaPreco` (
+        INSERT INTO `auditoriapreco` (
             `id_games`,
             `preco_antigo`,
             `preco_novo`,
@@ -165,12 +173,12 @@ BEGIN
     WHILE i <= num_jogos DO
     
     	SELECT id_categoria INTO categoria_id_aleatoria
-        FROM `Categorias`
+        FROM `categorias`
         ORDER BY RAND()
         LIMIT 1;
        
 	    IF categoria_id_aleatoria IS NOT NULL THEN
-	        INSERT INTO `Jogos` (
+	        INSERT INTO `jogos` (
 	            `id_categoria`,
 	            `titulo`,
 	            `descricao`,
@@ -208,7 +216,7 @@ READS SQL DATA
 BEGIN
     DECLARE possui INT;
     SELECT COUNT(*) INTO possui
-    FROM `Biblioteca` AS B
+    FROM `biblioteca` AS B
     WHERE B.id_user = id_user_param AND B.id_games = id_games_param;
     RETURN possui > 0;
 END;
@@ -227,8 +235,8 @@ BEGIN
     -- Verifica se o jogo está ativo ('S') e se a categoria referenciada ainda existe (INNER JOIN)
 
     SELECT COUNT(J.id_games) INTO is_ready
-    FROM `Jogos` AS J
-    INNER JOIN `Categorias` AS C ON J.id_categoria = C.id_categoria
+    FROM `jogos` AS J
+    INNER JOIN `categorias` AS C ON J.id_categoria = C.id_categoria
     WHERE J.id_games = id_games_param
       AND J.ativo = 'S'; -- 'S' = Sim (Ativo)
     RETURN is_ready > 0;
@@ -238,10 +246,12 @@ $$
 
 DELIMITER ;
 
+
 -- -----------------------------------------
 -- Categorias pré-cadastradas
 -- -----------------------------------------
-INSERT INTO `Categorias` (`id_categoria`, `nm_cat`, `desc_cat`) VALUES
+-- A instrução INSERT não altera o nome da tabela no código, apenas o conteúdo
+INSERT INTO `categorias` (`id_categoria`, `nm_cat`, `desc_cat`) VALUES
 (1, 'Ação', 'Gênero que enfatiza desafios físicos, como coordenação olho-mão e tempo de reação.'),
 (2, 'Corrida', 'Jogos que simulam corridas de veículos motorizados ou outros meios.'),
 (3, 'Estratégia', 'Jogos que exigem planejamento, táticas e manobras para alcançar a vitória.'),
@@ -253,7 +263,8 @@ INSERT INTO `Categorias` (`id_categoria`, `nm_cat`, `desc_cat`) VALUES
 -- -----------------------------------------
 -- Jogos pré-cadastrados
 -- -----------------------------------------
-INSERT INTO `Jogos` (`id_categoria`, `titulo`, `descricao`, `preco`, `imagem`, `link`, `data_lancamento`, `ativo`) VALUES
+-- A instrução INSERT não altera o nome da tabela no código, apenas o conteúdo
+INSERT INTO `jogos` (`id_categoria`, `titulo`, `descricao`, `preco`, `imagem`, `link`, `data_lancamento`, `ativo`) VALUES
 (4, 'Cyberpunk 2077', 'RPG de ação e aventura em mundo aberto ambientado em Night City, uma megalópole obcecada por poder, glamour e modificações corporais.', 199.99, '1763675630.jpg', 'https://store.steampowered.com/app/1091500/', '2020-12-10', 'S'),
 (4, 'Doom Eternal', 'Retorno do Slayer com uma sede de vingança insaciável contra as forças do Inferno.', 149.99, '1763675061.jpg', 'https://store.steampowered.com/app/782330/', '2020-03-20', 'S'),
 (6, 'The Witness', 'Um jogo de exploração em primeira pessoa em uma ilha misteriosa, resolvendo mais de 500 quebra-cabeças.', 74.90, '1763677830.jpg', 'https://www.epicgames.com/store/pt-BR/p/the-witness', '2016-01-26', 'S'),
@@ -272,5 +283,6 @@ INSERT INTO `Jogos` (`id_categoria`, `titulo`, `descricao`, `preco`, `imagem`, `
 -- -----------------------------------------
 -- Usuário “Carlinhos” Admin
 -- -----------------------------------------
-INSERT INTO `Usuários` (`nm_user`, `email`, `senha`, `data_criacao`, `tipo`) VALUES
+-- A instrução INSERT não altera o nome da tabela no código, apenas o conteúdo
+INSERT INTO `usuários` (`nm_user`, `email`, `senha`, `data_criacao`, `tipo`) VALUES
 ('Carlinhos', 'carlos@gmail.com', '$2y$10$eFtZ8CypSv3guw.ehsyNXuzSnQPOtMjQdDKxghKc/21GjMJ/z8xb6', '2025-10-30 17:54:59', 'admin');
